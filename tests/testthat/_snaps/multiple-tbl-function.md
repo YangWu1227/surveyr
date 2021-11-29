@@ -80,7 +80,7 @@
     Code
       generate_tbls(l = list_xtab, df = df, weight = "weightvec", type = crosstab)
     Error <simpleError>
-      comparison (1) is possible only for atomic and list types
+      Please place quotes around the argument 'type'
 
 # Mismatched 'type' argument and 'l' list argument
 

@@ -42,6 +42,7 @@
 #'
 #' @importFrom purrr safely
 #' @importFrom purrr transpose
+#' @importFrom purrr map
 #' @export
 #'
 #' @examples
@@ -125,6 +126,7 @@ list_xtab_args <- function(df, var_of_interest, dependent_vars = NULL, rm = NULL
 #' @importFrom data.table rbindlist
 #' @importFrom tibble as_tibble
 #' @importFrom rlang is_list
+#' @importFrom purrr map_lgl
 #' @export
 #'
 #' @examples
