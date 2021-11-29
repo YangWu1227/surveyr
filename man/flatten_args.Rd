@@ -18,9 +18,11 @@ and \code{error}. It will either \strong{1)} throw an error indicating that atte
 list, or \strong{2)} return a single list of arguments, which can then be passed to \code{generate_tbls()}.
 }
 \examples{
+\donttest{
 # Generate arguments list for crosstabs
 list_xtabs_args(df, var_of_interest, dependent_vars, rm) \%>\%
   flatten_args(l = .)
+}
 }
 \seealso{
 \code{\link[=list_xtab_args]{list_xtab_args()}} for vectorized crosstab arguments generation and \code{\link[=generate_tbls]{generate_tbls()}} for

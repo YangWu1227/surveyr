@@ -25,8 +25,10 @@ implements data masking internally so users must specify data variables as strin
 (i.e. use "x", "weight").
 }
 \examples{
+\donttest{
 # Generate a topline
-df_ \%>\% generate_topline(df = ., "x_var", "weight", "X")
+df \%>\% generate_topline(df = ., "x_var", "weight", "X")
+}
 }
 \seealso{
 \code{\link[=generate_xtab]{generate_xtab()}} for crosstab generation.

@@ -18,8 +18,8 @@ is implemented such that only the character class of numbers and letters in the 
 i.e., \verb{[:alnum:]} is retained.
 }
 \examples{
+\donttest{
 # Remove special characters from column names
-\dontrun{
 new_df <- df \%>\% col_nms_rm_splchar()
 }
 }

@@ -22,12 +22,12 @@ is implemented such that only the character class of numbers and letters in the 
 i.e., \verb{[:alnum:]}, and periods (".") are retained.
 }
 \examples{
-\dontrun{
+\donttest{
 # Remove special characters from columns 1 & 2
 df_ \%>\% rm_spl_char(var = c("col_1", "col_2"))
 
 # Remove special characters from all columns
-cols <- names(df_)
+cols <- names(df)
 df_ \%>\% rrm_spl_char(var = cols)
 }
 }

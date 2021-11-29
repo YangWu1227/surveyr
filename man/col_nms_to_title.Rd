@@ -16,8 +16,8 @@ A data frame or tibble.
 Convert column names in a data frame to title cases.
 }
 \examples{
+\donttest{
 # Capitalize column names
-\dontrun{
 new_df <- col_nms_to_title(df)
 }
 }

@@ -47,10 +47,11 @@ to efficiently generate many tables by passing a list of arguments. The shapes o
 may vary depending on the table \code{type}.
 }
 \examples{
+\donttest{
 # Generate crosstabs
 list_of_xtabs <- generate_tbls(
   l = list_xtab,
-  df_,
+  df,
   "weight",
   "crosstab"
 )
@@ -58,10 +59,11 @@ list_of_xtabs <- generate_tbls(
 # Generate toplines
 list_of_topline <- generate_tbls(
   l = list_topline,
-  df_,
+  df,
   "weight",
   "topline"
 )
+}
 }
 \seealso{
 \code{\link[=generate_xtab]{generate_xtab()}} and \code{\link[=generate_topline]{generate_topline()}} for single crosstab or topline generation.

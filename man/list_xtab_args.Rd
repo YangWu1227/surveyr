@@ -50,6 +50,7 @@ specified, the function defaults to crossing each variable in \code{var_of_inter
 columns in \code{df} unless \code{rm} is specified.
 }
 \examples{
+\donttest{
 # Create var_of_interest vector
 var_of_interest <- c("col1", "col3", "col20", "col23", "col32")
 
@@ -63,5 +64,6 @@ dependent_vars <- list(
 )
 
 # Create list_of_args
-list_of_args <- list_xtabs_args(df_, var_of_interest, dependent_vars)
+list_of_args <- list_xtabs_args(df, var_of_interest, dependent_vars)
+}
 }

@@ -21,12 +21,14 @@
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' # Remove special characters from columns 1 & 2
 #' df_ %>% rm_spl_char(var = c("col_1", "col_2"))
 #'
 #' # Remove special characters from all columns
 #' cols <- names(df)
 #' df_ %>% rrm_spl_char(var = cols)
+#' }
 rm_spl_char <- function(df, var) {
   if (is.data.frame(df) == FALSE) {
     stop("'df' must be a data frame", call. = FALSE)
@@ -63,8 +65,10 @@ rm_spl_char <- function(df, var) {
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' # Capitalize column names
 #' new_df <- col_nms_to_title(df)
+#' }
 col_nms_to_title <- function(df) {
   if (!is.data.frame(df)) {
     stop("'df' must be a data frame", call. = FALSE)
@@ -94,8 +98,10 @@ col_nms_to_title <- function(df) {
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' # Remove special characters from column names
 #' new_df <- df %>% col_nms_rm_splchar()
+#' }
 col_nms_rm_splchar <- function(df) {
   if (!is.data.frame(df)) {
     stop("'df' must be a data frame", call. = FALSE)

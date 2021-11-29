@@ -25,13 +25,15 @@ passed on to \code{generate_tbls()} for a given set of arguments. This may be us
 variables in a data frame is large, and there is a need to generate varying arguments efficiently.
 }
 \examples{
+\donttest{
 # Generate list of arguments
-generate_xtab_args(df_, "var_of_interest")
+generate_xtab_args(df, "var_of_interest")
 
 # Specified dependent variables and removal variables
 dependent_vars <- c("col1", "col2")
 rm <- c("col19", "col20")
-generate_xtab_args(df_, "var_of_interest", dependent_vars, rm)
+generate_xtab_args(df, "var_of_interest", dependent_vars, rm)
+}
 }
 \seealso{
 \code{\link[=generate_tbls]{generate_tbls()}} for an example of a list of arguments.
