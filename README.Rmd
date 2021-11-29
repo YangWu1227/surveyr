@@ -20,11 +20,11 @@ knitr::opts_chunk$set(
 [![CRAN status](https://www.r-pkg.org/badges/version/citizenr)](https://CRAN.R-project.org/package=citizenr)
 <!-- badges: end -->
 
-The goal of citizenr is to provide a set of tools that lead to easier data cleaning, more concise code, and faster Citizen-themed table generation. 
+The goal of citizenr is to provide a set of tools that lead to easier data cleaning, more concise code, and faster Citizen-themed table generation.
 
 ## Installation
 
-You can install the development version of citizenr as such:
+You can install the development version of citizenr as such: 
 
 ``` r
 install.packages("devtools")
