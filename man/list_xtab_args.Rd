@@ -49,21 +49,3 @@ element of \code{dependent_vars}, which is a vector in and of itself. If no \cod
 specified, the function defaults to crossing each variable in \code{var_of_interest} with all other
 columns in \code{df} unless \code{rm} is specified.
 }
-\examples{
-\donttest{
-# Create var_of_interest vector
-var_of_interest <- c("col1", "col3", "col20", "col23", "col32")
-
-# List of dependent variable vectors
-dependent_vars <- list(
-  c("col2", "col4", "col5", "col100"),
-  c("col2", "col4"),
-  c("col2", "col4", "col5", "col86"),
-  NULL,
-  c("col2", "col4"),
-)
-
-# Create list_of_args
-list_of_args <- list_xtabs_args(df, var_of_interest, dependent_vars)
-}
-}
