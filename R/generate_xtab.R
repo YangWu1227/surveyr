@@ -34,7 +34,7 @@
 #'
 #' @examples
 #' # Generate a crosstab
-#' df %>% generate_xtab(df = ., "x_var", "y_var", "weight", "X by Y")
+#' df_ %>% generate_xtab(df = ., "x_var", "y_var", "weight", "X by Y")
 generate_xtab <- function(df, x, y, weight, caption) {
   if (!"data.frame" %in% class(df)) {
     stop("The argument 'df' must be an object of class or subclass of data frame", call. = FALSE)

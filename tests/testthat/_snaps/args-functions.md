@@ -31,8 +31,6 @@
     Code
       generate_xtab_args(df = df, var_of_interest = c("education_rollup",
         "issue_focus"), rm = "weightvec")
-    Warning <simpleWarning>
-      the condition has length > 1 and only the first element will be used
     Error <simpleError>
       The argument 'var_of_interest' must be a single column name found in 'df'
 

@@ -59,7 +59,7 @@
 #' )
 #'
 #' # Create list_of_args
-#' list_of_args <- list_xtabs_args(df, var_of_interest, dependent_vars)
+#' list_of_args <- list_xtabs_args(df_, var_of_interest, dependent_vars)
 list_xtab_args <- function(df, var_of_interest, dependent_vars = NULL, rm = NULL) {
   if (!is_character(var_of_interest)) {
     stop("'var_of_intereset' must be a character vector", call. = FALSE)
@@ -140,7 +140,7 @@ flatten_args <- function(l) {
 
   # If the error list is not a NULL list, throw an error
   if (!all(map_lgl(l[["error"]], rlang::is_null))) {
-    stop("The `error` list contains failtures, please examine", call. = FALSE)
+    stop("The `error` list contains failures, please examine", call. = FALSE)
   }
   list_of_args <- as_tibble(rbindlist(l[["result"]]))
   list_of_args

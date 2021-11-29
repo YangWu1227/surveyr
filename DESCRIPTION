@@ -12,6 +12,8 @@ Authors@R:
 Description: A toolkit of functionalities aimed at making data clearning and table formatting 
     easier for reporting.
 License: file LICENSE
+URL: https://github.com/YangWu1227/citizenr
+BugReports: https://github.com/YangWu1227/citizenr/issues
 Depends:
     R (>= 3.3.0)
 Imports:

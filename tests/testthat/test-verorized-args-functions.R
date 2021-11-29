@@ -1,8 +1,6 @@
 # Tests for list_xtab_args() ----------------------------------------------
 
-# Test data ---------------------------------------------------------------
-
-df <- readRDS(system.file("tests/testthat", "testdata.rds", package = "citizenr"))
+df <- readr::read_csv("~/Rpkg/citizenr/tests/testthat/testdata.csv")
 
 # Errors ------------------------------------------------------------------
 

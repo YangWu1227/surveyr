@@ -17,5 +17,7 @@ Convert column names in a data frame to title cases.
 }
 \examples{
 # Capitalize column names
+\dontrun{
 new_df <- col_nms_to_title(df)
+}
 }

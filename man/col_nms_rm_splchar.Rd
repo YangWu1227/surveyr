@@ -2,7 +2,7 @@
 % Please edit documentation in R/clearning-helpers.R
 \name{col_nms_rm_splchar}
 \alias{col_nms_rm_splchar}
-\title{Remove special characters column names}
+\title{Remove special characters from column names}
 \usage{
 col_nms_rm_splchar(df)
 }
@@ -19,7 +19,9 @@ i.e., \verb{[:alnum:]} is retained.
 }
 \examples{
 # Remove special characters from column names
-new_df <- col_nms_rm_splchar(df)
+\dontrun{
+new_df <- df \%>\% col_nms_rm_splchar()
+}
 }
 \seealso{
 \code{\link[=rm_spl_char]{rm_spl_char()}} for removing special characters from selected columns.

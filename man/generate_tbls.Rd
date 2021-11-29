@@ -50,7 +50,7 @@ may vary depending on the table \code{type}.
 # Generate crosstabs
 list_of_xtabs <- generate_tbls(
   l = list_xtab,
-  df,
+  df_,
   "weight",
   "crosstab"
 )
@@ -58,7 +58,7 @@ list_of_xtabs <- generate_tbls(
 # Generate toplines
 list_of_topline <- generate_tbls(
   l = list_topline,
-  df,
+  df_,
   "weight",
   "topline"
 )

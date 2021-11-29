@@ -23,15 +23,15 @@
 #'
 #' @examples
 #' # Generate list of arguments
-#' generate_xtab_args(df, "var_of_interest")
+#' generate_xtab_args(df_, "var_of_interest")
 #'
 #' # Specified dependent variables and removal variables
 #' dependent_vars <- c("col1", "col2")
 #' rm <- c("col19", "col20")
-#' generate_xtab_args(df, "var_of_interest", dependent_vars, rm)
+#' generate_xtab_args(df_, "var_of_interest", dependent_vars, rm)
 generate_xtab_args <- function(df, var_of_interest, dependent_vars = NULL, rm = NULL) {
   if (!is.data.frame(df)) stop("'df' must be a data frame", call. = FALSE)
-  if (!is_character(var_of_interest, n = 1) | !var_of_interest %in% names(df)) {
+  if (!is_character(var_of_interest, n = 1) | !all(var_of_interest %in% names(df))) {
     stop("The argument 'var_of_interest' must be a single column name found in 'df'", call. = FALSE)
   }
 
@@ -133,11 +133,11 @@ generate_xtab_args <- function(df, var_of_interest, dependent_vars = NULL, rm = 
 #'
 #' @examples
 #' # Generate list of arguments
-#' generate_topline_args(df, "var_of_interest")
+#' generate_topline_args(df_, "var_of_interest")
 #'
 #' # Specified removal variables
 #' rm <- c("col19", "col20")
-#' generate_topline_args(df, "var_of_interest", rm)
+#' generate_topline_args(df_, "var_of_interest", rm)
 generate_topline_args <- function(df, var_of_interest = NULL, rm = NULL) {
   if (!is.data.frame(df)) stop("'df' must be a data frame", call. = FALSE)
 

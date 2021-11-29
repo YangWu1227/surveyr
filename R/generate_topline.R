@@ -20,7 +20,7 @@
 #'
 #' @examples
 #' # Generate a topline
-#' df %>% generate_topline(df = ., "x_var", "weight", "X")
+#' df_ %>% generate_topline(df = ., "x_var", "weight", "X")
 generate_topline <- function(df, x, weight, caption) {
   if (!"data.frame" %in% class(df)) {
     stop("The argument 'df' must be an object of class or subclass of data frame", call. = FALSE)

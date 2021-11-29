@@ -24,11 +24,11 @@ variables in a data frame is large, and there is a need to generate varying argu
 }
 \examples{
 # Generate list of arguments
-generate_topline_args(df, "var_of_interest")
+generate_topline_args(df_, "var_of_interest")
 
 # Specified removal variables
 rm <- c("col19", "col20")
-generate_topline_args(df, "var_of_interest", rm)
+generate_topline_args(df_, "var_of_interest", rm)
 }
 \seealso{
 \code{\link[=generate_tbls]{generate_tbls()}} for an example of a list of arguments.

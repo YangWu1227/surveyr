@@ -17,14 +17,16 @@
 #'
 #' @importFrom magrittr %>%
 #' @importFrom dplyr everything
+#'
 #' @export
+#'
 #' @examples
 #' # Remove special characters from columns 1 & 2
-#' df %>% rm_spl_char(var = c("col_1", "col_2"))
+#' df_ %>% rm_spl_char(var = c("col_1", "col_2"))
 #'
 #' # Remove special characters from all columns
 #' cols <- names(df)
-#' df %>% rrm_spl_char(var = cols)
+#' df_ %>% rrm_spl_char(var = cols)
 rm_spl_char <- function(df, var) {
   if (is.data.frame(df) == FALSE) {
     stop("'df' must be a data frame", call. = FALSE)
@@ -76,7 +78,7 @@ col_nms_to_title <- function(df) {
   new_df
 }
 
-#' Remove special characters column names
+#' Remove special characters from column names
 #'
 #' @description
 #' Remove special characters from column names in a data frame. To be precise, the function
@@ -93,7 +95,7 @@ col_nms_to_title <- function(df) {
 #'
 #' @examples
 #' # Remove special characters from column names
-#' new_df <- col_nms_rm_splchar(df)
+#' new_df <- df %>% col_nms_rm_splchar()
 col_nms_rm_splchar <- function(df) {
   if (!is.data.frame(df)) {
     stop("'df' must be a data frame", call. = FALSE)

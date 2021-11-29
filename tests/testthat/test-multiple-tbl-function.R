@@ -1,6 +1,6 @@
 # Test data ---------------------------------------------------------------
 
-df <- readRDS(system.file("tests/testthat", "testdata.rds", package = "citizenr"))
+df <- readr::read_csv("~/Rpkg/citizenr/tests/testthat/testdata.csv")
 
 list_xtab <- tibble::tribble(
   ~x, ~y, ~caption,

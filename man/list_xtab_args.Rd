@@ -63,5 +63,5 @@ dependent_vars <- list(
 )
 
 # Create list_of_args
-list_of_args <- list_xtabs_args(df, var_of_interest, dependent_vars)
+list_of_args <- list_xtabs_args(df_, var_of_interest, dependent_vars)
 }

@@ -27,7 +27,7 @@ so users must specify data variables as strings (i.e. use "x", "y", "weight").
 }
 \examples{
 # Generate a crosstab
-df \%>\% generate_xtab(df = ., "x_var", "y_var", "weight", "X by Y")
+df_ \%>\% generate_xtab(df = ., "x_var", "y_var", "weight", "X by Y")
 }
 \seealso{
 \code{\link[=generate_topline]{generate_topline()}} for topline generation.
