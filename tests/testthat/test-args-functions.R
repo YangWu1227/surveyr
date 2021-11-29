@@ -1,6 +1,6 @@
 # Test data ---------------------------------------------------------------
 
-df <- readr::read_csv("~/Rpkg/citizenr/tests/testthat/testdata.csv", show_col_types = FALSE)
+df <- readr::read_csv("/Users/kenwu/Rpkg/citizenr/tests/testthat/testdata.csv", show_col_types = FALSE)
 
 # Errors ------------------------------------------------------------------
 
