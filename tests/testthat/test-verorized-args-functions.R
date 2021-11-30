@@ -4,7 +4,7 @@
 
 test_that("list_xtab_args() provides meaningful error messages", {
   # Test data
-  df <- readr::read_csv("/Users/kenwu/Rpkg/citizenr/tests/testthat/testdata.csv", show_col_types = FALSE)
+  df <- readr::read_csv(test_path("testdata.csv"), show_col_types = FALSE)
   # Invalid input for 'var_of_interest' (wrong type)
   expect_snapshot(
     x = list_xtab_args(
@@ -26,7 +26,7 @@ test_that("list_xtab_args() provides meaningful error messages", {
 
 test_that("Does the error list accurately capture invalid input for 'df'", {
   # Test data
-  df <- readr::read_csv("/Users/kenwu/Rpkg/citizenr/tests/testthat/testdata.csv", show_col_types = FALSE)
+  df <- readr::read_csv(test_path("testdata.csv"), show_col_types = FALSE)
   expect_snapshot_output(
     x = list_xtab_args(
       df = list(df),
@@ -41,7 +41,7 @@ test_that("Does the error list accurately capture invalid input for 'df'", {
 
 test_that("Does the error list accurately capture invalid input for 'var_interest' (not found in df)", {
   # Test data
-  df <- readr::read_csv("/Users/kenwu/Rpkg/citizenr/tests/testthat/testdata.csv", show_col_types = FALSE)
+  df <- readr::read_csv(test_path("testdata.csv"), show_col_types = FALSE)
   expect_snapshot_output(
     x = list_xtab_args(
       df = df,
@@ -56,7 +56,7 @@ test_that("Does the error list accurately capture invalid input for 'var_interes
 
 test_that("Does the error list accurately capture invalid input for 'dependent_vars' (not in df)", {
   # Test data
-  df <- readr::read_csv("/Users/kenwu/Rpkg/citizenr/tests/testthat/testdata.csv", show_col_types = FALSE)
+  df <- readr::read_csv(test_path("testdata.csv"), show_col_types = FALSE)
   expect_snapshot_output(
     x = list_xtab_args(
       df = df,
@@ -71,7 +71,7 @@ test_that("Does the error list accurately capture invalid input for 'dependent_v
 
 test_that("Does the error list accurately capture invalid input for 'rm' (not in df and wrong type)", {
   # Test data
-  df <- readr::read_csv("/Users/kenwu/Rpkg/citizenr/tests/testthat/testdata.csv", show_col_types = FALSE)
+  df <- readr::read_csv(test_path("testdata.csv"), show_col_types = FALSE)
   expect_snapshot_output(
     x = list_xtab_args(
       df = df,
@@ -115,7 +115,7 @@ test_that("flatten_args() provides meaningful error messages", {
 
 test_that("Does flatten_args() return correct output type and class and snapshot", {
   # Test data
-  df <- readr::read_csv("/Users/kenwu/Rpkg/citizenr/tests/testthat/testdata.csv", show_col_types = FALSE)
+  df <- readr::read_csv(test_path("testdata.csv"), show_col_types = FALSE)
   # Test data
   list_of_args <- list_xtab_args(
     df = df,

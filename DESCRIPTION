@@ -9,8 +9,8 @@ Authors@R:
              comment = c(ORCID = "0000-0001-9847-0112")),
       person(given = "Citizen, Inc.", 
              role = c("cph")))
-Description: A toolkit of functionalities aimed at making data clearning and table formatting 
-    easier for reporting.
+Description: A toolkit of functions aimed at making data cleaning and table formatting 
+    easier and faster using more concise code.
 License: file LICENSE
 URL: https://github.com/YangWu1227/citizenr
 BugReports: https://github.com/YangWu1227/citizenr/issues
@@ -31,7 +31,8 @@ Imports:
     tibble,
     tidyr,
     tinytex (>= 0.35.0),
-    vctrs (>= 0.3.8)
+    vctrs (>= 0.3.8),
+    vroom
 Suggests:
     covr,
     sloop (>= 1.0.1),
