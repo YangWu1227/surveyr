@@ -19,7 +19,7 @@ generation.
 
 ## Installation
 
-You can install the development version of citizenr as such:
+You can install the development version of citizenr as follows:
 
 ``` r
 install.packages("devtools")
