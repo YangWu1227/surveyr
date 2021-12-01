@@ -9,8 +9,7 @@
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/citizenr)](https://CRAN.R-project.org/package=citizenr)
-[![Codecov test
-coverage](https://codecov.io/gh/YangWu1227/citizenr/branch/main/graph/badge.svg)](https://app.codecov.io/gh/YangWu1227/citizenr?branch=main)
+[![codecov](https://codecov.io/gh/YangWu1227/citizenr/branch/main/graph/badge.svg?token=KS3DTV6WDT)](https://codecov.io/gh/YangWu1227/citizenr)
 <!-- badges: end -->
 
 The goal of citizenr is to provide a set of tools that lead to easier
