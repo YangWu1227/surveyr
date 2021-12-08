@@ -4,10 +4,10 @@
 \alias{generate_tbls}
 \title{Iteratively generate multiple tables}
 \usage{
-generate_tbls(l, df, weight, type = "topline")
+generate_tbls(l, df, weight, type = "topline", output = "word")
 }
 \arguments{
-\item{l}{A list of arguments to be passed on to either \code{generate_xtab()} or \code{generate_topline()}:
+\item{l}{A list of arguments to be passed on to either \verb{generate_xtab_*()} or \verb{generate_topline_*()}:
 \describe{
 \item{For toplines}{
 \preformatted{list_topline <- tibble::tribble(
@@ -36,13 +36,15 @@ generate_tbls(l, df, weight, type = "topline")
 \item{weight}{A length one character vector used as the caption for the topline.}
 
 \item{type}{Must either be 'topline' or 'crosstab'. Defaults to 'topline'.}
+
+\item{output}{Must either be 'latex' or 'word'. Defaults to 'word'.}
 }
 \value{
-A list containing elements that are length one character vectors, each of which is the source code for a single
-table.
+A list containing elements that are length one character vectors (latex) or lists objects (word), each of which is the source code for a single
+table (latex) or a \code{s3} list object (word).
 }
 \description{
-This function provides a wrapper around \code{generate_xtab()} and \code{generate_topline()}, allowing users
+This function provides a wrapper around \verb{generate_xtab_*()} and \verb{generate_topline_*()}, allowing users
 to efficiently generate many tables by passing a list of arguments. The shapes of the argument lists
 may vary depending on the table \code{type}.
 }
@@ -53,7 +55,8 @@ list_of_xtabs <- generate_tbls(
   l = list_xtab,
   df,
   "weight",
-  "crosstab"
+  "crosstab",
+  "word"
 )
 
 # Generate toplines
@@ -61,10 +64,11 @@ list_of_topline <- generate_tbls(
   l = list_topline,
   df,
   "weight",
-  "topline"
+  "topline",
+  "latex"
 )
 }
 }
 \seealso{
-\code{\link[=generate_xtab]{generate_xtab()}} and \code{\link[=generate_topline]{generate_topline()}} for single crosstab or topline generation.
+\code{\link[=generate_xtab_docx]{generate_xtab_docx()}}, \code{\link[=generate_xtab_latex]{generate_xtab_latex()}}, \code{\link[=generate_topline_docx]{generate_topline_docx()}}, and \code{\link[=generate_topline_latex]{generate_topline_latex()}} for single crosstab or topline generation.
 }

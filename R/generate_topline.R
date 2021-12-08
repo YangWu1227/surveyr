@@ -1,4 +1,4 @@
-#' Generate toplines
+#' Generate toplines (latex)
 #'
 #' @description
 #' This function takes a data frame or a tibble object, a variable of interest, and a string
@@ -13,7 +13,7 @@
 #'
 #' @return A character vector of the table source code, which is an object of class `knitr_kable`.
 #'
-#' @seealso [generate_xtab()] for crosstab generation.
+#' @seealso [generate_topline_docx()] for outputting to Microsoft word.
 #'
 #' @importFrom dplyr select
 #' @export
@@ -21,9 +21,9 @@
 #' @examples
 #' \donttest{
 #' # Generate a topline
-#' df %>% generate_topline(df = ., "x_var", "weight", "X")
+#' df %>% generate_topline_latex(df = ., "x_var", "weight", "X")
 #' }
-generate_topline <- function(df, x, weight, caption) {
+generate_topline_latex <- function(df, x, weight, caption) {
   if (!"data.frame" %in% class(df)) {
     stop("The argument 'df' must be an object of class or subclass of data frame", call. = FALSE)
   }
@@ -128,6 +128,88 @@ generate_topline <- function(df, x, weight, caption) {
       column = 1,
       bold = TRUE
     )
+
+  # Return formatted table
+  topline_formatted
+}
+
+
+#' Generate toplines (word)
+#'
+#' @description
+#' This function takes a data frame or a tibble object, a variable of interest, and a string
+#' caption, returning a list object that is an instance of class `flextable`. The function
+#' implements data masking internally so users must specify data variables as strings
+#' (i.e. use "x", "weight").
+#'
+#' @param df A data frame or tibble.
+#' @param x A single string of variable name.
+#' @param weight A single string of the weighting variable.
+#' @param caption A length one character vector used as the caption for the topline.
+#'
+#' @return A list object, which is an object of class `flextable`.
+#'
+#' @seealso [generate_topline_latex()] for outputting to pdf.
+#'
+#' @importFrom dplyr select
+#' @export
+#'
+#' @examples
+#' \donttest{
+#' # Generate a topline
+#' df %>% generate_topline_docx(df = ., "x_var", "weight", "X")
+#' }
+generate_topline_docx <- function(df, x, weight, caption) {
+  if (!"data.frame" %in% class(df)) {
+    stop("The argument 'df' must be an object of class or subclass of data frame", call. = FALSE)
+  }
+  if (!is_character(caption, n = 1)) {
+    stop("The argument 'caption' must be a length one character vector", call. = FALSE)
+  }
+  if (!is_character(x, n = 1) | !is_character(weight, n = 1)) {
+    stop("The arguments 'x' and 'weight' must be character vectors of length one", call. = FALSE)
+  }
+
+  # Convert string to symbols
+  x <- ensym(x)
+  weight <- ensym(weight)
+
+  topline <- pollster::topline(df = df, variable = {{ x }}, weight = {{ weight }}) %>%
+    select(-c(Percent, `Cumulative Percent`)) %>%
+    rename(
+      Percent = `Valid Percent`
+    )
+
+  topline_formatted <- topline %>%
+    flextable() %>%
+    colformat_double(j = 2:3, digits = 1) %>%
+    align(align = "center", part = "header") %>%
+    align(i = NULL, j = 2:3, align = "center", part = "body") %>%
+    bold(bold = TRUE, part = "header") %>%
+    bold(i = NULL, j = 1, bold = TRUE, part = "body") %>%
+    font(fontname = "Open Sans", part = "all") %>%
+    color(color = "white", part = "header") %>%
+    bg(i = NULL, j = NULL, bg = "#32BDB9", part = "header") %>%
+    vline_left(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
+    vline_right(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
+    hline_top(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
+    hline_bottom(border = fp_border(color = "black", style = "solid", width = 1), part = "all")
+
+  # Obtain a character vector of unique categories (factor levels)
+  levels <- topline[[1]] %>%
+    unique() %>%
+    as.character()
+
+  while (vec_size(levels) > 0) {
+    if (vec_size(levels) %% 2 == 1) {
+      row_num <- which(topline[[1]] == levels[[1]])
+      topline_formatted <- bg(x = topline_formatted, i = row_num, j = NULL, bg = "#e5e5e5", part = "body")
+    } else if (vec_size(levels) %% 2 == 0) {
+      row_num <- which(topline[[1]] == levels[[1]])
+      topline_formatted <- bg(x = topline_formatted, i = row_num, j = NULL, bg = "white", part = "body")
+    }
+    levels <- levels[-1]
+  }
 
   # Return formatted table
   topline_formatted

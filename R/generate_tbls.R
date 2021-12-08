@@ -1,10 +1,10 @@
 #' Iteratively generate multiple tables
 #'
-#' This function provides a wrapper around `generate_xtab()` and `generate_topline()`, allowing users
+#' This function provides a wrapper around `generate_xtab_*()` and `generate_topline_*()`, allowing users
 #' to efficiently generate many tables by passing a list of arguments. The shapes of the argument lists
 #' may vary depending on the table `type`.
 #'
-#' @param l A list of arguments to be passed on to either `generate_xtab()` or `generate_topline()`:
+#' @param l A list of arguments to be passed on to either `generate_xtab_*()` or `generate_topline_*()`:
 #' \describe{
 #'   \item{For toplines}{
 #'   \preformatted{list_topline <- tibble::tribble(
@@ -30,11 +30,12 @@
 #' @param df A data frame or tibble.
 #' @param weight A length one character vector used as the caption for the topline.
 #' @param type Must either be 'topline' or 'crosstab'. Defaults to 'topline'.
+#' @param output Must either be 'latex' or 'word'. Defaults to 'word'.
 #'
-#' @return A list containing elements that are length one character vectors, each of which is the source code for a single
-#' table.
+#' @return A list containing elements that are length one character vectors (latex) or lists objects (word), each of which is the source code for a single
+#' table (latex) or a `s3` list object (word).
 #'
-#' @seealso [generate_xtab()] and [generate_topline()] for single crosstab or topline generation.
+#' @seealso [generate_xtab_docx()], [generate_xtab_latex()], [generate_topline_docx()], and [generate_topline_latex()] for single crosstab or topline generation.
 #'
 #' @importFrom purrr pmap
 #' @export
@@ -46,7 +47,8 @@
 #'   l = list_xtab,
 #'   df,
 #'   "weight",
-#'   "crosstab"
+#'   "crosstab",
+#'   "word"
 #' )
 #'
 #' # Generate toplines
@@ -54,10 +56,11 @@
 #'   l = list_topline,
 #'   df,
 #'   "weight",
-#'   "topline"
+#'   "topline",
+#'   "latex"
 #' )
 #' }
-generate_tbls <- function(l, df, weight, type = "topline") {
+generate_tbls <- function(l, df, weight, type = "topline", output = "word") {
   tryCatch(
     error = function(cnd) stop("Please place quotes around the argument 'weight'", call. = FALSE),
     {
@@ -70,31 +73,71 @@ generate_tbls <- function(l, df, weight, type = "topline") {
       type
     }
   )
+  tryCatch(
+    error = function(cnd) stop("Please place quotes around the argument 'output'", call. = FALSE),
+    {
+      output
+    }
+  )
   if (!"data.frame" %in% class(l) | !"data.frame" %in% class(df)) {
     stop("The argument 'l' and 'df' must be objects inheriting from data frame", call. = FALSE)
   }
   if (!is_character(weight, n = 1) | !weight %in% names(df)) {
     stop("The argument 'weight' must be a single column name found in 'df'", call. = FALSE)
   }
+  if (!is_character(type, n = 1)) {
+    stop("The argument 'type' must be a length-one character vector", call. = FALSE)
+  }
+  if (!is_character(output, n = 1)) {
+    stop("The argument 'output' must be a length-one character vector", call. = FALSE)
+  }
 
-  if (type == "topline") {
-    list_of_tables <- pmap(
-      .l = l,
-      .f = generate_topline,
-      # Constant arguments
-      df = df,
-      weight = {{ weight }}
+  if (output == "word") {
+    switch(type,
+      topline = {
+        list_of_tables <- pmap(
+          .l = l,
+          .f = generate_topline_docx,
+          # Constant arguments
+          df = df,
+          weight = {{ weight }}
+        )
+      },
+      crosstab = {
+        list_of_tables <- pmap(
+          .l = l,
+          .f = generate_xtab_docx,
+          # Constant arguments
+          df = df,
+          weight = {{ weight }}
+        )
+      },
+      stop("The argument 'type' must either be 'crosstab' or 'topline'", call. = FALSE)
     )
-  } else if (type == "crosstab") {
-    list_of_tables <- pmap(
-      .l = l,
-      .f = generate_xtab,
-      # Constant arguments
-      df = df,
-      weight = {{ weight }}
+  } else if (output == "latex") {
+    switch(type,
+      topline = {
+        list_of_tables <- pmap(
+          .l = l,
+          .f = generate_topline_latex,
+          # Constant arguments
+          df = df,
+          weight = {{ weight }}
+        )
+      },
+      crosstab = {
+        list_of_tables <- pmap(
+          .l = l,
+          .f = generate_xtab_latex,
+          # Constant arguments
+          df = df,
+          weight = {{ weight }}
+        )
+      },
+      stop("The argument 'type' must either be 'crosstab' or 'topline'", call. = FALSE)
     )
   } else {
-    stop("The argument 'type' must either be 'topline' or 'crosstab'", call. = FALSE)
+    stop("The argument 'output' must either be 'word' or 'latex'", call. = FALSE)
   }
 
   list_of_tables
