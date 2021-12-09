@@ -187,6 +187,7 @@ generate_xtab_latex <- function(df, x, y, weight, caption) {
 #' @importFrom flextable vline_right
 #' @importFrom flextable hline_top
 #' @importFrom flextable hline_bottom
+#' @importFrom flextable set_caption
 #' @export
 #'
 #' @examples
@@ -228,6 +229,7 @@ generate_xtab_docx <- function(df, x, y, weight, caption) {
 
   xtab_formatted <- xtab %>%
     flextable() %>%
+    set_caption(caption = caption) %>%
     colformat_double(j = 5, digits = 0) %>%
     colformat_double(j = 3:4, digits = 1) %>%
     align(align = "center", part = "header") %>%
