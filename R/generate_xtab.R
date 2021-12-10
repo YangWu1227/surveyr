@@ -38,10 +38,10 @@
 #' df %>% generate_xtab_latex(df = ., "x_var", "y_var", "weight", "X by Y")
 #' }
 generate_xtab_latex <- function(df, x, y, weight, caption) {
-  if (!"data.frame" %in% class(df)) {
+  if (!is.data.frame(df)) {
     stop("The argument 'df' must be an object of class or subclass of data frame", call. = FALSE)
   }
-  if (!is_character(caption, n = 1)) {
+  if (!is.character(caption) | !length(caption) == 1) {
     stop("The argument 'caption' must be a length one character vector", call. = FALSE)
   }
   if (!is_character(x, n = 1) |
@@ -93,9 +93,9 @@ generate_xtab_latex <- function(df, x, y, weight, caption) {
     as.character()
   # Apply "grey" and "white" row color based on categories in levels
   # Keep executing expressions until we exhaust the levels vector
-  while (vec_size(levels) > 0) {
+  while (length(levels) > 0) {
     # If, when dividing the length of the `levels` vector by 2, we get a remainder of 1, apply grey
-    if (vec_size(levels) %% 2 == 1) {
+    if (length(levels) %% 2 == 1) {
       # Create a vector of row index satisfying a particular category in "levels"
       row_num <- which(xtab[[1]] == levels[[1]])
       # Apply \makecell, \colorbox, and \cellcolor to rows whose indices are in 'row_num'
@@ -107,7 +107,7 @@ generate_xtab_latex <- function(df, x, y, weight, caption) {
         .f = ~ paste0("\\cellcolor[HTML]{e5e5e5}{", .x, "}")
       )
       # If, when dividing the length of the levels vector by 2, we get a remainder of 0, apply white
-    } else if (vec_size(levels) %% 2 == 0) {
+    } else if (length(levels) %% 2 == 0) {
       # Create a vector of row index satisfying a particular category in "levels"
       row_num <- which(xtab[[1]] == levels[[1]])
       # Apply \makecell, \colorbox, and \cellcolor to rows whose indices are in 'row_num'
@@ -196,10 +196,10 @@ generate_xtab_latex <- function(df, x, y, weight, caption) {
 #' df %>% generate_xtab_docx(df = ., "x_var", "y_var", "weight", "X by Y")
 #' }
 generate_xtab_docx <- function(df, x, y, weight, caption) {
-  if (!"data.frame" %in% class(df)) {
+  if (!is.data.frame(df)) {
     stop("The argument 'df' must be an object of class or subclass of data frame", call. = FALSE)
   }
-  if (!is_character(caption, n = 1)) {
+  if (!is.character(caption) | !length(caption) == 1) {
     stop("The argument 'caption' must be a length one character vector", call. = FALSE)
   }
   if (!is_character(x, n = 1) |
@@ -250,11 +250,11 @@ generate_xtab_docx <- function(df, x, y, weight, caption) {
     unique() %>%
     as.character()
 
-  while (vec_size(levels) > 0) {
-    if (vec_size(levels) %% 2 == 1) {
+  while (length(levels) > 0) {
+    if (length(levels) %% 2 == 1) {
       row_num <- which(xtab[[1]] == levels[[1]])
       xtab_formatted <- bg(x = xtab_formatted, i = row_num, j = NULL, bg = "#e5e5e5", part = "body")
-    } else if (vec_size(levels) %% 2 == 0) {
+    } else if (length(levels) %% 2 == 0) {
       row_num <- which(xtab[[1]] == levels[[1]])
       xtab_formatted <- bg(x = xtab_formatted, i = row_num, j = NULL, bg = "#FFFFFF", part = "body")
     }

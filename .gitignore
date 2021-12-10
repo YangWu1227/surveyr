@@ -2,10 +2,10 @@
 .DS_Store
 .Rhistory
 .RData
-*.pdf
-*.log
-*.tex
-*.docx
-*.csv
-*.rds
+citizenr/**/*.pdf
+citizenr/**/*.log
+citizenr/**/*.tex
+citizenr/**/*.docx
+citizenr/**/*.csv
+citizenr/**/*.rds
 cran-comments.md

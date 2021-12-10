@@ -49,7 +49,7 @@ generate_xtab_args <- function(df, var_of_interest, dependent_vars = NULL, rm = 
 
     if (!rlang::is_null(rm)) {
       # If 'rm' is not NULL, "rm" must be a character vector
-      if (!is_character(rm)) {
+      if (!is.character(rm)) {
         stop("The argument 'rm' must be a character vector", call. = FALSE)
       }
       # If 'rm' is not NULL, check if "rm" is in "df"
@@ -75,7 +75,7 @@ generate_xtab_args <- function(df, var_of_interest, dependent_vars = NULL, rm = 
 
   if (!rlang::is_null(dependent_vars)) {
     # Check dependent_vars type and size
-    if (!is_character(dependent_vars) | vec_size(dependent_vars) > (length(df) - 1)) {
+    if (!is.character(dependent_vars) | length(dependent_vars) > (length(df) - 1)) {
       stop(
         "The argument 'dependent_vars' must be a character vector with length no greater than (length(df) - 1)",
         call. = FALSE
@@ -90,7 +90,7 @@ generate_xtab_args <- function(df, var_of_interest, dependent_vars = NULL, rm = 
     }
     # Check 'rm' type and whether they exist in 'df
     if (!rlang::is_null(rm)) {
-      if (!is_character(rm)) {
+      if (!is.character(rm)) {
         stop("The argument 'rm' must be a character vector", call. = FALSE)
       }
       if (!all(rm %in% names(df))) {
@@ -100,7 +100,7 @@ generate_xtab_args <- function(df, var_of_interest, dependent_vars = NULL, rm = 
   }
 
   # Broadcast variable of interest (a single character) to have the same length as the dependent variable vector
-  vec_var_of_interest <- rep_len(x = var_of_interest, length.out = vec_size(dependent_vars))
+  vec_var_of_interest <- rep_len(x = var_of_interest, length.out = length(dependent_vars))
 
   tibble(
     "x" = vec_var_of_interest,
@@ -157,7 +157,7 @@ generate_topline_args <- function(df, var_of_interest = NULL, rm = NULL) {
 
     if (!rlang::is_null(rm)) {
       # If 'rm' is not NULL, "rm" must be a character vector
-      if (!is_character(rm)) {
+      if (!is.character(rm)) {
         stop("The argument 'rm' must be a character vector", call. = FALSE)
       }
       # If 'rm' is not NULL, check if "rm" is in "df"
@@ -183,7 +183,7 @@ generate_topline_args <- function(df, var_of_interest = NULL, rm = NULL) {
 
   if (!rlang::is_null(var_of_interest)) {
     # Check var_of_interest type, size, and whether it exists in 'df'
-    if (!is_character(var_of_interest) | vec_size(var_of_interest) > length(df) | !all(var_of_interest %in% names(df))) {
+    if (!is.character(var_of_interest) | length(var_of_interest) > length(df) | !all(var_of_interest %in% names(df))) {
       stop(
         "The argument 'var_of_interest' must be a character vector of column names found in 'df' with length no greater than length(df)",
         call. = FALSE
@@ -191,7 +191,7 @@ generate_topline_args <- function(df, var_of_interest = NULL, rm = NULL) {
     }
     # If 'rm' is not NULL, check 'rm' type and whether they exist in 'df
     if (!rlang::is_null(rm)) {
-      if (!is_character(rm)) {
+      if (!is.character(rm)) {
         stop("The argument 'rm' must be a character vector", call. = FALSE)
       }
       if (!all(rm %in% names(df))) {

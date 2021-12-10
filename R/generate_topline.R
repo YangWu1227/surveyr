@@ -24,10 +24,10 @@
 #' df %>% generate_topline_latex(df = ., "x_var", "weight", "X")
 #' }
 generate_topline_latex <- function(df, x, weight, caption) {
-  if (!"data.frame" %in% class(df)) {
+  if (!is.data.frame(df)) {
     stop("The argument 'df' must be an object of class or subclass of data frame", call. = FALSE)
   }
-  if (!is_character(caption, n = 1)) {
+  if (!is.character(caption) | !length(caption) == 1) {
     stop("The argument 'caption' must be a length one character vector", call. = FALSE)
   }
   if (!is_character(x, n = 1) | !is_character(weight, n = 1)) {
@@ -67,9 +67,9 @@ generate_topline_latex <- function(df, x, weight, caption) {
     as.character()
   # Apply "grey" and "white" striping based on categories in levels
   # Keep executing expressions until we exhaust the levels vector
-  while (vec_size(levels) > 0) {
+  while (length(levels) > 0) {
     # If, when dividing the length of the levels vector by 2, we get a remainder of 1, apply grey
-    if (vec_size(levels) %% 2 == 1) {
+    if (length(levels) %% 2 == 1) {
       # Create a vector of row index satisfying a particular category in "levels"
       row_num <- which(topline[[1]] == levels[[1]])
       # Only \makecell, \colorbox, and \cellcolorto rows whose indices are in 'row_num'
@@ -81,7 +81,7 @@ generate_topline_latex <- function(df, x, weight, caption) {
         .f = ~ paste0("\\cellcolor[HTML]{e5e5e5}{", .x, "}")
       )
       # If, when dividing the length of the levels vector by 2, we get a remainder of 0, apply white
-    } else if (vec_size(levels) %% 2 == 0) {
+    } else if (length(levels) %% 2 == 0) {
       # Create a vector of row index satisfying a particular category in "levels"
       row_num <- which(topline[[1]] == levels[[1]])
       # Only \makecell, \colorbox, and \cellcolor to rows whose indices are in 'row_num'
@@ -160,10 +160,10 @@ generate_topline_latex <- function(df, x, weight, caption) {
 #' df %>% generate_topline_docx(df = ., "x_var", "weight", "X")
 #' }
 generate_topline_docx <- function(df, x, weight, caption) {
-  if (!"data.frame" %in% class(df)) {
+  if (!is.data.frame(df)) {
     stop("The argument 'df' must be an object of class or subclass of data frame", call. = FALSE)
   }
-  if (!is_character(caption, n = 1)) {
+  if (!is.character(caption) | !length(caption) == 1) {
     stop("The argument 'caption' must be a length one character vector", call. = FALSE)
   }
   if (!is_character(x, n = 1) | !is_character(weight, n = 1)) {
@@ -201,11 +201,11 @@ generate_topline_docx <- function(df, x, weight, caption) {
     unique() %>%
     as.character()
 
-  while (vec_size(levels) > 0) {
-    if (vec_size(levels) %% 2 == 1) {
+  while (length(levels) > 0) {
+    if (length(levels) %% 2 == 1) {
       row_num <- which(topline[[1]] == levels[[1]])
       topline_formatted <- bg(x = topline_formatted, i = row_num, j = NULL, bg = "#e5e5e5", part = "body")
-    } else if (vec_size(levels) %% 2 == 0) {
+    } else if (length(levels) %% 2 == 0) {
       row_num <- which(topline[[1]] == levels[[1]])
       topline_formatted <- bg(x = topline_formatted, i = row_num, j = NULL, bg = "#FFFFFF", part = "body")
     }

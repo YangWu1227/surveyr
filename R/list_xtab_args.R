@@ -63,7 +63,7 @@
 #' list_of_args <- list_xtabs_args(df, var_of_interest, dependent_vars)
 #' }
 list_xtab_args <- function(df, var_of_interest, dependent_vars = NULL, rm = NULL) {
-  if (!is_character(var_of_interest)) {
+  if (!is.character(var_of_interest)) {
     stop("'var_of_intereset' must be a character vector", call. = FALSE)
   }
 
@@ -86,10 +86,10 @@ list_xtab_args <- function(df, var_of_interest, dependent_vars = NULL, rm = NULL
     list_args
     # Second case
   } else if (!rlang::is_null(dependent_vars)) {
-    if (!is_list(dependent_vars)) {
+    if (!is.list(dependent_vars)) {
       stop("'dependent_vars' must be a list object", call. = FALSE)
     }
-    if (vec_size(dependent_vars) != vec_size(var_of_interest)) {
+    if (length(dependent_vars) != length(var_of_interest)) {
       stop("'dependent_vars' and 'var_of_interest' must have the same length", call. = FALSE)
     }
 
@@ -136,14 +136,14 @@ list_xtab_args <- function(df, var_of_interest, dependent_vars = NULL, rm = NULL
 #' # Generate arguments list for crosstabs
 #' list_xtabs_args(df, var_of_interest, dependent_vars, rm) %>%
 #'   flatten_args(l = .)
-#'}
+#' }
 flatten_args <- function(l) {
-  if (!is_list(l, n = 2) | !all(c("error", "result") %in% names(l))) {
+  if (!is.list(l) | !length(l) == 2 | !all(c("error", "result") %in% names(l))) {
     stop("'l' must be the output of `list-xtab_args()`", call. = FALSE)
   }
 
   # If the error list is not a NULL list, throw an error
-  if (!all(map_lgl(l[["error"]], rlang::is_null))) {
+  if (!all(map_lgl(l[["error"]], is.null))) {
     stop("The `error` list contains failures, please examine", call. = FALSE)
   }
   list_of_args <- as_tibble(rbindlist(l[["result"]]))

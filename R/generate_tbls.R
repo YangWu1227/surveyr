@@ -79,16 +79,16 @@ generate_tbls <- function(l, df, weight, type = "topline", output = "word") {
       output
     }
   )
-  if (!"data.frame" %in% class(l) | !"data.frame" %in% class(df)) {
+  if (!is.data.frame(l) | !is.data.frame(df)) {
     stop("The argument 'l' and 'df' must be objects inheriting from data frame", call. = FALSE)
   }
-  if (!is_character(weight, n = 1) | !weight %in% names(df)) {
+  if (!is.character(weight) | !length(weight) == 1 | !weight %in% names(df)) {
     stop("The argument 'weight' must be a single column name found in 'df'", call. = FALSE)
   }
-  if (!is_character(type, n = 1)) {
+  if (!is.character(type) | !length(type) == 1) {
     stop("The argument 'type' must be a length-one character vector", call. = FALSE)
   }
-  if (!is_character(output, n = 1)) {
+  if (!is_character(output) | !length(type) == 1) {
     stop("The argument 'output' must be a length-one character vector", call. = FALSE)
   }
 
