@@ -256,7 +256,7 @@ generate_xtab_docx <- function(df, x, y, weight, caption) {
       xtab_formatted <- bg(x = xtab_formatted, i = row_num, j = NULL, bg = "#e5e5e5", part = "body")
     } else if (vec_size(levels) %% 2 == 0) {
       row_num <- which(xtab[[1]] == levels[[1]])
-      xtab_formatted <- bg(x = xtab_formatted, i = row_num, j = NULL, bg = "white", part = "body")
+      xtab_formatted <- bg(x = xtab_formatted, i = row_num, j = NULL, bg = "#FFFFFF", part = "body")
     }
     levels <- levels[-1]
   }

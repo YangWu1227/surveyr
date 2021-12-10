@@ -207,7 +207,7 @@ generate_topline_docx <- function(df, x, weight, caption) {
       topline_formatted <- bg(x = topline_formatted, i = row_num, j = NULL, bg = "#e5e5e5", part = "body")
     } else if (vec_size(levels) %% 2 == 0) {
       row_num <- which(topline[[1]] == levels[[1]])
-      topline_formatted <- bg(x = topline_formatted, i = row_num, j = NULL, bg = "white", part = "body")
+      topline_formatted <- bg(x = topline_formatted, i = row_num, j = NULL, bg = "#FFFFFF", part = "body")
     }
     levels <- levels[-1]
   }
