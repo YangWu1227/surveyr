@@ -194,7 +194,8 @@ generate_topline_docx <- function(df, x, weight, caption) {
     vline_left(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
     vline_right(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
     hline_top(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
-    hline_bottom(border = fp_border(color = "black", style = "solid", width = 1), part = "all")
+    hline_bottom(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
+    fix_border_issues(part = "all")
 
   # Obtain a character vector of unique categories (factor levels)
   levels <- topline[[1]] %>%

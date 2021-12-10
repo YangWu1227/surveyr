@@ -188,6 +188,7 @@ generate_xtab_latex <- function(df, x, y, weight, caption) {
 #' @importFrom flextable hline_top
 #' @importFrom flextable hline_bottom
 #' @importFrom flextable set_caption
+#' @importFrom flextable fix_border_issues
 #' @export
 #'
 #' @examples
@@ -243,7 +244,8 @@ generate_xtab_docx <- function(df, x, y, weight, caption) {
     vline_left(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
     vline_right(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
     hline_top(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
-    hline_bottom(border = fp_border(color = "black", style = "solid", width = 1), part = "all")
+    hline_bottom(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
+    fix_border_issues(part = "all")
 
   # Obtain a character vector of unique categories (factor levels)
   levels <- xtab[[1]] %>%
