@@ -106,9 +106,9 @@ generate_xtab_args <- function(df, var_of_interest, dependent_vars = NULL, rm = 
     "x" = vec_var_of_interest,
     "y" = dependent_vars,
     "caption" = paste(
-      str_replace_all(str_to_title(dependent_vars), "[^[:alnum:]]", " "),
+      str_to_title(str_replace_all(dependent_vars, "[^[:alnum:]]", " ")),
       sep = " by ",
-      str_replace_all(str_to_title(vec_var_of_interest), "[^[:alnum:]]", " ")
+      str_to_title(str_replace_all(vec_var_of_interest, "[^[:alnum:]]", " "))
     )
   )
 }
@@ -202,6 +202,6 @@ generate_topline_args <- function(df, var_of_interest = NULL, rm = NULL) {
 
   tibble(
     "x" = var_of_interest,
-    "caption" = str_replace_all(str_to_title(var_of_interest), "[^[:alnum:]]", " ")
+    "caption" = str_to_title(str_replace_all(var_of_interest, "[^[:alnum:]]", " "))
   )
 }

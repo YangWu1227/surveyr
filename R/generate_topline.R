@@ -183,7 +183,8 @@ generate_topline_docx <- function(df, x, weight, caption) {
   topline_formatted <- topline %>%
     flextable() %>%
     set_caption(caption = caption) %>%
-    colformat_double(j = 2:3, digits = 1) %>%
+    colformat_double(j = 2, digits = 0) %>%
+    colformat_double(j = 3, digits = 1) %>%
     align(align = "center", part = "header") %>%
     align(i = NULL, j = 2:3, align = "center", part = "body") %>%
     bold(bold = TRUE, part = "header") %>%
