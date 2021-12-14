@@ -177,6 +177,7 @@ generate_xtab_latex <- function(df, x, y, weight, caption) {
 #' @importFrom officer fp_border
 #' @importFrom flextable flextable
 #' @importFrom flextable colformat_double
+#' @importFrom flextable colformat_num
 #' @importFrom flextable align
 #' @importFrom flextable bold
 #' @importFrom flextable color
@@ -224,6 +225,12 @@ generate_xtab_docx <- function(df, x, y, weight, caption) {
       N = n,
       {{ x_name }} := {{ x }},
       {{ y_name }} := {{ y }}
+    ) %>%
+    modify_at(
+      .x = .,
+      .at = 3,
+      .f = round,
+      digits = 1
     )
 
   roll_x <- names(xtab)[[1]]
@@ -232,7 +239,8 @@ generate_xtab_docx <- function(df, x, y, weight, caption) {
     flextable() %>%
     set_caption(caption = caption) %>%
     colformat_double(j = 5, digits = 0) %>%
-    colformat_double(j = 3:4, digits = 1) %>%
+    colformat_double(j = 4, digits = 1) %>%
+    colformat_num(j = 3, suffix = " %") %>%
     align(align = "center", part = "header") %>%
     align(i = NULL, j = 3:5, align = "center", part = "body") %>%
     bold(bold = TRUE, part = "header") %>%
