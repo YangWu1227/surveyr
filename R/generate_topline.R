@@ -59,6 +59,11 @@ generate_topline_latex <- function(df, x, weight, caption) {
     modify(
       .x = .,
       .f = as.character
+    ) %>%
+    modify_at(
+      .x = .,
+      .at = 3,
+      .f = ~ paste(.x, "\\%")
     )
 
   # Obtain a character vector of unique categories (factor levels)
