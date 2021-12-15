@@ -24,7 +24,6 @@
 #' @importFrom rlang ensym
 #' @importFrom stringr str_replace_all
 #' @importFrom stringr str_wrap
-#' @importFrom stringr str_c
 #' @importFrom purrr modify_at
 #' @importFrom purrr modify
 #' @importFrom dplyr rename
