@@ -224,7 +224,7 @@ generate_xtab_docx <- function(df, x, y, weight, caption) {
   y <- ensym(y)
   weight <- ensym(weight)
 
-  xtab <- moe_crosstab(df = df, x = {{ x }}, y = {{ y }}, weight = {{ weight }}) %>%
+  xtab <- pollster::moe_crosstab(df = df, x = {{ x }}, y = {{ y }}, weight = {{ weight }}) %>%
     rename(
       Percent = pct,
       MOE = moe,
@@ -239,11 +239,7 @@ generate_xtab_docx <- function(df, x, y, weight, caption) {
       digits = 1
     )
 
-  # Name of the column to merg_v()
   roll_x <- names(xtab)[[1]]
-  # Row indices to apply zebra-stripe
-  even <- seq.int(length.out = vec_size(xtab)) %% 2 == 0
-  odd <- !even
 
   xtab_formatted <- xtab %>%
     flextable() %>%
@@ -263,9 +259,23 @@ generate_xtab_docx <- function(df, x, y, weight, caption) {
     vline_right(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
     hline_top(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
     hline_bottom(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
-    fix_border_issues(part = "all") %>%
-    bg(i = even, bg = "#e5e5e5", part = "body") %>%
-    bg(i = odd, bg = "#FFFFFF", part = "body")
+    fix_border_issues(part = "all")
+
+  # Obtain a character vector of unique categories (factor levels)
+  levels <- xtab[[1]] %>%
+    unique() %>%
+    as.character()
+
+  while (length(levels) > 0) {
+    if (length(levels) %% 2 == 1) {
+      row_num <- which(xtab[[1]] == levels[[1]])
+      xtab_formatted <- bg(x = xtab_formatted, i = row_num, j = NULL, bg = "#e5e5e5", part = "body")
+    } else if (length(levels) %% 2 == 0) {
+      row_num <- which(xtab[[1]] == levels[[1]])
+      xtab_formatted <- bg(x = xtab_formatted, i = row_num, j = NULL, bg = "#FFFFFF", part = "body")
+    }
+    levels <- levels[-1]
+  }
 
   # Return formatted table
   xtab_formatted
