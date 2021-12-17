@@ -125,7 +125,6 @@ list_xtab_args <- function(df, var_of_interest, dependent_vars = NULL, rm = NULL
 #' @seealso [list_xtab_args()] for vectorized crosstab arguments generation and [generate_tbls()] for
 #'   multiple tables generation.
 #'
-#' @importFrom data.table rbindlist
 #' @importFrom tibble as_tibble
 #' @importFrom rlang is_list
 #' @importFrom purrr map_lgl

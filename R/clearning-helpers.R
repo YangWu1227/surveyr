@@ -60,7 +60,6 @@ rm_spl_char <- function(df, var) {
 #'
 #' @return A data frame or tibble.
 #'
-#' @importFrom data.table setnames
 #' @importFrom stringr str_to_title
 #' @export
 #'

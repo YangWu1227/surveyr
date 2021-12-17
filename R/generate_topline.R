@@ -16,6 +16,7 @@
 #' @seealso [generate_topline_docx()] for outputting to Microsoft word.
 #'
 #' @importFrom dplyr select
+#' @importFrom pollster topline
 #' @export
 #'
 #' @examples
@@ -38,69 +39,42 @@ generate_topline_latex <- function(df, x, weight, caption) {
   x <- ensym(x)
   weight <- ensym(weight)
 
-  topline <- pollster::topline(df = df, variable = {{ x }}, weight = {{ weight }}) %>%
-    select(-c(Percent, `Cumulative Percent`)) %>%
-    rename(
-      Percent = `Valid Percent`
-    ) %>%
-    # Apply string wrap function to first two columns (which are both text columns)
-    # This inserts "\n" into the strings every 25 characters
-    modify_at(
-      .x = .,
-      .at = 1,
-      .f = str_wrap,
-      width = 25
-    ) %>%
-    modify_at(
-      .x = .,
-      .at = 2:3,
-      .f = ~ round(.x, digits = 1)
-    ) %>%
-    modify(
-      .x = .,
-      .f = as.character
-    ) %>%
-    modify_at(
-      .x = .,
-      .at = 3,
-      .f = ~ paste(.x, "\\%")
-    )
+  # Object of class data.table
+  topline <- as.data.table(topline(df = df, variable = {{ x }}, weight = {{ weight }}))[
+    , .(Response, Frequency, Percent = `Valid Percent`)
+  ][, c("Frequency", "Percent") := round(.SD, digits = 1), .SDcols = c("Frequency", "Percent")
+    ][, c(
+    "Response",
+    "Frequency",
+    "Percent"
+  ) := .(
+    {str_wrap(Response, width = 25)},
+    as.character(Frequency),
+    {paste(Percent, "\\%")}
+  )]
 
-  # Obtain a character vector of unique categories (factor levels)
-  levels <- topline[[1]] %>%
-    unique() %>%
-    as.character()
-  # Apply "grey" and "white" striping based on categories in levels
-  # Keep executing expressions until we exhaust the levels vector
-  while (length(levels) > 0) {
-    # If, when dividing the length of the levels vector by 2, we get a remainder of 1, apply grey
-    if (length(levels) %% 2 == 1) {
-      # Create a vector of row index satisfying a particular category in "levels"
-      row_num <- which(topline[[1]] == levels[[1]])
-      # Only \makecell, \colorbox, and \cellcolorto rows whose indices are in 'row_num'
-      topline[row_num, ] <- topline[row_num, ] %>%
-        mutate(across(.cols = 1, .fns = linebreak_grey))
-      # Apply \cellcolor to other cells in these rows
-      topline[row_num, ] <- topline[row_num, ] %>% modify(
-        .x = .,
-        .f = ~ paste0("\\cellcolor[HTML]{e5e5e5}{", .x, "}")
-      )
-      # If, when dividing the length of the levels vector by 2, we get a remainder of 0, apply white
-    } else if (length(levels) %% 2 == 0) {
-      # Create a vector of row index satisfying a particular category in "levels"
-      row_num <- which(topline[[1]] == levels[[1]])
-      # Only \makecell, \colorbox, and \cellcolor to rows whose indices are in 'row_num'
-      topline[row_num, ] <- topline[row_num, ] %>%
-        mutate(across(.cols = 1, .fns = linebreak_white))
-      # Apply \cellcolor to other cells in these rows
-      topline[row_num, ] <- topline[row_num, ] %>% modify(
-        .x = .,
-        .f = ~ paste0("\\cellcolor[HTML]{ffffff}{", .x, "}")
-      )
-    }
-    # At the end of each iteration, remove a category and return control to top level
-    levels <- levels[-1]
-  }
+  # Indices to apply background color
+  even <- seq.int(length.out = vec_size(topline)) %% 2 == 0
+  odd <- !even
+
+  # Use reference semantics to modify in place
+  topline[even, Response := linebreak_grey(Response)][even, c(
+    "Response",
+    "Frequency",
+    "Percent"
+  ) := .(
+    paste0("\\cellcolor[HTML]{e5e5e5}{", Response, "}"),
+    paste0("\\cellcolor[HTML]{e5e5e5}{", Frequency, "}"),
+    paste0("\\cellcolor[HTML]{e5e5e5}{", Percent, "}")
+  )][odd, Response := linebreak_white(Response)][odd, c(
+    "Response",
+    "Frequency",
+    "Percent"
+  ) := .(
+    paste0("\\cellcolor[HTML]{ffffff}{", Response, "}"),
+    paste0("\\cellcolor[HTML]{ffffff}{", Frequency, "}"),
+    paste0("\\cellcolor[HTML]{ffffff}{", Percent, "}")
+  )]
 
   # Create kableextra table object and format
   topline_formatted <- topline %>%
@@ -157,6 +131,7 @@ generate_topline_latex <- function(df, x, weight, caption) {
 #' @seealso [generate_topline_latex()] for outputting to pdf.
 #'
 #' @importFrom dplyr select
+#' @import data.table
 #' @export
 #'
 #' @examples
@@ -179,17 +154,13 @@ generate_topline_docx <- function(df, x, weight, caption) {
   x <- ensym(x)
   weight <- ensym(weight)
 
-  topline <- pollster::topline(df = df, variable = {{ x }}, weight = {{ weight }}) %>%
-    select(-c(Percent, `Cumulative Percent`)) %>%
-    rename(
-      Percent = `Valid Percent`
-    ) %>%
-    modify_at(
-      .x = .,
-      .at = 3,
-      .f = round,
-      digits = 1
-    )
+  topline <- as.data.table(topline(df = df, variable = {{ x }}, weight = {{ weight }}))[
+    , .(Response, Frequency, Percent = `Valid Percent`)
+  ][, Percent := round(.SD, digits = 1), .SDcols = "Percent"]
+
+  # Row indices to apply zebra-stripe
+  even <- seq.int(length.out = vec_size(topline)) %% 2 == 0
+  odd <- !even
 
   topline_formatted <- topline %>%
     flextable() %>%
@@ -207,23 +178,9 @@ generate_topline_docx <- function(df, x, weight, caption) {
     vline_right(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
     hline_top(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
     hline_bottom(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
-    fix_border_issues(part = "all")
-
-  # Obtain a character vector of unique categories (factor levels)
-  levels <- topline[[1]] %>%
-    unique() %>%
-    as.character()
-
-  while (length(levels) > 0) {
-    if (length(levels) %% 2 == 1) {
-      row_num <- which(topline[[1]] == levels[[1]])
-      topline_formatted <- bg(x = topline_formatted, i = row_num, j = NULL, bg = "#e5e5e5", part = "body")
-    } else if (length(levels) %% 2 == 0) {
-      row_num <- which(topline[[1]] == levels[[1]])
-      topline_formatted <- bg(x = topline_formatted, i = row_num, j = NULL, bg = "#FFFFFF", part = "body")
-    }
-    levels <- levels[-1]
-  }
+    fix_border_issues(part = "all") %>%
+    bg(i = even, bg = "#e5e5e5", part = "body") %>%
+    bg(i = odd, bg = "#FFFFFF", part = "body")
 
   # Return formatted table
   topline_formatted
