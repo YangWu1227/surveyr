@@ -261,21 +261,23 @@ generate_xtab_docx <- function(df, x, y, weight, caption) {
     hline_bottom(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
     fix_border_issues(part = "all")
 
+  # First column of the crosstab
+  first_column <- xtab[[1]]
   # Obtain a character vector of unique categories (factor levels)
-  levels <- xtab[[1]] %>%
-    unique() %>%
-    as.character()
+  levels <- as.character(unique(first_column))
 
-  while (length(levels) > 0) {
-    if (length(levels) %% 2 == 1) {
-      row_num <- which(xtab[[1]] == levels[[1]])
-      xtab_formatted <- bg(x = xtab_formatted, i = row_num, j = NULL, bg = "#e5e5e5", part = "body")
-    } else if (length(levels) %% 2 == 0) {
-      row_num <- which(xtab[[1]] == levels[[1]])
-      xtab_formatted <- bg(x = xtab_formatted, i = row_num, j = NULL, bg = "#FFFFFF", part = "body")
+  invisible(lapply(
+    X = levels,
+    FUN = function(x) {
+      row_num <- first_column == x
+      row_index <- which(levels == x)
+      if (row_index %% 2 == 1) {
+        xtab_formatted <<- bg(x = xtab_formatted, i = row_num, j = NULL, bg = "#FFFFFF", part = "body")
+      } else if (row_index %% 2 == 0) {
+        xtab_formatted <<- bg(x = xtab_formatted, i = row_num, j = NULL, bg = "#e5e5e5", part = "body")
+      }
     }
-    levels <- levels[-1]
-  }
+  ))
 
   # Return formatted table
   xtab_formatted
