@@ -52,88 +52,60 @@ generate_xtab_latex <- function(df, x, y, weight, caption) {
   }
 
   # Keep only alphabets and numbers in column names
-  x_name <- str_replace_all(x, "[^[:alnum:]]", " ")
-  y_name <- str_replace_all(y, "[^[:alnum:]]", " ")
+  x_name <- str_to_title(str_replace_all(x, "[^[:alnum:]]", " "))
+  y_name <- str_to_title(str_replace_all(y, "[^[:alnum:]]", " "))
   # Convert string to symbols
   x <- ensym(x)
   y <- ensym(y)
   weight <- ensym(weight)
 
-  xtab <- moe_crosstab(df = df, x = {{ x }}, y = {{ y }}, weight = {{ weight }}) %>%
-    rename(
-      Percent = pct,
-      MOE = moe,
-      N = n,
-      {{ x_name }} := {{ x }},
-      {{ y_name }} := {{ y }}
-    ) %>%
-    modify_at(
-      .x = .,
-      .at = 1:2,
-      .f = str_wrap,
-      width = 25
-    ) %>%
-    modify_at(
-      .x = .,
-      .at = 3:4,
-      .f = ~ round(.x, digits = 1)
-    ) %>%
-    modify_at(
-      .x = .,
-      .at = 5,
-      .f = ~ round(.x, digits = 0)
-    ) %>%
-    modify(
-      .x = .,
-      .f = as.character
-    ) %>%
-    modify(
-      .x = .,
-      .at = 3,
-      .f = ~ paste(.x, "\\%")
-    )
+  xtab <- as.data.table(moe_crosstab(df = df, x = {{ x }}, y = {{ y }}, weight = {{ weight }})) %>%
+    setattr(x = ., "names", c(x_name, y_name, "Percent", "MOE", "N"))
+  xtab[, c(x_name, y_name, "Percent", "MOE", "N") := .(
+    str_wrap(get(x_name), width = 25),
+    str_wrap(get(y_name), width = 25),
+    paste(as.character(round(Percent, digits = 1)), "\\%"),
+    as.character(round(MOE, digits = 1)),
+    as.character(round(N, digits = 0))
+  )]
 
+  # First column of the crosstab
+  first_column <- as.character(xtab[[1]])
   # Obtain a character vector of unique categories (factor levels)
-  levels <- xtab[[1]] %>%
-    unique() %>%
-    as.character()
-  # Apply "grey" and "white" row color based on categories in levels
-  # Keep executing expressions until we exhaust the levels vector
-  while (length(levels) > 0) {
-    # If, when dividing the length of the `levels` vector by 2, we get a remainder of 1, apply grey
-    if (length(levels) %% 2 == 1) {
-      # Create a vector of row index satisfying a particular category in "levels"
-      row_num <- which(xtab[[1]] == levels[[1]])
-      # Apply \makecell, \colorbox, and \cellcolor to rows whose indices are in 'row_num'
-      xtab[row_num, ] <- xtab[row_num, ] %>%
-        mutate(across(.cols = 1:2, .fns = linebreak_grey))
-      # Apply \cellcolor to all cells in these rows
-      xtab[row_num, ] <- xtab[row_num, ] %>% modify(
-        .x = .,
-        .f = ~ paste0("\\cellcolor[HTML]{e5e5e5}{", .x, "}")
-      )
-      # If, when dividing the length of the levels vector by 2, we get a remainder of 0, apply white
-    } else if (length(levels) %% 2 == 0) {
-      # Create a vector of row index satisfying a particular category in "levels"
-      row_num <- which(xtab[[1]] == levels[[1]])
-      # Apply \makecell, \colorbox, and \cellcolor to rows whose indices are in 'row_num'
-      xtab[row_num, ] <- xtab[row_num, ] %>%
-        mutate(across(.cols = 1:2, .fns = linebreak_white))
-      # Apply \cellcolor to all cells in these rows
-      xtab[row_num, ] <- xtab[row_num, ] %>% modify(
-        .x = .,
-        .f = ~ paste0("\\cellcolor[HTML]{ffffff}{", .x, "}")
-      )
+  levels <- unique(first_column)
+
+  invisible(lapply(
+    X = levels,
+    FUN = function(x) {
+      row_num <- first_column == x
+      color_index <- which(levels == x)
+      if (color_index %% 2 == 1) {
+        # Apply \makecell, \colorbox, and \cellcolor to rows whose indices are in 'row_num'
+        # For the first two columns, also apply the associating linebreak function
+        xtab[row_num, c(x_name, y_name, "Percent", "MOE", "N") := .(
+          paste0("\\cellcolor[HTML]{ffffff}{", linebreak_white(get(x_name)), "}"),
+          paste0("\\cellcolor[HTML]{ffffff}{", linebreak_white(get(y_name)), "}"),
+          paste0("\\cellcolor[HTML]{ffffff}{", Percent, "}"),
+          paste0("\\cellcolor[HTML]{ffffff}{", MOE, "}"),
+          paste0("\\cellcolor[HTML]{ffffff}{", N, "}")
+        )]
+      } else if (color_index %% 2 == 0) {
+        # Apply \makecell, \colorbox, and \cellcolor to rows whose indices are in 'row_num'
+        # For the first two columns, also apply the associating linebreak function
+        xtab[row_num, c(x_name, y_name, "Percent", "MOE", "N") := .(
+          paste0("\\cellcolor[HTML]{e5e5e5}{", linebreak_grey(get(x_name)), "}"),
+          paste0("\\cellcolor[HTML]{e5e5e5}{", linebreak_grey(get(y_name)), "}"),
+          paste0("\\cellcolor[HTML]{e5e5e5}{", Percent, "}"),
+          paste0("\\cellcolor[HTML]{e5e5e5}{", MOE, "}"),
+          paste0("\\cellcolor[HTML]{e5e5e5}{", N, "}")
+        )]
+      }
     }
-    # At the end of each iteration, remove a category and return control to top level
-    levels <- levels[-1]
-  }
+  ))
 
   # Create kableextra table object and format
-  xtab_formatted <- xtab %>%
+  xtab_formatted <- xtab |>
     kbl(
-      x = .,
-      digits = c(0, 0, 0, 0, 0),
       align = rep("l", times = 5),
       caption = caption,
       escape = FALSE,
@@ -143,14 +115,13 @@ generate_xtab_latex <- function(df, x, y, weight, caption) {
       centering = TRUE,
       vline = "",
       linesep = c(rep("", times = vec_size(xtab)), "\\addlinespace")
-    ) %>%
+    ) |>
     kable_styling(
-      kable_input = .,
       latex_options = c(
         "hold_position"
       ),
       font_size = 15
-    ) %>%
+    ) |>
     row_spec(
       row = 0,
       bold = TRUE,
@@ -217,35 +188,26 @@ generate_xtab_docx <- function(df, x, y, weight, caption) {
   }
 
   # Keep only alphabets and numbers in column names
-  x_name <- str_replace_all(x, "[^[:alnum:]]", " ")
-  y_name <- str_replace_all(y, "[^[:alnum:]]", " ")
+  x_name <- str_to_title(str_replace_all(x, "[^[:alnum:]]", " "))
+  y_name <- str_to_title(str_replace_all(y, "[^[:alnum:]]", " "))
   # Convert string to symbols
   x <- ensym(x)
   y <- ensym(y)
   weight <- ensym(weight)
 
-  xtab <- pollster::moe_crosstab(df = df, x = {{ x }}, y = {{ y }}, weight = {{ weight }}) %>%
-    rename(
-      Percent = pct,
-      MOE = moe,
-      N = n,
-      {{ x_name }} := {{ x }},
-      {{ y_name }} := {{ y }}
-    ) %>%
-    modify_at(
-      .x = .,
-      .at = 3,
-      .f = round,
-      digits = 1
-    )
+  xtab <- as.data.table(moe_crosstab(df = df, x = {{ x }}, y = {{ y }}, weight = {{ weight }})) %>%
+    setattr(x = ., "names", c(x_name, y_name, "Percent", "MOE", "N"))
+  xtab[, c("Percent", "MOE", "N") := .(
+    round(Percent, digits = 1),
+    round(MOE, digits = 1),
+    round(N, digits = 0)
+  )]
 
   roll_x <- names(xtab)[[1]]
 
   xtab_formatted <- xtab %>%
     flextable() %>%
     set_caption(caption = caption) %>%
-    colformat_double(j = 5, digits = 0) %>%
-    colformat_double(j = 4, digits = 1) %>%
     colformat_num(j = 3, suffix = " %") %>%
     align(align = "center", part = "header") %>%
     align(i = NULL, j = 3:5, align = "center", part = "body") %>%
@@ -262,18 +224,18 @@ generate_xtab_docx <- function(df, x, y, weight, caption) {
     fix_border_issues(part = "all")
 
   # First column of the crosstab
-  first_column <- xtab[[1]]
+  first_column <- as.character(xtab[[1]])
   # Obtain a character vector of unique categories (factor levels)
-  levels <- as.character(unique(first_column))
+  levels <- unique(first_column)
 
   invisible(lapply(
     X = levels,
     FUN = function(x) {
       row_num <- first_column == x
-      row_index <- which(levels == x)
-      if (row_index %% 2 == 1) {
+      color_index <- which(levels == x)
+      if (color_index %% 2 == 1) {
         xtab_formatted <<- bg(x = xtab_formatted, i = row_num, j = NULL, bg = "#FFFFFF", part = "body")
-      } else if (row_index %% 2 == 0) {
+      } else if (color_index %% 2 == 0) {
         xtab_formatted <<- bg(x = xtab_formatted, i = row_num, j = NULL, bg = "#e5e5e5", part = "body")
       }
     }

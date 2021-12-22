@@ -42,15 +42,14 @@ generate_topline_latex <- function(df, x, weight, caption) {
   # Object of class data.table
   topline <- as.data.table(topline(df = df, variable = {{ x }}, weight = {{ weight }}))[
     , .(Response, Frequency, Percent = `Valid Percent`)
-  ][, c("Frequency", "Percent") := round(.SD, digits = 1), .SDcols = c("Frequency", "Percent")
-    ][, c(
+  ][, c(
     "Response",
     "Frequency",
     "Percent"
   ) := .(
-    {str_wrap(Response, width = 25)},
-    as.character(Frequency),
-    {paste(Percent, "\\%")}
+    str_wrap(Response, width = 25),
+    as.character(round(Frequency, digits = 1)),
+    paste(round(Percent, digits = 1), "\\%")
   )]
 
   # Indices to apply background color
@@ -156,7 +155,10 @@ generate_topline_docx <- function(df, x, weight, caption) {
 
   topline <- as.data.table(topline(df = df, variable = {{ x }}, weight = {{ weight }}))[
     , .(Response, Frequency, Percent = `Valid Percent`)
-  ][, Percent := round(.SD, digits = 1), .SDcols = "Percent"]
+  ][, c("Frequency", "Percent") := .(
+    round(Frequency, digits = 0),
+    round(Percent, digits = 1)
+  )]
 
   # Row indices to apply zebra-stripe
   even <- seq.int(length.out = vec_size(topline)) %% 2 == 0
@@ -165,7 +167,6 @@ generate_topline_docx <- function(df, x, weight, caption) {
   topline_formatted <- topline %>%
     flextable() %>%
     set_caption(caption = caption) %>%
-    colformat_double(j = 2, digits = 0) %>%
     colformat_num(j = 3, suffix = " %") %>%
     align(align = "center", part = "header") %>%
     align(i = NULL, j = 2:3, align = "center", part = "body") %>%

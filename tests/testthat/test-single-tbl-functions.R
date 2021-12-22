@@ -288,7 +288,7 @@ test_that("generate_xtab_docx() returns correct output type and class", {
     object = generate_xtab_docx(
       df = df,
       x = "education_rollup",
-      y = "party_reg",
+      y = "issue_focus",
       weight = "weightvec",
       caption = "caption"
     ),
