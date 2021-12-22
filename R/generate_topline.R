@@ -102,12 +102,7 @@ generate_topline_latex <- function(df, x, weight, caption) {
     ) |>
     column_spec(
       column = 1,
-      bold = TRUE,
-      border_left = TRUE
-    ) |>
-    column_spec(
-      column = 3,
-      border_right = TRUE
+      bold = TRUE
     )
 
   # Return formatted table
