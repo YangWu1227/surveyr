@@ -127,6 +127,15 @@ generate_xtab_latex <- function(df, x, y, weight, caption) {
       bold = TRUE,
       color = "white",
       background = "#32bdb9"
+    ) |>
+    column_spec(
+      column = 1,
+      bold = TRUE,
+      border_left = TRUE
+    ) |>
+    column_spec(
+      column = 5,
+      border_right = TRUE
     )
 
   # Return formatted table

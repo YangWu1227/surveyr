@@ -76,9 +76,8 @@ generate_topline_latex <- function(df, x, weight, caption) {
   )]
 
   # Create kableextra table object and format
-  topline_formatted <- topline %>%
+  topline_formatted <- topline |>
     kbl(
-      x = .,
       align = rep("l", times = 3),
       caption = caption,
       escape = FALSE,
@@ -88,23 +87,27 @@ generate_topline_latex <- function(df, x, weight, caption) {
       centering = TRUE,
       vline = "",
       linesep = c(rep("", times = vec_size(topline)), "\\addlinespace")
-    ) %>%
+    ) |>
     kable_styling(
-      kable_input = .,
       latex_options = c(
         "hold_position"
       ),
       font_size = 15
-    ) %>%
+    ) |>
     row_spec(
       row = 0,
       bold = TRUE,
       color = "white",
       background = "#32bdb9"
-    ) %>%
+    ) |>
     column_spec(
       column = 1,
-      bold = TRUE
+      bold = TRUE,
+      border_left = TRUE
+    ) |>
+    column_spec(
+      column = 3,
+      border_right = TRUE
     )
 
   # Return formatted table
@@ -164,23 +167,23 @@ generate_topline_docx <- function(df, x, weight, caption) {
   even <- seq.int(length.out = vec_size(topline)) %% 2 == 0
   odd <- !even
 
-  topline_formatted <- topline %>%
-    flextable() %>%
-    set_caption(caption = caption) %>%
-    colformat_num(j = 3, suffix = " %") %>%
-    align(align = "center", part = "header") %>%
-    align(i = NULL, j = 2:3, align = "center", part = "body") %>%
-    bold(bold = TRUE, part = "header") %>%
-    bold(i = NULL, j = 1, bold = TRUE, part = "body") %>%
-    font(fontname = "Open Sans", part = "all") %>%
-    color(color = "white", part = "header") %>%
-    bg(i = NULL, j = NULL, bg = "#32BDB9", part = "header") %>%
-    vline_left(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
-    vline_right(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
-    hline_top(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
-    hline_bottom(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
-    fix_border_issues(part = "all") %>%
-    bg(i = even, bg = "#e5e5e5", part = "body") %>%
+  topline_formatted <- topline |>
+    flextable() |>
+    set_caption(caption = caption) |>
+    colformat_num(j = 3, suffix = " %") |>
+    align(align = "center", part = "header") |>
+    align(i = NULL, j = 2:3, align = "center", part = "body") |>
+    bold(bold = TRUE, part = "header") |>
+    bold(i = NULL, j = 1, bold = TRUE, part = "body") |>
+    font(fontname = "Open Sans", part = "all") |>
+    color(color = "white", part = "header") |>
+    bg(i = NULL, j = NULL, bg = "#32BDB9", part = "header") |>
+    vline_left(border = fp_border(color = "black", style = "solid", width = 1), part = "all") |>
+    vline_right(border = fp_border(color = "black", style = "solid", width = 1), part = "all") |>
+    hline_top(border = fp_border(color = "black", style = "solid", width = 1), part = "all") |>
+    hline_bottom(border = fp_border(color = "black", style = "solid", width = 1), part = "all") |>
+    fix_border_issues(part = "all") |>
+    bg(i = even, bg = "#e5e5e5", part = "body") |>
     bg(i = odd, bg = "#FFFFFF", part = "body")
 
   # Return formatted table
