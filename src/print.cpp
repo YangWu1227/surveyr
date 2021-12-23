@@ -38,7 +38,8 @@ void print_tbls(List l, String output) {
       print_flex(
         _["x"] = fit(
           _["x"] = l[i]
-        )
+        ),
+        _["text_after"] = "\\pagebreak"
       );
     }
   } else if (output == "pdf") {

@@ -40,17 +40,17 @@ generate_topline_latex <- function(df, x, weight, caption) {
   weight <- ensym(weight)
 
   # Object of class data.table
-  topline <- as.data.table(topline(df = df, variable = {{ x }}, weight = {{ weight }}))[
-    , .(Response, Frequency, Percent = `Valid Percent`)
-  ][, c(
-    "Response",
-    "Frequency",
-    "Percent"
-  ) := .(
-    str_wrap(Response, width = 25),
-    as.character(round(Frequency, digits = 1)),
-    paste(round(Percent, digits = 1), "\\%")
-  )]
+  topline <- topline_internal(df = df, variable = {{ x }}, weight = {{ weight }})[
+    , c(
+      "Response",
+      "Frequency",
+      "Percent"
+    ) := .(
+      str_wrap(Response, width = 25),
+      as.character(Frequency),
+      paste(Percent, "\\%")
+    )
+  ]
 
   # Indices to apply background color
   even <- seq.int(length.out = vec_size(topline)) %% 2 == 0
@@ -129,6 +129,7 @@ generate_topline_latex <- function(df, x, weight, caption) {
 #'
 #' @importFrom dplyr select
 #' @import data.table
+#' @importFrom flextable colformat_num
 #' @export
 #'
 #' @examples
@@ -151,12 +152,7 @@ generate_topline_docx <- function(df, x, weight, caption) {
   x <- ensym(x)
   weight <- ensym(weight)
 
-  topline <- as.data.table(topline(df = df, variable = {{ x }}, weight = {{ weight }}))[
-    , .(Response, Frequency, Percent = `Valid Percent`)
-  ][, c("Frequency", "Percent") := .(
-    round(Frequency, digits = 0),
-    round(Percent, digits = 1)
-  )]
+  topline <- topline_internal(df = df, variable = {{ x }}, weight = {{ weight }})
 
   # Row indices to apply zebra-stripe
   even <- seq.int(length.out = vec_size(topline)) %% 2 == 0

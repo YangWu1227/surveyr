@@ -24,12 +24,8 @@
 #' @importFrom rlang ensym
 #' @importFrom stringr str_replace_all
 #' @importFrom stringr str_wrap
-#' @importFrom purrr modify_at
-#' @importFrom purrr modify
 #' @importFrom dplyr rename
 #' @importFrom dplyr mutate
-#' @importFrom dplyr across
-#' @importFrom pollster moe_crosstab
 #' @importFrom vctrs vec_size
 #' @export
 #'
@@ -59,14 +55,12 @@ generate_xtab_latex <- function(df, x, y, weight, caption) {
   y <- ensym(y)
   weight <- ensym(weight)
 
-  xtab <- as.data.table(moe_crosstab(df = df, x = {{ x }}, y = {{ y }}, weight = {{ weight }})) %>%
-    setattr(x = ., "names", c(x_name, y_name, "Percent", "MOE", "N"))
-  xtab[, c(x_name, y_name, "Percent", "MOE", "N") := .(
+  xtab <- moe_crosstab_internal(df = df, x = {{ x }}, y = {{ y }}, weight = {{ weight }}) |>
+    setattr("names", c(x_name, y_name, "Percent", "MOE", "N"))
+  xtab[, c(x_name, y_name, "Percent") := .(
     str_wrap(get(x_name), width = 25),
     str_wrap(get(y_name), width = 25),
-    paste(as.character(round(Percent, digits = 1)), "\\%"),
-    as.character(round(MOE, digits = 1)),
-    as.character(round(N, digits = 0))
+    paste(Percent, "\\%")
   )]
 
   # First column of the crosstab
@@ -158,7 +152,7 @@ generate_xtab_latex <- function(df, x, y, weight, caption) {
 #' @importFrom officer fp_border
 #' @importFrom flextable flextable
 #' @importFrom flextable colformat_double
-#' @importFrom flextable colformat_num
+#' @importFrom flextable colformat_char
 #' @importFrom flextable align
 #' @importFrom flextable bold
 #' @importFrom flextable color
@@ -199,20 +193,15 @@ generate_xtab_docx <- function(df, x, y, weight, caption) {
   y <- ensym(y)
   weight <- ensym(weight)
 
-  xtab <- as.data.table(moe_crosstab(df = df, x = {{ x }}, y = {{ y }}, weight = {{ weight }})) %>%
-    setattr(x = ., "names", c(x_name, y_name, "Percent", "MOE", "N"))
-  xtab[, c("Percent", "MOE", "N") := .(
-    round(Percent, digits = 1),
-    round(MOE, digits = 1),
-    round(N, digits = 0)
-  )]
+  xtab <- moe_crosstab_internal(df = df, x = {{ x }}, y = {{ y }}, weight = {{ weight }}) |>
+    setattr("names", c(x_name, y_name, "Percent", "MOE", "N"))
 
   roll_x <- names(xtab)[[1]]
 
   xtab_formatted <- xtab %>%
     flextable() %>%
     set_caption(caption = caption) %>%
-    colformat_num(j = 3, suffix = " %") %>%
+    colformat_char(j = 3, suffix = " %") %>%
     align(align = "center", part = "header") %>%
     align(i = NULL, j = 3:5, align = "center", part = "body") %>%
     bold(bold = TRUE, part = "header") %>%
@@ -238,7 +227,7 @@ generate_xtab_docx <- function(df, x, y, weight, caption) {
       row_num <- first_column == x
       color_index <- which(levels == x)
       if (color_index %% 2 == 1) {
-        xtab_formatted <<- bg(x = xtab_formatted, i = row_num, j = NULL, bg = "#FFFFFF", part = "body")
+        xtab_formatted <<- bg(x = xtab_formatted, i = row_num, j = NULL, bg = "#ffffff", part = "body")
       } else if (color_index %% 2 == 0) {
         xtab_formatted <<- bg(x = xtab_formatted, i = row_num, j = NULL, bg = "#e5e5e5", part = "body")
       }
