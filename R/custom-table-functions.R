@@ -1,3 +1,5 @@
+# Cumston topline and crosstab functions ----------------------------------
+
 #' @importFrom dplyr summarize
 #' @importFrom dplyr group_by
 #' @importFrom dplyr ungroup
@@ -7,7 +9,7 @@
 #' @importFrom labelled to_factor
 #' @importFrom forcats fct_explicit_na
 topline_internal <- function(df, variable, weight) {
-  d.output <- df |>
+  topline <- df |>
     # Convert to ordered factors
     mutate(
       {{ variable }} := to_factor({{ variable }}, sort_levels = "values"),
@@ -27,12 +29,13 @@ topline_internal <- function(df, variable, weight) {
     filter(Response != "(Missing)")
 
   # Column sums
-  freq_sum <- sum(d.output[["Frequency"]])
-  per_sum <- sum(d.output[["Percent"]])
+  freq_sum <- sum(topline[["Frequency"]])
+  per_sum <- sum(topline[["Percent"]])
 
-  d.output <- add_row(d.output, Response = "Total", Frequency = freq_sum, Percent = per_sum)
+  topline <- add_row(topline, Response = "Total", Frequency = freq_sum, Percent = per_sum)
 
-  as.data.table(d.output)
+  class(topline) <- c("data.table", "data.frame")
+  topline
 }
 
 
@@ -48,7 +51,7 @@ moe_crosstab_internal <- function(df, x, y, weight) {
     deff_calc()
 
   # build the table, either row percents or cell percents
-  d.output <- df |>
+  xtab <- df |>
     filter(
       !is.na({{ x }}),
       !is.na({{ y }})
@@ -77,5 +80,6 @@ moe_crosstab_internal <- function(df, x, y, weight) {
     select(-c("observations", "unweighted_n")) |>
     relocate(N, .after = MOE)
 
-  as.data.table(d.output)
+  class(xtab) <- c("data.table", "data.frame")
+  xtab
 }

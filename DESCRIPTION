@@ -1,6 +1,6 @@
 Package: citizenr
 Title: An R Toolkit for Citizen
-Version: 1.3.0
+Version: 1.4.0
 Authors@R: 
     c(person(given = "Yang", 
              family = "Wu",
@@ -20,6 +20,7 @@ Imports:
     data.table (>= 1.14.2),
     dplyr (>= 1.0.7),
     flextable (>= 0.6.10),
+    glue,
     kableExtra (>= 1.3.4),
     knitr (>= 1.36.0),
     labelled,
