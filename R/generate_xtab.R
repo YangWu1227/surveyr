@@ -198,22 +198,22 @@ generate_xtab_docx <- function(df, x, y, weight, caption) {
 
   roll_x <- names(xtab)[[1]]
 
-  xtab_formatted <- xtab %>%
-    flextable() %>%
-    set_caption(caption = caption) %>%
-    colformat_char(j = 3, suffix = " %") %>%
-    align(align = "center", part = "header") %>%
-    align(i = NULL, j = 3:5, align = "center", part = "body") %>%
-    bold(bold = TRUE, part = "header") %>%
-    bold(i = NULL, j = 1, bold = TRUE, part = "body") %>%
-    font(fontname = "Open Sans", part = "all") %>%
-    color(color = "white", part = "header") %>%
-    bg(i = NULL, j = NULL, bg = "#32BDB9", part = "header") %>%
-    merge_v(target = roll_x, part = "body") %>%
-    vline_left(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
-    vline_right(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
-    hline_top(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
-    hline_bottom(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
+  xtab_formatted <- xtab |>
+    flextable() |>
+    set_caption(caption = caption) |>
+    colformat_char(j = 3, suffix = " %") |>
+    align(align = "center", part = "header") |>
+    align(i = NULL, j = 3:5, align = "center", part = "body") |>
+    bold(bold = TRUE, part = "header") |>
+    bold(i = NULL, j = 1, bold = TRUE, part = "body") |>
+    font(fontname = "Open Sans", part = "all") |>
+    color(color = "white", part = "header") |>
+    bg(i = NULL, j = NULL, bg = "#32BDB9", part = "header") |>
+    merge_v(target = roll_x, part = "body") |>
+    vline_left(border = fp_border(color = "black", style = "solid", width = 1), part = "all") |>
+    vline_right(border = fp_border(color = "black", style = "solid", width = 1), part = "all") |>
+    hline_top(border = fp_border(color = "black", style = "solid", width = 1), part = "all") |>
+    hline_bottom(border = fp_border(color = "black", style = "solid", width = 1), part = "all") |>
     fix_border_issues(part = "all")
 
   # First column of the crosstab

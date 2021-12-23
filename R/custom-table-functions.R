@@ -1,5 +1,3 @@
-#' Topline function (Internal)
-#'
 #' @importFrom dplyr summarize
 #' @importFrom dplyr group_by
 #' @importFrom dplyr ungroup
@@ -38,8 +36,6 @@ topline_internal <- function(df, variable, weight) {
 }
 
 
-#' Title
-#'
 #' @importFrom pollster deff_calc
 #' @importFrom pollster moedeff_calc
 #' @importFrom dplyr pull
@@ -74,7 +70,7 @@ moe_crosstab_internal <- function(df, x, y, weight) {
       unweighted_n = first(unweighted_n)
     ) |>
     ungroup() |>
-    mutate(MOE = as.character(round(moedeff_calc(pct = Percent, deff = deff, n = unweighted_n, zscore = 1.96), digits = 1))) %>%
+    mutate(MOE = as.character(round(moedeff_calc(pct = Percent, deff = deff, n = unweighted_n, zscore = 1.96), digits = 1))) |>
     mutate(
       Percent = as.character(round(Percent * 100, digits = 1))
     ) |>
