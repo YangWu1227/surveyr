@@ -32,7 +32,7 @@ split_df <- function(df, patterns, weight) {
       call. = FALSE
     )
   }
-  if (!weight %in% col_names) {
+  if (!weight %in% names(df)) {
     stop("The argument 'weight' must exit in 'df'", call. = FALSE)
   }
 
