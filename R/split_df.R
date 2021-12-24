@@ -32,6 +32,9 @@ split_df <- function(df, patterns, weight) {
       call. = FALSE
     )
   }
+  if (!weight %in% col_names) {
+    stop("The argument 'weight' must exit in 'df'", call. = FALSE)
+  }
 
   # Coerce to data.table
   class(df) <- c("data.table", "data.frame")
@@ -39,9 +42,12 @@ split_df <- function(df, patterns, weight) {
   df_list <- lapply(
     X = patterns,
     FUN = function(pattern) {
-      df[, .SD, .SDcols = patterns(glue("^{pattern}|{weight}"))]
+      df[, .SD, .SDcols = patterns(glue("^({pattern}|{weight})"))]
     }
   )
+
+  # Set list names to 'patterns' for easier access to elements via name attributes
+  names(df_list) <- patterns
 
   df_list
 }
