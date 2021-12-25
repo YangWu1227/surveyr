@@ -17,6 +17,7 @@ BugReports: https://github.com/YangWu1227/citizenr/issues
 Depends:
     R (>= 3.3.0)
 Imports:
+    BH (>= 1.78.0),
     data.table (>= 1.14.2),
     dplyr (>= 1.0.7),
     flextable (>= 0.6.10),
@@ -50,4 +51,5 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 LinkingTo: 
     testthat,
-    Rcpp
+    Rcpp,
+    BH

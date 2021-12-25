@@ -10,6 +10,18 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// check_patterns
+std::vector<bool> check_patterns(std::vector<std::string> mainstrs, std::vector<std::string> patterns);
+RcppExport SEXP _citizenr_check_patterns(SEXP mainstrsSEXP, SEXP patternsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<std::string> >::type mainstrs(mainstrsSEXP);
+    Rcpp::traits::input_parameter< std::vector<std::string> >::type patterns(patternsSEXP);
+    rcpp_result_gen = Rcpp::wrap(check_patterns(mainstrs, patterns));
+    return rcpp_result_gen;
+END_RCPP
+}
 // print_tbls
 void print_tbls(List l, String output);
 RcppExport SEXP _citizenr_print_tbls(SEXP lSEXP, SEXP outputSEXP) {
@@ -25,6 +37,7 @@ END_RCPP
 RcppExport SEXP run_testthat_tests(SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_citizenr_check_patterns", (DL_FUNC) &_citizenr_check_patterns, 2},
     {"_citizenr_print_tbls", (DL_FUNC) &_citizenr_print_tbls, 2},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},
     {NULL, NULL, 0}
