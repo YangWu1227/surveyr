@@ -118,7 +118,7 @@ list_xtab_args <- function(df, var_of_interest, dependent_vars = NULL, rm = NULL
 #' and `error`. It will either \strong{1)} throw an error indicating that attention must be paid to the `error`
 #' list, or \strong{2)} return a single list of arguments, which can then be passed to `generate_tbls()`.
 #'
-#' @param l A list of list as returned by `list_xtab_args()`.
+#' @param l A list of lists as returned by `list_xtab_args()`.
 #'
 #' @return A single tibble of crosstab arguments to be passed to `generate_tbls(type = "crosstab")`.
 #'

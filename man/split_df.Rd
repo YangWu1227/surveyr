@@ -9,7 +9,7 @@ split_df(df, patterns, weight)
 \arguments{
 \item{df}{A data frame or data.table or tibble.}
 
-\item{patterns}{A character vector of "prefixes" for selecting columns in 'df.'}
+\item{patterns}{A character vector of "prefixes" for selecting columns in \code{df}.}
 
 \item{weight}{A single string of the weighting variable.}
 }
@@ -17,7 +17,7 @@ split_df(df, patterns, weight)
 A list of data frames, each of which is a \code{data.table} object.
 }
 \description{
-This function is the first part of the split-apply-combine workflow in handling multiple selection questions in the
+This function is the first part of the \strong{split-apply-combine} workflow in handling multiple selection questions in the
 survey. In multi-select, participants are able to choose from a menu of choices provided. From a data perspective,
 multi-select responses are recorded in wide format where each column represents a single choice in a multi-select
 question. Related columns, i.e., those belonging to the same multi-select question, are grouped together using homogeneous
@@ -32,4 +32,8 @@ patterns <- c("prefix_1", "predix_2", ...)
 # List of data.tables
 list_df <- split_df(df, patterns, "weight_var")
 }
+}
+\seealso{
+\code{\link[=apply_topline_multiselect]{apply_topline_multiselect()}} for vectorized topline generation for multiple selection questions and
+\code{\link[=combine_topline_multiselect]{combine_topline_multiselect()}} for combining the multiselect toplines.
 }

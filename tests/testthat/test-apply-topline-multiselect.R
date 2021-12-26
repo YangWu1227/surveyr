@@ -1,0 +1,128 @@
+# Test data ---------------------------------------------------------------
+
+df <- readr::read_rds(test_path("testdata_multiselect.rds"))
+patterns <- c("no_vote", "civic_engagement", "media", "activism")
+list_df <- split_df(df, patterns, "weightvec")
+captions <- rep("captions", 4)
+parents <- rep(c(FALSE, TRUE), 2)
+
+# Errors ------------------------------------------------------------------
+
+test_that("apply_topline_multiselect() returns meaningful errors", {
+  # Invalid list of data.tables
+  expect_snapshot(
+    x = apply_topline_multiselect(
+      list_df = list(list_df[[1]], 3),
+      weight = "weightvec",
+      caption = captions,
+      parent = parents
+    ),
+    error = TRUE
+  )
+  # Invalid input for weight (wrong type)
+  expect_snapshot(
+    x = apply_topline_multiselect(
+      list_df = list_df,
+      weight = 3,
+      caption = captions,
+      parent = parents
+    ),
+    error = TRUE
+  )
+  # Invalid input for caption
+  expect_snapshot(
+    x = apply_topline_multiselect(
+      list_df = list_df,
+      weight = "weightvec",
+      caption = 3,
+      parent = parents
+    ),
+    error = TRUE
+  )
+  # Invalid input for caption
+  expect_snapshot(
+    x = apply_topline_multiselect(
+      list_df = list_df,
+      weight = "weightvec",
+      caption = captions,
+      parent = c("wrong_type", "not_boolean")
+    ),
+    error = TRUE
+  )
+})
+
+# Functionality -----------------------------------------------------------
+
+test_that("Does apply_topline_multiselect() return correct output type and class", {
+  # Test data
+  results <- apply_topline_multiselect(
+    list_df = list_df,
+    weight = "weightvec",
+    caption = captions,
+    parent = parents
+  )
+  # Base type (container)
+  expect_vector(
+    object = results,
+    ptype = list(),
+    size = 2
+  )
+  # First element should be 'no vote', a single list
+  expect_vector(
+    object = results[["result"]][["no_vote"]],
+    ptype = list(),
+    size = 1
+  )
+  # Check class of 'no vote', should be a flextable
+  expect_s3_class(
+    object = results[["result"]][["no_vote"]][[1]],
+    class = "flextable",
+    exact = TRUE
+  )
+  # Second element should be 'civic engagement', a double list
+  expect_vector(
+    object = results[["result"]][["civic_engagement"]],
+    ptype = list(),
+    size = 2
+  )
+  # Check classes of 'civic engagement', should be flextables
+  expect_s3_class(
+    object = results[["result"]][["civic_engagement"]][[1]],
+    class = "flextable",
+    exact = TRUE
+  )
+  expect_s3_class(
+    object = results[["result"]][["civic_engagement"]][[2]],
+    class = "flextable",
+    exact = TRUE
+  )
+  # Third element should be 'media', a single list
+  expect_vector(
+    object = results[["result"]][["media"]],
+    ptype = list(),
+    size = 1
+  )
+  # Check class of 'media', should be a flextable
+  expect_s3_class(
+    object = results[["result"]][["media"]][[1]],
+    class = "flextable",
+    exact = TRUE
+  )
+  # Second element should be 'activism', a double list
+  expect_vector(
+    object = results[["result"]][["activism"]],
+    ptype = list(),
+    size = 2
+  )
+  # Check classes of 'activism', should be flextables
+  expect_s3_class(
+    object = results[["result"]][["activism"]][[1]],
+    class = "flextable",
+    exact = TRUE
+  )
+  expect_s3_class(
+    object = results[["result"]][["activism"]][[2]],
+    class = "flextable",
+    exact = TRUE
+  )
+})

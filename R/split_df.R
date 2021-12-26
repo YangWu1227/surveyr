@@ -1,7 +1,7 @@
 #' Split a single data frame into a list of data frames
 #'
 #' @description
-#' This function is the first part of the split-apply-combine workflow in handling multiple selection questions in the
+#' This function is the first part of the \strong{split-apply-combine} workflow in handling multiple selection questions in the
 #' survey. In multi-select, participants are able to choose from a menu of choices provided. From a data perspective,
 #' multi-select responses are recorded in wide format where each column represents a single choice in a multi-select
 #' question. Related columns, i.e., those belonging to the same multi-select question, are grouped together using homogeneous
@@ -10,10 +10,13 @@
 #'
 #'
 #' @param df A data frame or data.table or tibble.
-#' @param patterns A character vector of "prefixes" for selecting columns in 'df.'
+#' @param patterns A character vector of "prefixes" for selecting columns in `df`.
 #' @param weight A single string of the weighting variable.
 #'
 #' @return A list of data frames, each of which is a `data.table` object.
+#'
+#' @seealso [apply_topline_multiselect()] for vectorized topline generation for multiple selection questions and
+#'   [combine_topline_multiselect()] for combining the multiselect toplines.
 #'
 #' @importFrom glue glue
 #' @export

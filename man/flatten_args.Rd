@@ -7,7 +7,7 @@
 flatten_args(l)
 }
 \arguments{
-\item{l}{A list of list as returned by \code{list_xtab_args()}.}
+\item{l}{A list of lists as returned by \code{list_xtab_args()}.}
 }
 \value{
 A single tibble of crosstab arguments to be passed to \code{generate_tbls(type = "crosstab")}.
