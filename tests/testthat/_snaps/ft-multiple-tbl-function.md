@@ -124,7 +124,7 @@
       ft_generate_tbls(l = xtab_args, df = df, weight = "weightvec", type = "crosstab",
         output = word)
     Error <simpleError>
-      The argument 'output' must be a length-one character vector
+      Please place quotes around the argument 'output'
 
 # Mismatched 'type' argument and 'l' list argument
 
