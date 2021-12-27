@@ -54,25 +54,6 @@ test_that("generate_topline_multiselect() returns helpful errors", {
     ),
     error = TRUE
   )
-  # Wrong type for weight
-  expect_snapshot(
-    x = generate_topline_multiselect(
-      df = list_df[[1]],
-      weight = 3,
-      caption = "caption",
-      parent = FALSE
-    ),
-    error = TRUE
-  )
-  expect_snapshot(
-    x = generate_topline_multiselect(
-      df = list_df[[1]],
-      weight = 3,
-      caption = "caption",
-      parent = TRUE
-    ),
-    error = TRUE
-  )
 })
 
 # Functionality -----------------------------------------------------------

@@ -1,8 +1,8 @@
-#' Iteratively generate multiple tables
+#' Iteratively generate tables for 'Feeling Thermometer' variables
 #'
 #' @description
-#' This function provides a wrapper around `generate_xtab_*()` and `generate_topline_*()`, allowing users
-#' to efficiently generate many tables by passing a list of arguments. The shapes of the argument lists
+#' This function provides a wrapper around `ft_generate_xtab_*()` and `ft_generate_topline_*()` (all internal),
+#' allowing users to efficiently generate many tables by passing a list of arguments. The shapes of the argument lists
 #' may vary depending on the table `type`.
 #'
 #' @param l A list of arguments to be passed on to either `generate_xtab_*()` or `generate_topline_*()`:
@@ -38,13 +38,12 @@
 #'
 #' @seealso [generate_xtab_docx()], [generate_xtab_latex()], [generate_topline_docx()], and [generate_topline_latex()] for single crosstab or topline generation.
 #'
-#' @importFrom purrr pmap
 #' @export
 #'
 #' @examples
 #' \donttest{
 #' # Generate crosstabs
-#' list_of_xtabs <- generate_tbls(
+#' list_of_xtabs <- ft_generate_tbls(
 #'   l = list_xtab,
 #'   df,
 #'   "weight",
@@ -53,7 +52,7 @@
 #' )
 #'
 #' # Generate toplines
-#' list_of_topline <- generate_tbls(
+#' list_of_topline <- ft_generate_tbls(
 #'   l = list_topline,
 #'   df,
 #'   "weight",
@@ -61,7 +60,7 @@
 #'   "latex"
 #' )
 #' }
-generate_tbls <- function(l, df, weight, type = "topline", output = "word") {
+ft_generate_tbls <- function(l, df, weight, type = "topline", output = "word") {
   tryCatch(
     error = function(cnd) stop("Please place quotes around the argument 'weight'", call. = FALSE),
     {
@@ -98,7 +97,7 @@ generate_tbls <- function(l, df, weight, type = "topline", output = "word") {
       topline = {
         list_of_tables <- pmap(
           .l = l,
-          .f = generate_topline_docx,
+          .f = ft_generate_topline_docx,
           # Constant arguments
           df = df,
           weight = {{ weight }}
@@ -107,7 +106,7 @@ generate_tbls <- function(l, df, weight, type = "topline", output = "word") {
       crosstab = {
         list_of_tables <- pmap(
           .l = l,
-          .f = generate_xtab_docx,
+          .f = ft_generate_xtab_docx,
           # Constant arguments
           df = df,
           weight = {{ weight }}
@@ -120,7 +119,7 @@ generate_tbls <- function(l, df, weight, type = "topline", output = "word") {
       topline = {
         list_of_tables <- pmap(
           .l = l,
-          .f = generate_topline_latex,
+          .f = ft_generate_topline_latex,
           # Constant arguments
           df = df,
           weight = {{ weight }}
@@ -129,7 +128,7 @@ generate_tbls <- function(l, df, weight, type = "topline", output = "word") {
       crosstab = {
         list_of_tables <- pmap(
           .l = l,
-          .f = generate_xtab_latex,
+          .f = ft_generate_xtab_latex,
           # Constant arguments
           df = df,
           weight = {{ weight }}

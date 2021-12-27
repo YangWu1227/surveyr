@@ -197,6 +197,26 @@ generate_xtab_docx <- function(df, x, y, weight, caption) {
     setattr("names", c(x_name, y_name, "Percent", "MOE", "N"))
 
   roll_x <- names(xtab)[[1]]
+  # First column of the crosstab
+  first_column <- as.character(xtab[[1]])
+  # Obtain a character vector of unique categories (factor levels)
+  levels <- unique(first_column)
+
+  # Initialize container
+  stripe_index_container <- logical(length = length(first_column))
+  # Stripe index
+  invisible(lapply(
+    X = levels,
+    FUN = function(x) {
+      row_num <- first_column == x
+      level_index <- which(levels == x)
+      if (level_index %% 2 == 1) {
+        stripe_index_container[row_num] <<- rep.int(TRUE, times = sum(row_num))
+      } else if (level_index %% 2 == 0) {
+        stripe_index_container[row_num] <<- rep.int(FALSE, times = sum(row_num))
+      }
+    }
+  ))
 
   xtab_formatted <- xtab |>
     flextable() |>
@@ -209,30 +229,13 @@ generate_xtab_docx <- function(df, x, y, weight, caption) {
     font(fontname = "Open Sans", part = "all") |>
     color(color = "white", part = "header") |>
     bg(i = NULL, j = NULL, bg = "#32BDB9", part = "header") |>
+    bg(i = stripe_index_container, j = NULL, bg = "#e5e5e5", part = "body") |>
     merge_v(target = roll_x, part = "body") |>
     vline_left(border = fp_border(color = "black", style = "solid", width = 1), part = "all") |>
     vline_right(border = fp_border(color = "black", style = "solid", width = 1), part = "all") |>
     hline_top(border = fp_border(color = "black", style = "solid", width = 1), part = "all") |>
     hline_bottom(border = fp_border(color = "black", style = "solid", width = 1), part = "all") |>
     fix_border_issues(part = "all")
-
-  # First column of the crosstab
-  first_column <- as.character(xtab[[1]])
-  # Obtain a character vector of unique categories (factor levels)
-  levels <- unique(first_column)
-
-  invisible(lapply(
-    X = levels,
-    FUN = function(x) {
-      row_num <- first_column == x
-      color_index <- which(levels == x)
-      if (color_index %% 2 == 1) {
-        xtab_formatted <<- bg(x = xtab_formatted, i = row_num, j = NULL, bg = "#ffffff", part = "body")
-      } else if (color_index %% 2 == 0) {
-        xtab_formatted <<- bg(x = xtab_formatted, i = row_num, j = NULL, bg = "#e5e5e5", part = "body")
-      }
-    }
-  ))
 
   # Return formatted table
   xtab_formatted

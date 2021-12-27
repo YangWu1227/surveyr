@@ -16,13 +16,13 @@ topline_internal <- function(df, variable, weight) {
       {{ variable }} := fct_explicit_na({{ variable }})
     ) |>
     # Calculate denominator
-    mutate(valid.total = sum(({{ weight }})[{{ variable }} != "(Missing)"])) |>
+    mutate(valid.total = sumcpp(({{ weight }})[{{ variable }} != "(Missing)"])) |>
     # Calculate proportions
     group_by({{ variable }}) |>
     # Use first() to get the first value since 'valid.total' is a column (vector) where all values are the same
     summarize(
-      Percent = round((sum({{ weight }}) / first(valid.total) * 100), digits = 1),
-      n = round(sum({{ weight }}), digits = 0)
+      Percent = round((sumcpp({{ weight }}) / first(valid.total) * 100), digits = 1),
+      n = round(sumcpp({{ weight }}), digits = 0)
     ) |>
     ungroup() |>
     select(Response = {{ variable }}, Frequency = n, Percent) |>
@@ -62,12 +62,12 @@ moe_crosstab_internal <- function(df, x, y, weight) {
     ) |>
     group_by({{ x }}) |>
     mutate(
-      total = sum({{ weight }}),
+      total = sumcpp({{ weight }}),
       unweighted_n = length({{ weight }})
     ) |>
     group_by({{ x }}, {{ y }}) |>
     summarize(
-      observations = sum({{ weight }}),
+      observations = sumcpp({{ weight }}),
       Percent = observations / first(total),
       N = as.character(round(first(total), digits = 0)),
       unweighted_n = first(unweighted_n)
