@@ -6,7 +6,7 @@
 #'
 #' @param list_df A list of data frame objects.
 #' @param weight A single string of the weighting variable.
-#' @param caption A character vector of captions for the toplines.
+#' @param caption A list of character vectors of captions for the toplines.
 #' @param parent A logical vector of booleans indicating whether `df` has a parent response column.
 #'
 #' @return A list containing two elements--- `result` and `error`, which are lists in and of themselves.
@@ -39,9 +39,9 @@ apply_topline_multiselect <- function(list_df, weight, caption, parent) {
   if (!all(vapply(X = list_df, FUN = is.data.frame, FUN.VALUE = logical(length = 1)))) {
     stop("The argument 'list_df' must be a list of data frames", call. = FALSE)
   }
-  if (!is.character(weight) | !is.character(caption) | !is.logical(parent)) {
+  if (!is.character(weight) | !is.list(caption) | !is.logical(parent)) {
     stop(
-      "The arguments 'weight', 'caption', and 'parent' must be character and logical vectors, respectively",
+      "The arguments 'weight', 'caption', and 'parent' must be a character, a list, and a logical vector, respectively",
       call. = FALSE
     )
   }

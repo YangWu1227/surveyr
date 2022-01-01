@@ -11,7 +11,7 @@ apply_topline_multiselect(list_df, weight, caption, parent)
 
 \item{weight}{A single string of the weighting variable.}
 
-\item{caption}{A character vector of captions for the toplines.}
+\item{caption}{A list of character vectors of captions for the toplines.}
 
 \item{parent}{A logical vector of booleans indicating whether \code{df} has a parent response column.}
 }

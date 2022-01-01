@@ -3,7 +3,7 @@
 df <- readr::read_rds(test_path("testdata_multiselect.rds"))
 patterns <- c("no_vote", "civic_engagement", "media", "activism")
 list_df <- split_df(df, patterns, "weightvec")
-captions <- rep("captions", 4)
+captions <- list("caption", c("caption1", "caption2"), "caption", c("caption1", "caption2"))
 parents <- rep(c(FALSE, TRUE), 2)
 results <- apply_topline_multiselect(
   list_df = list_df,

@@ -14,7 +14,7 @@ no_vote <- generate_topline_multiselect(
 civic <- generate_topline_multiselect(
   df = list_df[[2]],
   weight = "weightvec",
-  caption = "caption",
+  caption = c("caption1", "caption2"),
   parent = TRUE
 )
 
@@ -28,7 +28,7 @@ media <- generate_topline_multiselect(
 activism <- generate_topline_multiselect(
   df = list_df[[4]],
   weight = "weightvec",
-  caption = "caption",
+  caption = c("caption1", "caption2"),
   parent = TRUE
 )
 
@@ -40,7 +40,7 @@ test_that("generate_topline_multiselect() returns helpful errors", {
     x = generate_topline_multiselect(
       df = c(3, 4),
       weight = "weightvec",
-      caption = "caption",
+      caption = c("caption1", "caption2"),
       parent = TRUE
     ),
     error = TRUE

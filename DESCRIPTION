@@ -1,6 +1,6 @@
 Package: citizenr
 Title: An R Toolkit for Citizen
-Version: 1.4.0
+Version: 1.5.0
 Authors@R: 
     c(person(given = "Yang", 
              family = "Wu",

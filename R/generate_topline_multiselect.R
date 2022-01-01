@@ -50,7 +50,7 @@ generate_topline_multiselect <- function(df, weight, caption, parent = FALSE) {
 topline_multiselect_parent <- function(df, weight, caption) {
   # Parent topline
   parent_var <- names(df)[[1]]
-  topline_parent <- generate_topline_docx(df, x = parent_var, weight = weight, caption = caption)
+  topline_parent <- generate_topline_docx(df, x = parent_var, weight = weight, caption = caption[[1]])
 
   # Child topline
   df_child <- na.omit(df, cols = parent_var)[, c(parent_var) := NULL]
@@ -81,7 +81,7 @@ topline_multiselect_parent <- function(df, weight, caption) {
 
   topline_child <- topline_data |>
     flextable() |>
-    set_caption(caption = caption) |>
+    set_caption(caption = caption[[2]]) |>
     colformat_num(j = 3, suffix = " %") |>
     align(align = "center", part = "header") |>
     align(i = NULL, j = 2:3, align = "center", part = "body") |>

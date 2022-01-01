@@ -12,7 +12,7 @@
       apply_topline_multiselect(list_df = list_df, weight = 3, caption = captions,
         parent = parents)
     Error <simpleError>
-      The arguments 'weight', 'caption', and 'parent' must be character and logical vectors, respectively
+      The arguments 'weight', 'caption', and 'parent' must be a character, a list, and a logical vector, respectively
 
 ---
 
@@ -20,7 +20,7 @@
       apply_topline_multiselect(list_df = list_df, weight = "weightvec", caption = 3,
         parent = parents)
     Error <simpleError>
-      The arguments 'weight', 'caption', and 'parent' must be character and logical vectors, respectively
+      The arguments 'weight', 'caption', and 'parent' must be a character, a list, and a logical vector, respectively
 
 ---
 
@@ -28,5 +28,5 @@
       apply_topline_multiselect(list_df = list_df, weight = "weightvec", caption = captions,
         parent = c("wrong_type", "not_boolean"))
     Error <simpleError>
-      The arguments 'weight', 'caption', and 'parent' must be character and logical vectors, respectively
+      The arguments 'weight', 'caption', and 'parent' must be a character, a list, and a logical vector, respectively
 
