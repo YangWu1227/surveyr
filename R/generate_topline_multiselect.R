@@ -65,7 +65,7 @@ topline_multiselect_parent <- function(df, weight, caption) {
 
   # Topline data
   topline_data <- data.table(
-    Response = str_replace_all(cols, "[^[:alnum:]]", " "),
+    Response = str_to_title(str_replace_all(cols, "_", " ")),
     Frequency = round(unlist(col_frequency_list), digits = 0),
     Percent = round(unlist(col_frequency_list) / sum(df_child[[weight]]) * 100, digits = 1)
   )
@@ -117,7 +117,7 @@ topline_multiselect <- function(df, weight, caption) {
 
   # Topline data
   topline_data <- data.table(
-    Response = str_replace_all(cols, "[^[:alnum:]]", " "),
+    Response = str_to_title(str_replace_all(cols, "_", " ")),
     Frequency = round(unlist(col_frequency_list), digits = 0),
     Percent = round(unlist(col_frequency_list) / sum(df[[weight]]) * 100, digits = 1)
   )
