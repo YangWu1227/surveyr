@@ -53,7 +53,7 @@ apply_topline_multiselect <- function(list_df, weight, caption, parent) {
     .l = list(df = list_df, caption = caption, parent = parent),
     .f = safe_generate_topline_multiselect,
     weight = weight
-  ) |>
+  ) %>%
     purrr::transpose()
 
   list_multiselect

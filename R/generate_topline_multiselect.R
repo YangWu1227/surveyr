@@ -79,23 +79,23 @@ topline_multiselect_parent <- function(df, weight, caption) {
   even <- seq_len(vec_size(topline_data)) %% 2 == 0
   odd <- !even
 
-  topline_child <- topline_data |>
-    flextable() |>
-    set_caption(caption = caption[[2]]) |>
-    colformat_num(j = 3, suffix = " %") |>
-    align(align = "center", part = "header") |>
-    align(i = NULL, j = 2:3, align = "center", part = "body") |>
-    bold(bold = TRUE, part = "header") |>
-    bold(i = NULL, j = 1, bold = TRUE, part = "body") |>
-    font(fontname = "Open Sans", part = "all") |>
-    color(color = "white", part = "header") |>
-    bg(i = NULL, j = NULL, bg = "#32BDB9", part = "header") |>
-    vline_left(border = fp_border(color = "black", style = "solid", width = 1), part = "all") |>
-    vline_right(border = fp_border(color = "black", style = "solid", width = 1), part = "all") |>
-    hline_top(border = fp_border(color = "black", style = "solid", width = 1), part = "all") |>
-    hline_bottom(border = fp_border(color = "black", style = "solid", width = 1), part = "all") |>
-    fix_border_issues(part = "all") |>
-    bg(i = even, bg = "#e5e5e5", part = "body") |>
+  topline_child <- topline_data %>%
+    flextable() %>%
+    set_caption(caption = caption[[2]]) %>%
+    colformat_num(j = 3, suffix = " %") %>%
+    align(align = "center", part = "header") %>%
+    align(i = NULL, j = 2:3, align = "center", part = "body") %>%
+    bold(bold = TRUE, part = "header") %>%
+    bold(i = NULL, j = 1, bold = TRUE, part = "body") %>%
+    font(fontname = "Open Sans", part = "all") %>%
+    color(color = "white", part = "header") %>%
+    bg(i = NULL, j = NULL, bg = "#32BDB9", part = "header") %>%
+    vline_left(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
+    vline_right(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
+    hline_top(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
+    hline_bottom(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
+    fix_border_issues(part = "all") %>%
+    bg(i = even, bg = "#e5e5e5", part = "body") %>%
     bg(i = odd, bg = "#FFFFFF", part = "body")
 
   parent_child_list <- list(topline_parent, topline_child)
@@ -132,23 +132,23 @@ topline_multiselect <- function(df, weight, caption) {
   even <- seq_len(vec_size(topline_data)) %% 2 == 0
   odd <- !even
 
-  topline <- topline_data |>
-    flextable() |>
-    set_caption(caption = caption) |>
-    colformat_num(j = 3, suffix = " %") |>
-    align(align = "center", part = "header") |>
-    align(i = NULL, j = 2:3, align = "center", part = "body") |>
-    bold(bold = TRUE, part = "header") |>
-    bold(i = NULL, j = 1, bold = TRUE, part = "body") |>
-    font(fontname = "Open Sans", part = "all") |>
-    color(color = "white", part = "header") |>
-    bg(i = NULL, j = NULL, bg = "#32BDB9", part = "header") |>
-    vline_left(border = fp_border(color = "black", style = "solid", width = 1), part = "all") |>
-    vline_right(border = fp_border(color = "black", style = "solid", width = 1), part = "all") |>
-    hline_top(border = fp_border(color = "black", style = "solid", width = 1), part = "all") |>
-    hline_bottom(border = fp_border(color = "black", style = "solid", width = 1), part = "all") |>
-    fix_border_issues(part = "all") |>
-    bg(i = even, bg = "#e5e5e5", part = "body") |>
+  topline <- topline_data %>%
+    flextable() %>%
+    set_caption(caption = caption) %>%
+    colformat_num(j = 3, suffix = " %") %>%
+    align(align = "center", part = "header") %>%
+    align(i = NULL, j = 2:3, align = "center", part = "body") %>%
+    bold(bold = TRUE, part = "header") %>%
+    bold(i = NULL, j = 1, bold = TRUE, part = "body") %>%
+    font(fontname = "Open Sans", part = "all") %>%
+    color(color = "white", part = "header") %>%
+    bg(i = NULL, j = NULL, bg = "#32BDB9", part = "header") %>%
+    vline_left(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
+    vline_right(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
+    hline_top(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
+    hline_bottom(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
+    fix_border_issues(part = "all") %>%
+    bg(i = even, bg = "#e5e5e5", part = "body") %>%
     bg(i = odd, bg = "#FFFFFF", part = "body")
 
   topline_list <- list(no_parent = topline)

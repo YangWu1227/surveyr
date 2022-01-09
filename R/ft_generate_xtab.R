@@ -43,23 +43,23 @@ ft_generate_xtab_docx <- function(df, x, y, weight, caption) {
     }
   ))
 
-  xtab_formatted <- xtab |>
-    flextable() |>
-    set_caption(caption = caption) |>
-    colformat_char(j = 3, suffix = " %") |>
-    align(align = "center", part = "header") |>
-    align(i = NULL, j = 3:5, align = "center", part = "body") |>
-    bold(bold = TRUE, part = "header") |>
-    bold(i = NULL, j = 1, bold = TRUE, part = "body") |>
-    font(fontname = "Open Sans", part = "all") |>
-    color(color = "white", part = "header") |>
-    bg(i = NULL, j = NULL, bg = "#32BDB9", part = "header") |>
-    bg(i = stripe_index_container, j = NULL, bg = "#e5e5e5", part = "body") |>
-    merge_v(target = roll_x, part = "body") |>
-    vline_left(border = fp_border(color = "black", style = "solid", width = 1), part = "all") |>
-    vline_right(border = fp_border(color = "black", style = "solid", width = 1), part = "all") |>
-    hline_top(border = fp_border(color = "black", style = "solid", width = 1), part = "all") |>
-    hline_bottom(border = fp_border(color = "black", style = "solid", width = 1), part = "all") |>
+  xtab_formatted <- xtab %>%
+    flextable() %>%
+    set_caption(caption = caption) %>%
+    colformat_char(j = 3, suffix = " %") %>%
+    align(align = "center", part = "header") %>%
+    align(i = NULL, j = 3:5, align = "center", part = "body") %>%
+    bold(bold = TRUE, part = "header") %>%
+    bold(i = NULL, j = 1, bold = TRUE, part = "body") %>%
+    font(fontname = "Open Sans", part = "all") %>%
+    color(color = "white", part = "header") %>%
+    bg(i = NULL, j = NULL, bg = "#32BDB9", part = "header") %>%
+    bg(i = stripe_index_container, j = NULL, bg = "#e5e5e5", part = "body") %>%
+    merge_v(target = roll_x, part = "body") %>%
+    vline_left(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
+    vline_right(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
+    hline_top(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
+    hline_bottom(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
     fix_border_issues(part = "all")
 
   # Return formatted table
@@ -111,7 +111,7 @@ ft_generate_xtab_latex <- function(df, x, y, weight, caption) {
   ))
 
   # Create kableextra table object and format
-  xtab_formatted <- xtab |>
+  xtab_formatted <- xtab %>%
     kbl(
       align = rep("l", times = 5),
       caption = caption,
@@ -122,23 +122,23 @@ ft_generate_xtab_latex <- function(df, x, y, weight, caption) {
       centering = TRUE,
       vline = "",
       linesep = c(rep("", times = vec_size(xtab)), "\\addlinespace")
-    ) |>
+    ) %>%
     kable_styling(
       latex_options = c(
         "hold_position"
       ),
       font_size = 15,
-    ) |>
+    ) %>%
     row_spec(
       row = 0,
       bold = TRUE,
       color = "white",
       background = "#32bdb9"
-    ) |>
+    ) %>%
     row_spec(
       row = seq.int(length.out = vec_size(xtab))[stripe_index_container],
       background = "#e5e5e5"
-    ) |>
+    ) %>%
     column_spec(
       column = 1,
       bold = TRUE

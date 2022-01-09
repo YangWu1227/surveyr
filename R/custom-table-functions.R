@@ -9,23 +9,23 @@
 #' @importFrom labelled to_factor
 #' @importFrom forcats fct_explicit_na
 topline_internal <- function(df, variable, weight) {
-  topline <- df |>
+  topline <- df %>%
     # Convert to ordered factors
     mutate(
       {{ variable }} := to_factor({{ variable }}, sort_levels = "values"),
       {{ variable }} := fct_explicit_na({{ variable }})
-    ) |>
+    ) %>%
     # Calculate denominator
-    mutate(valid.total = sumcpp(({{ weight }})[{{ variable }} != "(Missing)"])) |>
+    mutate(valid.total = sumcpp(({{ weight }})[{{ variable }} != "(Missing)"])) %>%
     # Calculate proportions
-    group_by({{ variable }}) |>
+    group_by({{ variable }}) %>%
     # Use first() to get the first value since 'valid.total' is a column (vector) where all values are the same
     summarize(
       Percent = round((sumcpp({{ weight }}) / first(valid.total) * 100), digits = 1),
       n = round(sumcpp({{ weight }}), digits = 0)
-    ) |>
-    ungroup() |>
-    select(Response = {{ variable }}, Frequency = n, Percent) |>
+    ) %>%
+    ungroup() %>%
+    select(Response = {{ variable }}, Frequency = n, Percent) %>%
     filter(Response != "(Missing)")
 
   # Column sums
@@ -46,38 +46,38 @@ topline_internal <- function(df, variable, weight) {
 moe_crosstab_internal <- function(df, x, y, weight) {
 
   # calculate the design effect
-  deff <- df |>
-    pull({{ weight }}) |>
+  deff <- df %>%
+    pull({{ weight }}) %>%
     deff_calc()
 
   # build the table, either row percents or cell percents
-  xtab <- df |>
+  xtab <- df %>%
     filter(
       !is.na({{ x }}),
       !is.na({{ y }})
-    ) |>
+    ) %>%
     mutate(
       {{ x }} := to_factor({{ x }}),
       {{ y }} := to_factor({{ y }})
-    ) |>
-    group_by({{ x }}) |>
+    ) %>%
+    group_by({{ x }}) %>%
     mutate(
       total = sumcpp({{ weight }}),
       unweighted_n = length({{ weight }})
-    ) |>
-    group_by({{ x }}, {{ y }}) |>
+    ) %>%
+    group_by({{ x }}, {{ y }}) %>%
     summarize(
       observations = sumcpp({{ weight }}),
       Percent = observations / first(total),
       N = as.character(round(first(total), digits = 0)),
       unweighted_n = first(unweighted_n)
-    ) |>
-    ungroup() |>
-    mutate(MOE = as.character(round(moedeff_calc(pct = Percent, deff = deff, n = unweighted_n, zscore = 1.96), digits = 1))) |>
+    ) %>%
+    ungroup() %>%
+    mutate(MOE = as.character(round(moedeff_calc(pct = Percent, deff = deff, n = unweighted_n, zscore = 1.96), digits = 1))) %>%
     mutate(
       Percent = as.character(round(Percent * 100, digits = 1))
-    ) |>
-    select(-c("observations", "unweighted_n")) |>
+    ) %>%
+    select(-c("observations", "unweighted_n")) %>%
     relocate(N, .after = MOE)
 
   class(xtab) <- c("data.table", "data.frame")
