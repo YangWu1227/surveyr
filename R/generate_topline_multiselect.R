@@ -69,6 +69,8 @@ topline_multiselect_parent <- function(df, weight, caption) {
     Frequency = round(unlist(col_frequency_list), digits = 0),
     Percent = round(unlist(col_frequency_list) / sum(df_child[[weight]]) * 100, digits = 1)
   )
+  # Order
+  setorder(topline_data, Percent)
   # Add column totals
   topline_data <- rbindlist(list(
     topline_data,
@@ -121,6 +123,8 @@ topline_multiselect <- function(df, weight, caption) {
     Frequency = round(unlist(col_frequency_list), digits = 0),
     Percent = round(unlist(col_frequency_list) / sum(df[[weight]]) * 100, digits = 1)
   )
+  # Order
+  setorder(topline_data, Percent)
   # Add column totals
   topline_data <- rbindlist(list(
     topline_data,
