@@ -210,9 +210,9 @@ generate_xtab_docx <- function(df, x, y, weight, caption) {
     FUN = function(x) {
       row_num <- first_column == x
       level_index <- which(levels == x)
-      if (level_index %% 2 == 1) {
+      if (level_index %% 2 == 0) {
         stripe_index_container[row_num] <<- rep.int(TRUE, times = sum(row_num))
-      } else if (level_index %% 2 == 0) {
+      } else if (level_index %% 2 == 1) {
         stripe_index_container[row_num] <<- rep.int(FALSE, times = sum(row_num))
       }
     }

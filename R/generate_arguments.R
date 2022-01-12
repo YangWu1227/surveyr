@@ -106,9 +106,9 @@ generate_xtab_args <- function(df, var_of_interest, dependent_vars = NULL, rm = 
     "x" = vec_var_of_interest,
     "y" = dependent_vars,
     "caption" = paste(
-      str_to_title(str_replace_all(dependent_vars, "[^[:alnum:]]", " ")),
+      str_to_title(str_replace_all(vec_var_of_interest, "[^[:alnum:]]", " ")),
       sep = " by ",
-      str_to_title(str_replace_all(vec_var_of_interest, "[^[:alnum:]]", " "))
+      str_to_title(str_replace_all(dependent_vars, "[^[:alnum:]]", " "))
     )
   )
 }

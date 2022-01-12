@@ -30,22 +30,22 @@
     # A tibble: 2 x 3
       x                y           caption                        
       <chr>            <chr>       <chr>                          
-    1 education_rollup party_reg   Party Reg by Education Rollup  
-    2 education_rollup issue_focus Issue Focus by Education Rollup
+    1 education_rollup party_reg   Education Rollup by Party Reg  
+    2 education_rollup issue_focus Education Rollup by Issue Focus
     
     $result$party_reg
     # A tibble: 2 x 3
       x         y                caption                      
       <chr>     <chr>            <chr>                        
-    1 party_reg education_rollup Education Rollup by Party Reg
-    2 party_reg issue_focus      Issue Focus by Party Reg     
+    1 party_reg education_rollup Party Reg by Education Rollup
+    2 party_reg issue_focus      Party Reg by Issue Focus     
     
     $result$issue_focus
     # A tibble: 2 x 3
       x           y                caption                        
       <chr>       <chr>            <chr>                          
-    1 issue_focus education_rollup Education Rollup by Issue Focus
-    2 issue_focus party_reg        Party Reg by Issue Focus       
+    1 issue_focus education_rollup Issue Focus by Education Rollup
+    2 issue_focus party_reg        Issue Focus by Party Reg       
     
     $result$unknown
     NULL
@@ -76,13 +76,13 @@
     # A tibble: 1 x 3
       x         y           caption                 
       <chr>     <chr>       <chr>                   
-    1 party_reg issue_focus Issue Focus by Party Reg
+    1 party_reg issue_focus Party Reg by Issue Focus
     
     $result$issue_focus
     # A tibble: 1 x 3
       x           y         caption                 
       <chr>       <chr>     <chr>                   
-    1 issue_focus party_reg Party Reg by Issue Focus
+    1 issue_focus party_reg Issue Focus by Party Reg
     
     
     $error
@@ -152,10 +152,10 @@
     # A tibble: 6 x 3
       x                y                caption                        
       <chr>            <chr>            <chr>                          
-    1 education_rollup party_reg        Party Reg by Education Rollup  
-    2 education_rollup issue_focus      Issue Focus by Education Rollup
-    3 party_reg        education_rollup Education Rollup by Party Reg  
-    4 party_reg        issue_focus      Issue Focus by Party Reg       
-    5 issue_focus      party_reg        Party Reg by Issue Focus       
-    6 issue_focus      education_rollup Education Rollup by Issue Focus
+    1 education_rollup party_reg        Education Rollup by Party Reg  
+    2 education_rollup issue_focus      Education Rollup by Issue Focus
+    3 party_reg        education_rollup Party Reg by Education Rollup  
+    4 party_reg        issue_focus      Party Reg by Issue Focus       
+    5 issue_focus      party_reg        Issue Focus by Party Reg       
+    6 issue_focus      education_rollup Issue Focus by Education Rollup
 
