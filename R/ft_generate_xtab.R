@@ -92,7 +92,7 @@ ft_generate_xtab_3way_docx <- function(df, x, y, z, weight, caption) {
     get(z_name) == "11", eval(z_name) := "No"
   ]
 
-  roll_var <- names(xtab_3way)[[1]]
+  roll_vars <- names(xtab_3way)[1:2]
   # First column of the crosstab
   first_column <- as.character(xtab_3way[[1]])
   # Obtain a character vector of unique categories (factor levels)
@@ -126,7 +126,8 @@ ft_generate_xtab_3way_docx <- function(df, x, y, z, weight, caption) {
     color(color = "white", part = "header") %>%
     bg(i = NULL, j = NULL, bg = "#32BDB9", part = "header") %>%
     bg(i = stripe_index_container, j = NULL, bg = "#e5e5e5", part = "body") %>%
-    merge_v(j = roll_var, target = 1, part = "body") %>%
+    merge_v(j = roll_vars[[1]], target = 1, part = "body") %>%
+    merge_v(j = roll_vars[[2]], target = 2, part = "body") %>%
     vline_left(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
     vline_right(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
     hline_top(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
