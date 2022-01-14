@@ -123,7 +123,7 @@
       generate_tbls(l = list_xtab, df = df, weight = "weightvec", type = "crosstab",
         output = word)
     Error <simpleError>
-      Please place quotes around the argument 'output'
+      The argument 'output' must be a length-one character vector
 
 # Mismatched 'type' argument and 'l' list argument
 

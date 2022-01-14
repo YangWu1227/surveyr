@@ -83,16 +83,16 @@ ft_generate_xtab_3way_docx <- function(df, x, y, z, weight, caption) {
 
   xtab_3way <- moe_crosstab_3way_internal(df = df, x = {{ x }}, y = {{ y }}, z = {{ z }}, weight = {{ weight }})
   setattr(xtab_3way, "names", c(z_name, x_name, y_name, "Percent", "MOE", "N"))[
-    get(x_name) == "No", eval(x_name) := "11"
+    get(z_name) == "No", eval(z_name) := "11"
   ][
-    , eval(x_name) := as.integer(as.character(get(x_name)))
+    , eval(z_name) := as.integer(as.character(get(z_name)))
   ]
   # Reorder feeling thermometers
-  setorderv(xtab_3way, cols = x_name)[, eval(x_name) := as.character(get(x_name))][
-    get(x_name) == "11", eval(x_name) := "No"
+  setorderv(xtab_3way, cols = z_name)[, eval(z_name) := as.character(get(z_name))][
+    get(z_name) == "11", eval(z_name) := "No"
   ]
 
-  roll_x <- names(xtab_3way)[[1]]
+  roll_var <- names(xtab_3way)[[1]]
   # First column of the crosstab
   first_column <- as.character(xtab_3way[[1]])
   # Obtain a character vector of unique categories (factor levels)
@@ -116,7 +116,7 @@ ft_generate_xtab_3way_docx <- function(df, x, y, z, weight, caption) {
 
   xtab_3way_formatted <- xtab_3way %>%
     flextable() %>%
-    set_caption(caption = caption) %>%
+    set_caption(caption = "caption") %>%
     colformat_char(j = 4, suffix = " %") %>%
     align(align = "center", part = "header") %>%
     align(i = NULL, j = 4:6, align = "center", part = "body") %>%
@@ -126,7 +126,7 @@ ft_generate_xtab_3way_docx <- function(df, x, y, z, weight, caption) {
     color(color = "white", part = "header") %>%
     bg(i = NULL, j = NULL, bg = "#32BDB9", part = "header") %>%
     bg(i = stripe_index_container, j = NULL, bg = "#e5e5e5", part = "body") %>%
-    merge_v(target = roll_x, part = "body") %>%
+    merge_v(j = roll_var, target = 1, part = "body") %>%
     vline_left(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
     vline_right(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
     hline_top(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
