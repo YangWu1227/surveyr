@@ -116,7 +116,7 @@ ft_generate_xtab_3way_docx <- function(df, x, y, z, weight, caption) {
 
   xtab_3way_formatted <- xtab_3way %>%
     flextable() %>%
-    set_caption(caption = "caption") %>%
+    set_caption(caption = caption) %>%
     colformat_char(j = 4, suffix = " %") %>%
     align(align = "center", part = "header") %>%
     align(i = NULL, j = 4:6, align = "center", part = "body") %>%
