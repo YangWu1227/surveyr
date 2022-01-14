@@ -68,6 +68,7 @@ ft_generate_xtab_docx <- function(df, x, y, weight, caption) {
 
 # Three-way (word) --------------------------------------------------------
 
+#' @export
 ft_generate_xtab_3way_docx <- function(df, x, y, z, weight, caption) {
 
   # Keep only alphabets and numbers in column names
