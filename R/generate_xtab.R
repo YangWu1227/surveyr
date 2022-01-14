@@ -240,3 +240,103 @@ generate_xtab_docx <- function(df, x, y, weight, caption) {
   # Return formatted table
   xtab_formatted
 }
+
+
+#' Generate three-way crosstabs (word)
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
+#' This function takes a data frame or a tibble object, a few variables, and a string caption, returning
+#' a list object that is an instance of class `flextable`. The function implements data masking internally
+#' so users must specify data variables as strings (i.e. use "x", "y", "z", "weight").
+#'
+#' @param df A data frame or tibble.
+#' @param x A single string of the independent variable.
+#' @param y A single string of the dependent variable.
+#' @param y A single string of the second control variable.
+#' @param weight A single string of the weighting variable.
+#' @param caption A length one character vector used as the caption for the crosstab.
+#'
+#' @return A list object, which is an object of class `flextable`.
+#'
+#' @seealso [generate_xtab_word()] for two-way crosstabs.
+#'
+#' @export
+#'
+#' @examples
+#' \donttest{
+#' # Generate a crosstab
+#' df %>% generate_xtab_3way_docx(df = ., "x_var", "y_var", "z_var", "weight", "Z by X And Y")
+#' }
+generate_xtab_3way_docx <- function(df, x, y, z, weight, caption) {
+  if (!is.data.frame(df)) {
+    stop("The argument 'df' must be an object of class or subclass of data frame", call. = FALSE)
+  }
+  if (!is.character(caption) | !length(caption) == 1) {
+    stop("The argument 'caption' must be a length one character vector", call. = FALSE)
+  }
+  if (!is_character(x, n = 1) |
+    !is_character(y, n = 1) |
+    !is_character(z, n = 1) |
+    !is_character(weight, n = 1)) {
+    stop("The arguments 'x', 'y','z', and 'weight' must be character vectors of length one", call. = FALSE)
+  }
+
+  # Keep only alphabets and numbers in column names
+  x_name <- str_to_title(str_replace_all(x, "[^[:alnum:]]", " "))
+  y_name <- str_to_title(str_replace_all(y, "[^[:alnum:]]", " "))
+  z_name <- str_to_title(str_replace_all(z, "[^[:alnum:]]", " "))
+  # Convert string to symbols
+  x <- ensym(x)
+  y <- ensym(y)
+  z <- ensym(z)
+  weight <- ensym(weight)
+
+  xtab_3way <- moe_crosstab_3way_internal(df = df, x = {{ x }}, y = {{ y }}, z = {{ z }}, weight = {{ weight }}) %>%
+    setattr("names", c(z_name, x_name, y_name, "Percent", "MOE", "N"))
+
+  roll_x <- names(xtab_3way)[[1]]
+  # First column of the crosstab
+  first_column <- as.character(xtab_3way[[1]])
+  # Obtain a character vector of unique categories (factor levels)
+  levels <- unique(first_column)
+
+  # Initialize container
+  stripe_index_container <- logical(length = length(first_column))
+  # Stripe index
+  invisible(lapply(
+    X = levels,
+    FUN = function(x) {
+      row_num <- first_column == x
+      level_index <- which(levels == x)
+      if (level_index %% 2 == 0) {
+        stripe_index_container[row_num] <<- rep.int(TRUE, times = sum(row_num))
+      } else if (level_index %% 2 == 1) {
+        stripe_index_container[row_num] <<- rep.int(FALSE, times = sum(row_num))
+      }
+    }
+  ))
+
+  xtab_3way_formatted <- xtab_3way %>%
+    flextable() %>%
+    set_caption(caption = caption) %>%
+    colformat_char(j = 4, suffix = " %") %>%
+    align(align = "center", part = "header") %>%
+    align(i = NULL, j = 4:6, align = "center", part = "body") %>%
+    bold(bold = TRUE, part = "header") %>%
+    bold(i = NULL, j = 1, bold = TRUE, part = "body") %>%
+    font(fontname = "Open Sans", part = "all") %>%
+    color(color = "white", part = "header") %>%
+    bg(i = NULL, j = NULL, bg = "#32BDB9", part = "header") %>%
+    bg(i = stripe_index_container, j = NULL, bg = "#e5e5e5", part = "body") %>%
+    merge_v(target = roll_x, part = "body") %>%
+    vline_left(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
+    vline_right(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
+    hline_top(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
+    hline_bottom(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
+    fix_border_issues(part = "all")
+
+  # Return formatted table
+  xtab_3way_formatted
+}

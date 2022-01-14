@@ -1,5 +1,6 @@
 ## usethis namespace: start
-#' @useDynLib citizenr, .registration = TRUE
+#' @importFrom lifecycle deprecated
 #' @importFrom Rcpp sourceCpp
+#' @useDynLib citizenr, .registration = TRUE
 ## usethis namespace: end
 NULL

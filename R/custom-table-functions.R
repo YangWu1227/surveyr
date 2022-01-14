@@ -45,12 +45,12 @@ topline_internal <- function(df, variable, weight) {
 #' @importFrom dplyr relocate
 moe_crosstab_internal <- function(df, x, y, weight) {
 
-  # calculate the design effect
+  # Calculate the design effect
   deff <- df %>%
     pull({{ weight }}) %>%
     deff_calc()
 
-  # build the table, either row percents or cell percents
+  # Build the table, either row percents or cell percents
   xtab <- df %>%
     filter(
       !is.na({{ x }}),
@@ -82,4 +82,46 @@ moe_crosstab_internal <- function(df, x, y, weight) {
 
   class(xtab) <- c("data.table", "data.frame")
   xtab
+}
+
+
+moe_crosstab_3way_internal <- function(df, x, y, z, weight) {
+
+  # Calculate the design effect
+  deff <- df %>%
+    pull({{ weight }}) %>%
+    deff_calc()
+
+  # Build the table, either row percents or cell percents
+  xtab_3way <- df %>%
+    filter(
+      !is.na({{ x }}),
+      !is.na({{ y }}),
+      !is.na({{ z }})
+    ) %>%
+    mutate(
+      {{ x }} := to_factor({{ x }}),
+      {{ y }} := to_factor({{ y }}),
+      {{ z }} := to_factor({{ z }})
+    ) %>%
+    group_by({{ z }}, {{ x }}) %>%
+    mutate(
+      total = sum({{ weight }}),
+      unweighted_n = length({{ weight }})
+    ) %>%
+    group_by({{ z }}, {{ x }}, {{ y }}) %>%
+    summarize(
+      observations = sum({{ weight }}),
+      Percent = observations / first(total),
+      N = as.character(round(first(total), digits = 0)),
+      unweighted_n = first(unweighted_n)
+    ) %>%
+    ungroup() %>%
+    mutate(MOE = as.character(round(moedeff_calc(pct = Percent, deff = deff, n = unweighted_n, zscore = 1.96), digits = 1))) %>%
+    mutate(Percent = as.character(round(Percent * 100, digits = 1))) %>%
+    select(-c("observations", "unweighted_n")) %>%
+    relocate(N, .after = MOE)
+
+  class(xtab_3way) <- c("data.table", "data.frame")
+  xtab_3way
 }
