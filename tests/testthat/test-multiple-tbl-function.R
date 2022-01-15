@@ -9,6 +9,22 @@ list_xtab <- tibble::tribble(
   "issue_focus", "party_reg", "caption3"
 )
 
+list_xtab_3way <- list_xtab_3way_args(
+  df = df,
+  control_var = c("education_rollup", "party_reg", "issue_focus"),
+  dependent_vars = list(
+    c("issue_focus", "party_reg"),
+    c("issue_focus", "education_rollup"),
+    c("party_reg", "education_rollup")
+  ),
+  independent_vars = list(
+    c("party_reg", "issue_focus"),
+    c("education_rollup", "issue_focus"),
+    c("education_rollup", "party_reg")
+  )
+) |>
+  flatten_args()
+
 list_topline <- tibble::tribble(
   ~x, ~caption,
   "education_rollup", "caption1",
@@ -24,8 +40,7 @@ test_that("Invalid input for 'l' (list)", {
       l = list(list_topline),
       df = df,
       weight = "weightvec",
-      type = "topline",
-      output = "word"
+      type = "topline"
     ),
     error = TRUE
   )
@@ -34,8 +49,16 @@ test_that("Invalid input for 'l' (list)", {
       l = list(list_xtab),
       df = df,
       weight = "weightvec",
-      type = "crosstab",
-      output = "latex"
+      type = "crosstab_2way"
+    ),
+    error = TRUE
+  )
+  expect_snapshot(
+    x = generate_tbls(
+      l = list(list_xtab_3way),
+      df = df,
+      weight = "weightvec",
+      type = "crosstab_3way"
     ),
     error = TRUE
   )
@@ -47,8 +70,7 @@ test_that("Invalid input for 'df' (list)", {
       l = list_topline,
       df = list(df),
       weight = "weightvec",
-      type = "topline",
-      output = "word"
+      type = "topline"
     ),
     error = TRUE
   )
@@ -57,8 +79,16 @@ test_that("Invalid input for 'df' (list)", {
       l = list_xtab,
       df = list(df),
       weight = "weightvec",
-      type = "crosstab",
-      output = "latex"
+      type = "crosstab_2way"
+    ),
+    error = TRUE
+  )
+  expect_snapshot(
+    x = generate_tbls(
+      l = list_xtab_3way,
+      df = list(df),
+      weight = "weightvec",
+      type = "crosstab_3way"
     ),
     error = TRUE
   )
@@ -70,8 +100,7 @@ test_that("Invalid input for 'weight' (correct type but incorrect value)", {
       l = list_topline,
       df = df,
       weight = "var_do_not_exist",
-      type = "topline",
-      output = "word"
+      type = "topline"
     ),
     error = TRUE
   )
@@ -80,8 +109,16 @@ test_that("Invalid input for 'weight' (correct type but incorrect value)", {
       l = list_xtab,
       df = df,
       weight = "var_do_not_exist",
-      type = "crosstab",
-      output = "latex"
+      type = "crosstab_2way"
+    ),
+    error = TRUE
+  )
+  expect_snapshot(
+    x = generate_tbls(
+      l = list_xtab_3way,
+      df = df,
+      weight = "var_do_not_exist",
+      type = "crosstab_3way"
     ),
     error = TRUE
   )
@@ -93,8 +130,7 @@ test_that("invalid input for 'weight' (no quotes around 'weight' variable but co
       l = list_topline,
       df = df,
       weight = weightvec,
-      type = "topline",
-      output = "word"
+      type = "topline"
     ),
     error = TRUE
   )
@@ -103,8 +139,16 @@ test_that("invalid input for 'weight' (no quotes around 'weight' variable but co
       l = list_xtab,
       df = df,
       weight = weightvec,
-      type = "crosstab",
-      output = "latex"
+      type = "crosstab_2way"
+    ),
+    error = TRUE
+  )
+  expect_snapshot(
+    x = generate_tbls(
+      l = list_xtab_3way,
+      df = df,
+      weight = weightvec,
+      type = "crosstab_3way"
     ),
     error = TRUE
   )
@@ -116,8 +160,7 @@ test_that("Invalid input for 'type' (wrong type)", {
       l = list_topline,
       df = df,
       weight = "weightvec",
-      type = FALSE,
-      output = "latex"
+      type = FALSE
     ),
     error = TRUE
   )
@@ -126,8 +169,16 @@ test_that("Invalid input for 'type' (wrong type)", {
       l = list_xtab,
       df = df,
       weight = "weightvec",
-      type = 3,
-      output = "word"
+      type = 3
+    ),
+    error = TRUE
+  )
+  expect_snapshot(
+    x = generate_tbls(
+      l = list_xtab_3way,
+      df = df,
+      weight = "weightvec",
+      type = 1:2 + 1i * (8:9)
     ),
     error = TRUE
   )
@@ -139,8 +190,7 @@ test_that("Invalid input for 'type' (incorect value)", {
       l = list_topline,
       df = df,
       weight = "weightvec",
-      type = "incorrect",
-      output = "word"
+      type = "incorrect"
     ),
     error = TRUE
   )
@@ -149,54 +199,16 @@ test_that("Invalid input for 'type' (incorect value)", {
       l = list_xtab,
       df = df,
       weight = "weightvec",
-      type = crosstab,
-      output = "latex"
-    ),
-    error = TRUE
-  )
-})
-
-test_that("Invalid input for 'output' (wrong type)", {
-  expect_snapshot(
-    x = generate_tbls(
-      l = list_xtab,
-      df = df,
-      weight = "weightvec",
-      type = "topline",
-      output = 3
+      type = crosstab_2way
     ),
     error = TRUE
   )
   expect_snapshot(
     x = generate_tbls(
-      l = list_xtab,
+      l = list_xtab_3way,
       df = df,
       weight = "weightvec",
-      type = "crosstab",
-      output = TRUE
-    ),
-    error = TRUE
-  )
-})
-
-test_that("Invalid input for 'output' (correct type but incorrect value)", {
-  expect_snapshot(
-    x = generate_tbls(
-      l = list_xtab,
-      df = df,
-      weight = "weightvec",
-      type = "topline",
-      output = "should_be_word_or_latex"
-    ),
-    error = TRUE
-  )
-  expect_snapshot(
-    x = generate_tbls(
-      l = list_xtab,
-      df = df,
-      weight = "weightvec",
-      type = "crosstab",
-      output = word
+      type = "crosstab_3wayy"
     ),
     error = TRUE
   )
@@ -209,8 +221,7 @@ test_that("Mismatched 'type' argument and 'l' list argument", {
       df = df,
       weight = "weightvec",
       # Mismatched
-      type = "crosstab",
-      output = "word"
+      type = "crosstab_2way"
     ),
     error = TRUE
   )
@@ -220,8 +231,17 @@ test_that("Mismatched 'type' argument and 'l' list argument", {
       df = df,
       weight = "weightvec",
       # Mismatched
-      type = "topline",
-      output = "latex"
+      type = "topline"
+    ),
+    error = TRUE
+  )
+  expect_snapshot(
+    x = generate_tbls(
+      l = list_xtab_3way,
+      df = df,
+      weight = "weightvec",
+      # Mismatched
+      type = "crosstab_2way"
     ),
     error = TRUE
   )
@@ -231,127 +251,87 @@ test_that("Mismatched 'type' argument and 'l' list argument", {
 
 test_that("generate_tbls() returns correct output type and class", {
   # Test examples
-  list_of_topline_word <- generate_tbls(
+  list_of_topline <- generate_tbls(
     l = list_topline,
     df = df,
     weight = "weightvec",
-    type = "topline",
-    output = "word"
+    type = "topline"
   )
-  list_of_xtab_word <- generate_tbls(
+  list_of_xtab <- generate_tbls(
     l = list_xtab,
     df = df,
     weight = "weightvec",
-    type = "crosstab",
-    output = "word"
+    type = "crosstab_2way"
   )
-  list_of_topline_latex <- generate_tbls(
-    l = list_topline,
+  list_of_xtab_3way <- generate_tbls(
+    l = list_xtab_3way,
     df = df,
     weight = "weightvec",
-    type = "topline",
-    output = "latex"
-  )
-  list_of_xtab_latex <- generate_tbls(
-    l = list_xtab,
-    df = df,
-    weight = "weightvec",
-    type = "crosstab",
-    output = "latex"
+    type = "crosstab_3way"
   )
   # Correct type?
   expect_vector(
-    object = generate_tbls(
-      l = list_topline,
-      df = df,
-      weight = "weightvec",
-      type = "topline",
-      output = "word"
-    ),
+    object = list_of_topline,
     ptype = list()
   )
   expect_vector(
-    object = generate_tbls(
-      l = list_xtab,
-      df = df,
-      weight = "weightvec",
-      type = "crosstab",
-      output = "word"
-    ),
+    object = list_of_xtab,
     ptype = list()
   )
   expect_vector(
-    object = generate_tbls(
-      l = list_topline,
-      df = df,
-      weight = "weightvec",
-      type = "topline",
-      output = "latex"
-    ),
-    ptype = list()
-  )
-  expect_vector(
-    object = generate_tbls(
-      l = list_xtab,
-      df = df,
-      weight = "weightvec",
-      type = "crosstab",
-      output = "latex"
-    ),
+    object = list_of_xtab_3way,
     ptype = list()
   )
   # Do list elements have the right class? (toplines)
-  # Word
   expect_s3_class(
-    object = list_of_topline_word[[1]],
+    object = list_of_topline[[1]],
     class = c("flextable")
   )
   expect_s3_class(
-    object = list_of_topline_word[[2]],
+    object = list_of_topline[[2]],
     class = c("flextable")
   )
   expect_s3_class(
-    object = list_of_topline_word[[3]],
+    object = list_of_topline[[3]],
     class = c("flextable")
-  )
-  # Latex
-  expect_s3_class(
-    object = list_of_topline_latex[[1]],
-    class = c("kableExtra", "knitr_kable")
-  )
-  expect_s3_class(
-    object = list_of_topline_latex[[2]],
-    class = c("kableExtra", "knitr_kable")
-  )
-  expect_s3_class(
-    object = list_of_topline_latex[[3]],
-    class = c("kableExtra", "knitr_kable")
   )
   # Do list elements have the right class? (crosstabs)
-  # Word
+  # Two-way
   expect_s3_class(
-    object = list_of_xtab_word[[1]],
+    object = list_of_xtab[[1]],
     class = c("flextable")
   )
   expect_s3_class(
-    object = list_of_xtab_word[[2]],
+    object = list_of_xtab[[2]],
     class = c("flextable")
   )
   expect_s3_class(
-    object = list_of_xtab_word[[3]],
+    object = list_of_xtab[[3]],
     class = c("flextable")
   )
-  # Latex
+  # Three-way
   expect_s3_class(
-    object = list_of_xtab_latex[[1]],
-    class = c("kableExtra", "knitr_kable")
+    object = list_of_xtab_3way[[1]],
+    class = c("flextable")
   )
   expect_s3_class(
-    object = list_of_xtab_latex[[2]],
-    class = c("kableExtra", "knitr_kable")
+    object = list_of_xtab_3way[[2]],
+    class = c("flextable")
   )
   expect_s3_class(
-    object = list_of_xtab_latex[[3]],
-    class = c("kableExtra", "knitr_kable")
+    object = list_of_xtab_3way[[3]],
+    class = c("flextable")
+  )
+  expect_s3_class(
+    object = list_of_xtab_3way[[4]],
+    class = c("flextable")
+  )
+  expect_s3_class(
+    object = list_of_xtab_3way[[5]],
+    class = c("flextable")
+  )
+  expect_s3_class(
+    object = list_of_xtab_3way[[6]],
+    class = c("flextable")
   )
 })

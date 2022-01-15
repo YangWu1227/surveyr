@@ -2,7 +2,7 @@
 % Please edit documentation in R/generate_arguments.R
 \name{generate_xtab_args}
 \alias{generate_xtab_args}
-\title{Generate a list of crosstab arguments}
+\title{Generate a list of two-way crosstab arguments}
 \usage{
 generate_xtab_args(df, var_of_interest, dependent_vars = NULL, rm = NULL)
 }
@@ -20,8 +20,8 @@ with all other variables in \code{df} unless \code{rm} is \code{NULL}.}
 A list of arguments. If n tables were to be generated, this is a \code{tibble} with dimensions (n, 3).
 }
 \description{
-This function is helper for \code{generate_tbls()}. It automatically generates a list of arguments to be
-passed on to \code{generate_tbls()} for a given set of arguments. This may be useful when the number of
+This function is helper for \code{generate_tbls()} or \code{ft_generate_tbls()}. It automatically generates a list of arguments to be
+passed on to \code{generate_tbls()} or \code{ft_generate_tbls()} for a given set of arguments. This may be useful when the number of
 variables in a data frame is large, and there is a need to generate varying arguments efficiently.
 }
 \examples{
@@ -36,5 +36,5 @@ generate_xtab_args(df, "var_of_interest", dependent_vars, rm)
 }
 }
 \seealso{
-\code{\link[=generate_tbls]{generate_tbls()}} for an example of a list of arguments.
+\code{\link[=generate_tbls]{generate_tbls()}} or \link{ft_generate_tbls} for an example of a list of arguments.
 }

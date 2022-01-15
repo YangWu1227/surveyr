@@ -7,24 +7,29 @@
 flatten_args(l)
 }
 \arguments{
-\item{l}{A list of lists as returned by \code{list_xtab_args()}.}
+\item{l}{A list of lists as returned by \code{list_xtab_args()} or \code{list_xtab_3way_args()}.}
 }
 \value{
-A single tibble of crosstab arguments to be passed to \code{generate_tbls(type = "crosstab")}.
+A single tibble of crosstab arguments to be passed to \code{generate_tbls(type = "crosstab_2way")} or \code{generate_tbls(type = "crosstab_3way")}.
 }
 \description{
-This is a helper function that accepts the output of \code{list_xtab_args()} containing two lists--- \code{return}
-and \code{error}. It will either \strong{1)} throw an error indicating that attention must be paid to the \code{error}
-list, or \strong{2)} return a single list of arguments, which can then be passed to \code{generate_tbls()}.
+This is a helper function that accepts the output of \code{list_xtab_args()} or \code{list_xtab_3way_args()}  containing
+two lists--- \code{return} and \code{error}. It will either \strong{1)} throw an error indicating that attention must be
+paid to the \code{error} list, or \strong{2)} return a single list of arguments, which can then be passed to \code{generate_tbls()}
+or \code{ft_generate_tbls()}.
 }
 \examples{
 \donttest{
 # Generate arguments list for crosstabs
 list_xtabs_args(df, var_of_interest, dependent_vars, rm) \%>\%
   flatten_args(l = .)
+
+# Generate arguments list for three-way crosstabs
+list_xtabs_args(df, control_var, independent_vars, dependent_vars) \%>\%
+  flatten_args(l = .)
 }
 }
 \seealso{
-\code{\link[=list_xtab_args]{list_xtab_args()}} for vectorized crosstab arguments generation and \code{\link[=generate_tbls]{generate_tbls()}} for
+\code{\link[=list_xtab_args]{list_xtab_args()}} and \code{\link[=list_xtab_3way_args]{list_xtab_3way_args()}} for vectorized crosstab arguments generation and \code{\link[=generate_tbls]{generate_tbls()}} for
 multiple tables generation.
 }

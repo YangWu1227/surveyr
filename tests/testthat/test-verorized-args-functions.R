@@ -2,7 +2,7 @@
 
 df <- readr::read_csv(test_path("testdata.csv"), show_col_types = FALSE)
 
-# Errors ------------------------------------------------------------------
+# Two-way -----------------------------------------------------------------
 
 test_that("list_xtab_args() provides meaningful error messages", {
   # Invalid input for 'var_of_interest' (wrong type)
@@ -24,7 +24,7 @@ test_that("list_xtab_args() provides meaningful error messages", {
   )
 })
 
-test_that("Does the error list accurately capture invalid input for 'df'", {
+test_that("list_xtab_args() does the error list accurately capture invalid input for 'df'", {
   expect_snapshot_output(
     x = list_xtab_args(
       df = list(df),
@@ -37,7 +37,7 @@ test_that("Does the error list accurately capture invalid input for 'df'", {
   )
 })
 
-test_that("Does the error list accurately capture invalid input for 'var_interest' (not found in df)", {
+test_that("list_xtab_args() does the error list accurately capture invalid input for 'var_interest' (not found in df)", {
   expect_snapshot_output(
     x = list_xtab_args(
       df = df,
@@ -50,7 +50,7 @@ test_that("Does the error list accurately capture invalid input for 'var_interes
   )
 })
 
-test_that("Does the error list accurately capture invalid input for 'dependent_vars' (not in df)", {
+test_that("list_xtab_args() Does the error list accurately capture invalid input for 'dependent_vars' (not in df)", {
   expect_snapshot_output(
     x = list_xtab_args(
       df = df,
@@ -63,7 +63,7 @@ test_that("Does the error list accurately capture invalid input for 'dependent_v
   )
 })
 
-test_that("Does the error list accurately capture invalid input for 'rm' (not in df and wrong type)", {
+test_that("list_xtab_args() does the error list accurately capture invalid input for 'rm' (not in df and wrong type)", {
   expect_snapshot_output(
     x = list_xtab_args(
       df = df,
@@ -83,6 +83,97 @@ test_that("Does the error list accurately capture invalid input for 'rm' (not in
     ),
     cran = FALSE,
     variant = "list_xtab_args"
+  )
+})
+
+# Three-way ---------------------------------------------------------------
+
+test_that("list_xtab_3way_args() provides meaningful error messages", {
+  # Invalid input for 'control_var' (wrong type)
+  expect_snapshot(
+    x = list_xtab_3way_args(
+      df = df,
+      control_var = c(3, 4, 1),
+      dependent_vars = list(c("education_rollup", "party_reg")),
+      independent_vars = list(c("party_reg", "education_rollup"))
+    ),
+    error = TRUE
+  )
+})
+
+test_that("list_xtab_3way_args() does the error list accurately capture invalid input for 'df'", {
+  expect_snapshot_output(
+    x = list_xtab_3way_args(
+      df = list(df),
+      control_var = "issue_focus",
+      dependent_vars = list(c("education_rollup", "party_reg")),
+      independent_vars = list(c("party_reg", "education_rollup"))
+    ),
+    cran = FALSE,
+    variant = "list_xtab_3way_args"
+  )
+})
+
+test_that("list_xtab_3way_args() does the error list accurately capture invalid input for 'control' (not found in df)", {
+  expect_snapshot_output(
+    x = list_xtab_3way_args(
+      df = df,
+      control_var = c("education_rollup", "unknown", "issue_focus"),
+      dependent_vars = list(
+        c("issue_focus", "party_reg"),
+        c("issue_focus", "education_rollup"),
+        c("party_reg", "education_rollup")
+      ),
+      independent_vars = list(
+        c("party_reg", "issue_focus"),
+        c("education_rollup", "issue_focus"),
+        c("education_rollup", "party_reg")
+      )
+    ),
+    cran = FALSE,
+    variant = "list_xtab_3way_args"
+  )
+})
+
+test_that("list_xtab_3way_args() does the error list accurately capture invalid input for 'dependent_vars' (not in df)", {
+  expect_snapshot_output(
+    x = list_xtab_3way_args(
+      df = df,
+      control_var = c("education_rollup", "party_reg", "issue_focus"),
+      dependent_vars = list(
+        c("issue_focus", "party_reg"),
+        c("issue_focus", "unknown"),
+        c("unknown", "education_rollup")
+      ),
+      independent_vars = list(
+        c("party_reg", "issue_focus"),
+        c("education_rollup", "issue_focus"),
+        c("education_rollup", "party_reg")
+      )
+    ),
+    cran = FALSE,
+    variant = "list_xtab_3way_args"
+  )
+})
+
+test_that("list_xtab_3way_args() does the error list accurately capture invalid input for 'independent_vars' (not in df)", {
+  expect_snapshot_output(
+    x = list_xtab_3way_args(
+      df = df,
+      control_var = c("education_rollup", "party_reg", "issue_focus"),
+      dependent_vars = list(
+        c("issue_focus", "party_reg"),
+        c("issue_focus", "education_rollup"),
+        c("party_reg", "education_rollup")
+      ),
+      independent_vars = list(
+        c("party_reg", "unknwon"),
+        c("education_rollup", "issue_focus"),
+        c("education_rollup", "party_reg")
+      )
+    ),
+    cran = FALSE,
+    variant = "list_xtab_3way_args"
   )
 })
 
@@ -117,9 +208,28 @@ test_that("Does flatten_args() return correct output type and class and snapshot
     ),
     rm = "weightvec"
   )
+  list_of_args_3way <- list_xtab_3way_args(
+    df = df,
+    control_var = c("education_rollup", "party_reg", "issue_focus"),
+    dependent_vars = list(
+      c("issue_focus", "party_reg"),
+      c("issue_focus", "education_rollup"),
+      c("party_reg", "education_rollup")
+    ),
+    independent_vars = list(
+      c("party_reg", "issue_focus"),
+      c("education_rollup", "issue_focus"),
+      c("education_rollup", "party_reg")
+    )
+  )
   # Class
   expect_s3_class(
     object = flatten_args(list_of_args),
+    class = c("tbl_df", "tbl", "data.frame"),
+    exact = TRUE
+  )
+  expect_s3_class(
+    object = flatten_args(list_of_args_3way),
     class = c("tbl_df", "tbl", "data.frame"),
     exact = TRUE
   )
@@ -128,5 +238,10 @@ test_that("Does flatten_args() return correct output type and class and snapshot
     x = flatten_args(list_of_args),
     cran = FALSE,
     variant = "list_xtab_args"
+  )
+  expect_snapshot_output(
+    x = flatten_args(list_of_args_3way),
+    cran = FALSE,
+    variant = "list_xtab_3way_args"
   )
 })

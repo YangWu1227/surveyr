@@ -1,10 +1,10 @@
 # Crosstab ----------------------------------------------------------------
 
-#' Generate a list of crosstab arguments
+#' Generate a list of two-way crosstab arguments
 #'
 #' @description
-#' This function is helper for `generate_tbls()`. It automatically generates a list of arguments to be
-#' passed on to `generate_tbls()` for a given set of arguments. This may be useful when the number of
+#' This function is helper for `generate_tbls()` or `ft_generate_tbls()`. It automatically generates a list of arguments to be
+#' passed on to `generate_tbls()` or `ft_generate_tbls()` for a given set of arguments. This may be useful when the number of
 #' variables in a data frame is large, and there is a need to generate varying arguments efficiently.
 #'
 #' @param df A data frame or tibble.
@@ -15,7 +15,7 @@
 #'
 #' @return A list of arguments. If n tables were to be generated, this is a `tibble` with dimensions (n, 3).
 #'
-#' @seealso [generate_tbls()] for an example of a list of arguments.
+#' @seealso [generate_tbls()] or [ft_generate_tbls] for an example of a list of arguments.
 #'
 #' @importFrom tibble tibble
 #' @importFrom stringr str_to_title
@@ -112,6 +112,95 @@ generate_xtab_args <- function(df, var_of_interest, dependent_vars = NULL, rm = 
     )
   )
 }
+
+
+#' Generate a list of three-way crosstab arguments
+#'
+#' @description
+#' This function is helper for `generate_tbls()` or `ft_generate_tbls()`. It automatically generates a list of arguments to be
+#' passed on to `generate_tbls()` or `ft_generate_tbls()` for a given set of arguments. This may be useful when the number of
+#' variables in a data frame is large, and there is a need to generate varying arguments efficiently.
+#'
+#' @param df A data frame or tibble.
+#' @param control_var A single string of control variable.
+#' @param independent_vars A character vector of independent variables.
+#' @param dependent_vars A character vector of dependent variables.
+#'
+#' @return A list of arguments. If n tables were to be generated, this is a `tibble` with dimensions (n, 4).
+#'
+#' @seealso [generate_tbls()] or [ft_generate_tbls] for an example of a list of arguments.
+#'
+#' @export
+#'
+#' @examples
+#' \donttest{
+#' # Generate list of arguments
+#' generate_xtab_3way_args(df, "control_var", c("independent_1", ...), c("dependent_1", ...))
+#' }
+generate_xtab_3way_args <- function(df, control_var, independent_vars, dependent_vars) {
+  if (!is.data.frame(df)) stop("'df' must be a data frame", call. = FALSE)
+  if (!is_character(control_var, n = 1) | !all(control_var %in% names(df))) {
+    stop("The argument 'control_var' must be a single column name found in 'df'", call. = FALSE)
+  }
+
+  ##################################################################################
+  # If the user supplies independent variables to be crossed, check input validity #
+  ##################################################################################
+
+  # Check dependent_vars type and size
+  if (!is.character(independent_vars) | length(independent_vars) > (length(df) - 1)) {
+    stop(
+      "The argument 'independent_vars' must be a character vector with length no greater than (length(df) - 1)",
+      call. = FALSE
+    )
+  }
+  # Check if dependent_vars are in 'df
+  if (!all(independent_vars %in% names(df))) {
+    stop(
+      "The argument 'independent_vars' must be a subset of `base::setdiff(x = names(df), y = control_var)`",
+      call. = FALSE
+    )
+  }
+
+  ################################################################################
+  # If the user supplies dependent variables to be crossed, check input validity #
+  ################################################################################
+
+  # Check dependent_vars type and size
+  if (!is.character(dependent_vars) | length(dependent_vars) > (length(df) - 1)) {
+    stop(
+      "The argument 'dependent_vars' must be a character vector with length no greater than (length(df) - 1)",
+      call. = FALSE
+    )
+  }
+  # Check if dependent_vars are in 'df
+  if (!all(dependent_vars %in% names(df))) {
+    stop(
+      "The argument 'dependent_vars' must be a subset of `base::setdiff(x = names(df), y = control_var)`",
+      call. = FALSE
+    )
+  }
+
+  # Broadcast control variable (a single character) to have the same length as the independent and dependent variable vectors
+  if (length(independent_vars) != length(dependent_vars)) {
+    stop("The arguments 'independent_vars' and 'dependent_vars' must have the same length", call. = FALSE)
+  }
+  vec_control_var <- rep_len(x = control_var, length.out = length(dependent_vars))
+
+  tibble(
+    "x" = independent_vars,
+    "y" = dependent_vars,
+    "z" = vec_control_var,
+    "caption" = paste(
+      str_to_title(str_replace_all(vec_control_var, "[^[:alnum:]]", " ")),
+      "by",
+      str_to_title(str_replace_all(independent_vars, "[^[:alnum:]]", " ")),
+      "And",
+      str_to_title(str_replace_all(dependent_vars, "[^[:alnum:]]", " "))
+    )
+  )
+}
+
 
 # Topline -----------------------------------------------------------------
 

@@ -1,11 +1,11 @@
 #' Iteratively generate tables for 'Feeling Thermometer' variables
 #'
 #' @description
-#' This function provides a wrapper around `ft_generate_xtab_*()` and `ft_generate_topline_*()` (all internal),
-#' allowing users to efficiently generate many tables by passing a list of arguments. The shapes of the argument lists
-#' may vary depending on the table `type`.
+#' This function provides a wrapper around `ft_generate_xtab()`, `ft_generate_xtab_3way()`, and `ft_generate_topline()`
+#' (all internal), allowing users to efficiently generate many tables by passing a list of arguments. The shapes of
+#' the argument lists may vary depending on the table `type`.
 #'
-#' @param l A list of arguments to be passed on to either `generate_xtab_*()` or `generate_topline_*()`:
+#' @param l A list of arguments to be passed on to either `ft_generate_xtab()`, `ft_generate_xtab_3way()` or `ft_generate_topline()`:
 #' \describe{
 #'   \item{For toplines}{
 #'   \preformatted{list_topline <- tibble::tribble(
@@ -20,9 +20,19 @@
 #'   \item{For crosstabs}{
 #'   \preformatted{list_xtab <- tibble::tribble(
 #'      ~x, ~y, ~caption,
-#'      "var_1", "var_2" "caption1",
-#'      "var_2", "var_9", caption2",
+#'      "var_1", "var_2", "caption1",
+#'      "var_2", "var_9", "caption2",
 #'      "var_3", "var_23", "caption3",
+#'      .
+#'      .
+#'      .
+#'   )}}
+#'   \item{For three-way crosstabs}{
+#'   \preformatted{list_xtab <- tibble::tribble(
+#'      ~x, ~y, ~z, ~caption,
+#'      "var_1", "var_2", "var_3", "caption1",
+#'      "var_2", "var_9", "var_1", "caption2",
+#'      "var_3", "var_23", "var_17", "caption3",
 #'      .
 #'      .
 #'      .
@@ -30,13 +40,12 @@
 #' }
 #' @param df A data frame or tibble.
 #' @param weight A length one character vector used as the caption for the topline.
-#' @param type Must either be 'topline' or 'crosstab'. Defaults to 'topline'.
-#' @param output Must either be 'latex' or 'word'. Defaults to 'word'.
+#' @param type Must either be 'topline', 'crosstab_2way', or 'crosstab_3way'. Defaults to 'topline'.
 #'
-#' @return A list containing elements that are length one character vectors (latex) or lists objects (word), each of which is the source code for a single
-#' table (latex) or a `s3` list object (word).
+#' @return A list containing elements that are list objects, each of which is the source code for a single
+#' `s3` list object of class `flextable`.
 #'
-#' @seealso [generate_xtab_docx()], [generate_xtab_latex()], [generate_topline_docx()], and [generate_topline_latex()] for single crosstab or topline generation.
+#' @seealso [ft_generate_xtab()], [ft_generate_xtab_3way()], and [ft_generate_topline()] for single 'Feeling Thermometer' crosstab or topline generations.
 #'
 #' @export
 #'
@@ -47,8 +56,14 @@
 #'   l = list_xtab,
 #'   df,
 #'   "weight",
-#'   "crosstab",
-#'   "word"
+#'   "crosstab_2way"
+#' )
+#'
+#' #' list_of_xtabs <- ft_generate_tbls(
+#'   l = list_xtab,
+#'   df,
+#'   "weight",
+#'   "crosstab_3way"
 #' )
 #'
 #' # Generate toplines
@@ -56,11 +71,10 @@
 #'   l = list_topline,
 #'   df,
 #'   "weight",
-#'   "topline",
-#'   "latex"
+#'   "topline"
 #' )
 #' }
-ft_generate_tbls <- function(l, df, weight, type = "topline", output = "word") {
+ft_generate_tbls <- function(l, df, weight, type = "topline") {
   tryCatch(
     error = function(cnd) stop("Please place quotes around the argument 'weight'", call. = FALSE),
     {
@@ -73,12 +87,6 @@ ft_generate_tbls <- function(l, df, weight, type = "topline", output = "word") {
       type
     }
   )
-  tryCatch(
-    error = function(cnd) stop("Please place quotes around the argument 'output'", call. = FALSE),
-    {
-      output
-    }
-  )
   if (!is.data.frame(l) | !is.data.frame(df)) {
     stop("The argument 'l' and 'df' must be objects inheriting from data frame", call. = FALSE)
   }
@@ -88,57 +96,37 @@ ft_generate_tbls <- function(l, df, weight, type = "topline", output = "word") {
   if (!is.character(type) | !length(type) == 1) {
     stop("The argument 'type' must be a length-one character vector", call. = FALSE)
   }
-  if (!is_character(output) | !length(type) == 1) {
-    stop("The argument 'output' must be a length-one character vector", call. = FALSE)
-  }
 
-  if (output == "word") {
-    switch(type,
-      topline = {
-        list_of_tables <- pmap(
-          .l = l,
-          .f = ft_generate_topline_docx,
-          # Constant arguments
-          df = df,
-          weight = {{ weight }}
-        )
-      },
-      crosstab = {
-        list_of_tables <- pmap(
-          .l = l,
-          .f = ft_generate_xtab_docx,
-          # Constant arguments
-          df = df,
-          weight = {{ weight }}
-        )
-      },
-      stop("The argument 'type' must either be 'crosstab' or 'topline'", call. = FALSE)
-    )
-  } else if (output == "latex") {
-    switch(type,
-      topline = {
-        list_of_tables <- pmap(
-          .l = l,
-          .f = ft_generate_topline_latex,
-          # Constant arguments
-          df = df,
-          weight = {{ weight }}
-        )
-      },
-      crosstab = {
-        list_of_tables <- pmap(
-          .l = l,
-          .f = ft_generate_xtab_latex,
-          # Constant arguments
-          df = df,
-          weight = {{ weight }}
-        )
-      },
-      stop("The argument 'type' must either be 'crosstab' or 'topline'", call. = FALSE)
-    )
-  } else {
-    stop("The argument 'output' must either be 'word' or 'latex'", call. = FALSE)
-  }
+  switch(type,
+    topline = {
+      list_of_tables <- pmap(
+        .l = l,
+        .f = ft_generate_topline,
+        # Constant arguments
+        df = df,
+        weight = {{ weight }}
+      )
+    },
+    crosstab_2way = {
+      list_of_tables <- pmap(
+        .l = l,
+        .f = ft_generate_xtab,
+        # Constant arguments
+        df = df,
+        weight = {{ weight }}
+      )
+    },
+    crosstab_3way = {
+      list_of_tables <- pmap(
+        .l = l,
+        .f = ft_generate_xtab_3way,
+        # Constant arguments
+        df = df,
+        weight = {{ weight }}
+      )
+    },
+    stop("The argument 'type' must either be 'crosstab', 'crosstab_3way', 'topline'", call. = FALSE)
+  )
 
   list_of_tables
 }

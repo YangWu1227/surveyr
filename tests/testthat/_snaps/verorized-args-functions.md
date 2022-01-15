@@ -3,7 +3,7 @@
     Code
       list_xtab_args(df = df, var_of_interest = c(3, 4, 1))
     Error <simpleError>
-      'var_of_intereset' must be a character vector
+      'var_of_interest' must be a character vector
 
 ---
 
@@ -13,17 +13,26 @@
     Error <simpleError>
       'dependent_vars' must be a list object
 
+# list_xtab_3way_args() provides meaningful error messages
+
+    Code
+      list_xtab_3way_args(df = df, control_var = c(3, 4, 1), dependent_vars = list(c(
+        "education_rollup", "party_reg")), independent_vars = list(c("party_reg",
+        "education_rollup")))
+    Error <simpleError>
+      'control_var' must be a character vector
+
 # flatten_args() provides meaningful error messages
 
     Code
       flatten_args(c(3, 5, 6))
     Error <simpleError>
-      'l' must be the output of `list-xtab_args()`
+      'l' must be the output of `list_xtab_args()` or `list_xtab_3way_args()`
 
 ---
 
     Code
       flatten_args(list(test = c(3, 4), error = ("test")))
     Error <simpleError>
-      'l' must be the output of `list-xtab_args()`
+      'l' must be the output of `list_xtab_args()` or `list_xtab_3way_args()`
 

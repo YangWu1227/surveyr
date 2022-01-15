@@ -2,7 +2,7 @@
 % Please edit documentation in R/generate_topline_multiselect.R
 \name{generate_topline_multiselect}
 \alias{generate_topline_multiselect}
-\title{Generate toplines for multiple selection questions (word)}
+\title{Generate toplines for multiple selection questions}
 \usage{
 generate_topline_multiselect(df, weight, caption, parent = FALSE)
 }

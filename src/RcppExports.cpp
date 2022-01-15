@@ -24,13 +24,12 @@ BEGIN_RCPP
 END_RCPP
 }
 // print_tbls
-void print_tbls(List l, String output);
-RcppExport SEXP _citizenr_print_tbls(SEXP lSEXP, SEXP outputSEXP) {
+void print_tbls(List l);
+RcppExport SEXP _citizenr_print_tbls(SEXP lSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< List >::type l(lSEXP);
-    Rcpp::traits::input_parameter< String >::type output(outputSEXP);
-    print_tbls(l, output);
+    print_tbls(l);
     return R_NilValue;
 END_RCPP
 }
@@ -50,7 +49,7 @@ RcppExport SEXP run_testthat_tests(SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
     {"_citizenr_check_patterns", (DL_FUNC) &_citizenr_check_patterns, 2},
-    {"_citizenr_print_tbls", (DL_FUNC) &_citizenr_print_tbls, 2},
+    {"_citizenr_print_tbls", (DL_FUNC) &_citizenr_print_tbls, 1},
     {"_citizenr_sumcpp", (DL_FUNC) &_citizenr_sumcpp, 1},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},
     {NULL, NULL, 0}

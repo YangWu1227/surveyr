@@ -4,10 +4,10 @@
 \alias{ft_generate_tbls}
 \title{Iteratively generate tables for 'Feeling Thermometer' variables}
 \usage{
-ft_generate_tbls(l, df, weight, type = "topline", output = "word")
+ft_generate_tbls(l, df, weight, type = "topline")
 }
 \arguments{
-\item{l}{A list of arguments to be passed on to either \verb{generate_xtab_*()} or \verb{generate_topline_*()}:
+\item{l}{A list of arguments to be passed on to either \code{ft_generate_xtab()}, \code{ft_generate_xtab_3way()} or \code{ft_generate_topline()}:
 \describe{
 \item{For toplines}{
 \preformatted{list_topline <- tibble::tribble(
@@ -22,9 +22,19 @@ ft_generate_tbls(l, df, weight, type = "topline", output = "word")
 \item{For crosstabs}{
 \preformatted{list_xtab <- tibble::tribble(
      ~x, ~y, ~caption,
-     "var_1", "var_2" "caption1",
-     "var_2", "var_9", caption2",
+     "var_1", "var_2", "caption1",
+     "var_2", "var_9", "caption2",
      "var_3", "var_23", "caption3",
+     .
+     .
+     .
+  )}}
+\item{For three-way crosstabs}{
+\preformatted{list_xtab <- tibble::tribble(
+     ~x, ~y, ~z, ~caption,
+     "var_1", "var_2", "var_3", "caption1",
+     "var_2", "var_9", "var_1", "caption2",
+     "var_3", "var_23", "var_17", "caption3",
      .
      .
      .
@@ -35,18 +45,16 @@ ft_generate_tbls(l, df, weight, type = "topline", output = "word")
 
 \item{weight}{A length one character vector used as the caption for the topline.}
 
-\item{type}{Must either be 'topline' or 'crosstab'. Defaults to 'topline'.}
-
-\item{output}{Must either be 'latex' or 'word'. Defaults to 'word'.}
+\item{type}{Must either be 'topline', 'crosstab_2way', or 'crosstab_3way'. Defaults to 'topline'.}
 }
 \value{
-A list containing elements that are length one character vectors (latex) or lists objects (word), each of which is the source code for a single
-table (latex) or a \code{s3} list object (word).
+A list containing elements that are list objects, each of which is the source code for a single
+\code{s3} list object of class \code{flextable}.
 }
 \description{
-This function provides a wrapper around \verb{ft_generate_xtab_*()} and \verb{ft_generate_topline_*()} (all internal),
-allowing users to efficiently generate many tables by passing a list of arguments. The shapes of the argument lists
-may vary depending on the table \code{type}.
+This function provides a wrapper around \code{ft_generate_xtab()}, \code{ft_generate_xtab_3way()}, and \code{ft_generate_topline()}
+(all internal), allowing users to efficiently generate many tables by passing a list of arguments. The shapes of
+the argument lists may vary depending on the table \code{type}.
 }
 \examples{
 \donttest{
@@ -55,8 +63,14 @@ list_of_xtabs <- ft_generate_tbls(
   l = list_xtab,
   df,
   "weight",
-  "crosstab",
-  "word"
+  "crosstab_2way"
+)
+
+#' list_of_xtabs <- ft_generate_tbls(
+  l = list_xtab,
+  df,
+  "weight",
+  "crosstab_3way"
 )
 
 # Generate toplines
@@ -64,11 +78,10 @@ list_of_topline <- ft_generate_tbls(
   l = list_topline,
   df,
   "weight",
-  "topline",
-  "latex"
+  "topline"
 )
 }
 }
 \seealso{
-\code{\link[=generate_xtab_docx]{generate_xtab_docx()}}, \code{\link[=generate_xtab_latex]{generate_xtab_latex()}}, \code{\link[=generate_topline_docx]{generate_topline_docx()}}, and \code{\link[=generate_topline_latex]{generate_topline_latex()}} for single crosstab or topline generation.
+\code{\link[=ft_generate_xtab]{ft_generate_xtab()}}, \code{\link[=ft_generate_xtab_3way]{ft_generate_xtab_3way()}}, and \code{\link[=ft_generate_topline]{ft_generate_topline()}} for single 'Feeling Thermometer' crosstab or topline generations.
 }

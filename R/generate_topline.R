@@ -1,116 +1,4 @@
-#' Generate toplines (latex)
-#'
-#' @description
-#' This function takes a data frame or a tibble object, a variable of interest, and a string
-#' caption, returning a length one character vector of the table source code. The function
-#' implements data masking internally so users must specify data variables as strings
-#' (i.e. use "x", "weight").
-#'
-#' @param df A data frame or tibble.
-#' @param x A single string of variable name.
-#' @param weight A single string of the weighting variable.
-#' @param caption A length one character vector used as the caption for the topline.
-#'
-#' @return A character vector of the table source code, which is an object of class `knitr_kable`.
-#'
-#' @seealso [generate_topline_docx()] for outputting to Microsoft word.
-#'
-#' @importFrom dplyr select
-#' @importFrom pollster topline
-#' @export
-#'
-#' @examples
-#' \donttest{
-#' # Generate a topline
-#' df %>% generate_topline_latex(df = ., "x_var", "weight", "X")
-#' }
-generate_topline_latex <- function(df, x, weight, caption) {
-  if (!is.data.frame(df)) {
-    stop("The argument 'df' must be an object of class or subclass of data frame", call. = FALSE)
-  }
-  if (!is.character(caption) | !length(caption) == 1) {
-    stop("The argument 'caption' must be a length one character vector", call. = FALSE)
-  }
-  if (!is_character(x, n = 1) | !is_character(weight, n = 1)) {
-    stop("The arguments 'x' and 'weight' must be character vectors of length one", call. = FALSE)
-  }
-
-  # Convert string to symbols
-  x <- ensym(x)
-  weight <- ensym(weight)
-
-  # Object of class data.table
-  topline <- topline_internal(df = df, variable = {{ x }}, weight = {{ weight }})[
-    , c(
-      "Response",
-      "Frequency",
-      "Percent"
-    ) := .(
-      str_wrap(Response, width = 25),
-      as.character(Frequency),
-      paste(Percent, "\\%")
-    )
-  ]
-
-  # Indices to apply background color
-  even <- seq.int(length.out = vec_size(topline)) %% 2 == 0
-  odd <- !even
-
-  # Use reference semantics to modify in place
-  topline[even, Response := linebreak_grey(Response)][even, c(
-    "Response",
-    "Frequency",
-    "Percent"
-  ) := .(
-    paste0("\\cellcolor[HTML]{e5e5e5}{", Response, "}"),
-    paste0("\\cellcolor[HTML]{e5e5e5}{", Frequency, "}"),
-    paste0("\\cellcolor[HTML]{e5e5e5}{", Percent, "}")
-  )][odd, Response := linebreak_white(Response)][odd, c(
-    "Response",
-    "Frequency",
-    "Percent"
-  ) := .(
-    paste0("\\cellcolor[HTML]{ffffff}{", Response, "}"),
-    paste0("\\cellcolor[HTML]{ffffff}{", Frequency, "}"),
-    paste0("\\cellcolor[HTML]{ffffff}{", Percent, "}")
-  )]
-
-  # Create kableextra table object and format
-  topline_formatted <- topline %>%
-    kbl(
-      align = rep("l", times = 3),
-      caption = caption,
-      escape = FALSE,
-      booktabs = FALSE,
-      longtable = TRUE,
-      position = "h",
-      centering = TRUE,
-      vline = "",
-      linesep = c(rep("", times = vec_size(topline)), "\\addlinespace")
-    ) %>%
-    kable_styling(
-      latex_options = c(
-        "hold_position"
-      ),
-      font_size = 15
-    ) %>%
-    row_spec(
-      row = 0,
-      bold = TRUE,
-      color = "white",
-      background = "#32bdb9"
-    ) %>%
-    column_spec(
-      column = 1,
-      bold = TRUE
-    )
-
-  # Return formatted table
-  topline_formatted
-}
-
-
-#' Generate toplines (word)
+#' Generate toplines
 #'
 #' @description
 #' This function takes a data frame or a tibble object, a variable of interest, and a string
@@ -125,8 +13,6 @@ generate_topline_latex <- function(df, x, weight, caption) {
 #'
 #' @return A list object, which is an object of class `flextable`.
 #'
-#' @seealso [generate_topline_latex()] for outputting to pdf.
-#'
 #' @importFrom dplyr select
 #' @import data.table
 #' @importFrom flextable colformat_num
@@ -135,9 +21,9 @@ generate_topline_latex <- function(df, x, weight, caption) {
 #' @examples
 #' \donttest{
 #' # Generate a topline
-#' df %>% generate_topline_docx(df = ., "x_var", "weight", "X")
+#' df %>% generate_topline(df = ., "x_var", "weight", "X")
 #' }
-generate_topline_docx <- function(df, x, weight, caption) {
+generate_topline <- function(df, x, weight, caption) {
   if (!is.data.frame(df)) {
     stop("The argument 'df' must be an object of class or subclass of data frame", call. = FALSE)
   }

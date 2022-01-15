@@ -37,11 +37,10 @@ check_patterns <- function(mainstrs, patterns) {
 #' Print tables iteratively
 #'
 #' @description
-#' This function takes a list of `flextable` or `kableExtra` objects and prints the raw code adapted to the 'output'
-#' format. \strong{Note} that chunk option results must be set to \strong{asis}, i.e., `results='asis'`.
+#' This function takes a list of `flextable` objects and prints the raw code. \strong{Note} that chunk option
+#' results must be set to \strong{asis}, i.e., `results='asis'`.
 #'
-#' @param l A list of `flextable` or `kableExtra` objects, which are s3 lists with certain structures.
-#' @param output A string specifying the output format.
+#' @param l A list of `flextable` objects, which are s3 lists with certain structures.
 #'
 #' @return Invisible.
 #'
@@ -51,14 +50,14 @@ check_patterns <- function(mainstrs, patterns) {
 #'
 #' @examples
 #' \donttest{
-#' # Toplines to word
-#' print_tbls(list_toplines, output = "word")
+#' # Toplines
+#' print_tbls(list_toplines)
 #'
-#' # Crosstabs to pdf
-#' print_tbls(list_xtabs, output = "pdf")
+#' # Crosstabs
+#' print_tbls(list_xtabs)
 #' }
-print_tbls <- function(l, output) {
-    invisible(.Call(`_citizenr_print_tbls`, l, output))
+print_tbls <- function(l) {
+    invisible(.Call(`_citizenr_print_tbls`, l))
 }
 
 #' Sum of Vector Elements (C++)

@@ -1,6 +1,6 @@
 # Word --------------------------------------------------------------------
 
-ft_generate_topline_docx <- function(df, x, weight, caption) {
+ft_generate_topline <- function(df, x, weight, caption) {
 
   # Convert string to symbols
   x <- ensym(x)
@@ -47,69 +47,3 @@ ft_generate_topline_docx <- function(df, x, weight, caption) {
   topline_formatted
 }
 
-# Latex -------------------------------------------------------------------
-
-ft_generate_topline_latex <- function(df, x, weight, caption) {
-
-  # Convert string to symbols
-  x <- ensym(x)
-  weight <- ensym(weight)
-
-  # Object of class data.table
-  topline <- topline_internal(df = df, variable = {{ x }}, weight = {{ weight }})[
-    , c(
-      "Frequency",
-      "Percent"
-    ) := .(
-      as.character(Frequency),
-      paste(Percent, "%")
-    )
-  ][
-    Response == "No", Response := "11"
-  ][
-    Response == "Total", Response := "12"
-  ][
-    , Response := as.integer(Response)
-  ]
-  # Reorder feeling thermometers
-  setorder(topline, Response)[, Response := as.character(Response)][
-    Response == "11", Response := "No"
-  ][
-    Response == "12", Response := "Total"
-  ]
-
-  # Create kableextra table object and format
-  topline_formatted <- topline %>%
-    kbl(
-      align = rep("l", times = 3),
-      caption = caption,
-      escape = TRUE,
-      booktabs = FALSE,
-      longtable = TRUE,
-      position = "h",
-      centering = TRUE,
-      vline = "",
-      linesep = c(rep("", times = vec_size(topline)), "\\addlinespace")
-    ) %>%
-    kable_styling(
-      "striped",
-      latex_options = c(
-        "hold_position"
-      ),
-      font_size = 15,
-      stripe_color = "#e5e5e5"
-    ) %>%
-    row_spec(
-      row = 0,
-      bold = TRUE,
-      color = "white",
-      background = "#32bdb9"
-    ) %>%
-    column_spec(
-      column = 1,
-      bold = TRUE
-    )
-
-  # Return formatted table
-  topline_formatted
-}

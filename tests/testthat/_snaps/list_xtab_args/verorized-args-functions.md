@@ -1,4 +1,4 @@
-# Does the error list accurately capture invalid input for 'df'
+# list_xtab_args() does the error list accurately capture invalid input for 'df'
 
     $result
     $result$education_rollup
@@ -23,7 +23,7 @@
     
     
 
-# Does the error list accurately capture invalid input for 'var_interest' (not found in df)
+# list_xtab_args() does the error list accurately capture invalid input for 'var_interest' (not found in df)
 
     $result
     $result$education_rollup
@@ -66,7 +66,7 @@
     
     
 
-# Does the error list accurately capture invalid input for 'dependent_vars' (not in df)
+# list_xtab_args() Does the error list accurately capture invalid input for 'dependent_vars' (not in df)
 
     $result
     $result$education_rollup
@@ -97,7 +97,7 @@
     
     
 
-# Does the error list accurately capture invalid input for 'rm' (not in df and wrong type)
+# list_xtab_args() does the error list accurately capture invalid input for 'rm' (not in df and wrong type)
 
     $result
     $result$education_rollup

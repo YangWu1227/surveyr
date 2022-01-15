@@ -1,4 +1,4 @@
-# Cumston topline and crosstab functions ----------------------------------
+# Custom topline ----------------------------------------------------------
 
 #' @importFrom dplyr summarize
 #' @importFrom dplyr group_by
@@ -38,6 +38,7 @@ topline_internal <- function(df, variable, weight) {
   topline
 }
 
+# Custom two-way crosstab -------------------------------------------------
 
 #' @importFrom pollster deff_calc
 #' @importFrom pollster moedeff_calc
@@ -84,6 +85,7 @@ moe_crosstab_internal <- function(df, x, y, weight) {
   xtab
 }
 
+# Custom three-way crosstab -----------------------------------------------
 
 moe_crosstab_3way_internal <- function(df, x, y, z, weight) {
 

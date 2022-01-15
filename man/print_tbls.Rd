@@ -4,26 +4,24 @@
 \alias{print_tbls}
 \title{Print tables iteratively}
 \usage{
-print_tbls(l, output)
+print_tbls(l)
 }
 \arguments{
-\item{l}{A list of \code{flextable} or \code{kableExtra} objects, which are s3 lists with certain structures.}
-
-\item{output}{A string specifying the output format.}
+\item{l}{A list of \code{flextable} objects, which are s3 lists with certain structures.}
 }
 \value{
 Invisible.
 }
 \description{
-This function takes a list of \code{flextable} or \code{kableExtra} objects and prints the raw code adapted to the 'output'
-format. \strong{Note} that chunk option results must be set to \strong{asis}, i.e., \code{results='asis'}.
+This function takes a list of \code{flextable} objects and prints the raw code. \strong{Note} that chunk option
+results must be set to \strong{asis}, i.e., \code{results='asis'}.
 }
 \examples{
 \donttest{
-# Toplines to word
-print_tbls(list_toplines, output = "word")
+# Toplines
+print_tbls(list_toplines)
 
-# Crosstabs to pdf
-print_tbls(list_xtabs, output = "pdf")
+# Crosstabs
+print_tbls(list_xtabs)
 }
 }

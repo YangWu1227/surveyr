@@ -1,6 +1,6 @@
 # Exported function for multiselect with a 'parent' switch argument -------
 
-#' Generate toplines for multiple selection questions (word)
+#' Generate toplines for multiple selection questions
 #'
 #' @description
 #' This function generates a \emph{single} topline for cases where there is no \strong{parent} response column in the
@@ -50,7 +50,7 @@ generate_topline_multiselect <- function(df, weight, caption, parent = FALSE) {
 topline_multiselect_parent <- function(df, weight, caption) {
   # Parent topline
   parent_var <- names(df)[[1]]
-  topline_parent <- generate_topline_docx(df, x = parent_var, weight = weight, caption = caption[[1]])
+  topline_parent <- generate_topline(df, x = parent_var, weight = weight, caption = caption[[1]])
 
   # Child topline
   df_child <- na.omit(df, cols = parent_var)[, c(parent_var) := NULL]
@@ -69,8 +69,6 @@ topline_multiselect_parent <- function(df, weight, caption) {
     Frequency = round(unlist(col_frequency_list), digits = 0),
     Percent = round(unlist(col_frequency_list) / sum(df_child[[weight]]) * 100, digits = 1)
   )
-  # Order
-  setorder(topline_data, Percent)
   # Add column totals
   topline_data <- rbindlist(list(
     topline_data,
@@ -123,8 +121,6 @@ topline_multiselect <- function(df, weight, caption) {
     Frequency = round(unlist(col_frequency_list), digits = 0),
     Percent = round(unlist(col_frequency_list) / sum(df[[weight]]) * 100, digits = 1)
   )
-  # Order
-  setorder(topline_data, Percent)
   # Add column totals
   topline_data <- rbindlist(list(
     topline_data,

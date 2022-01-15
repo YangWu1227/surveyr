@@ -1,13 +1,15 @@
-# Tests for generate_xtab_latex() -----------------------------------------
+# Test data ---------------------------------------------------------------
 
 df <- readr::read_csv(test_path("testdata.csv"), show_col_types = FALSE)
 
+# Tests for generate_xtab()  -----------------------------------------
+
 # Errors ------------------------------------------------------------------
 
-test_that("generate_xtab_latex() provides meaningful error messages", {
+test_that("generate_xtab() provides meaningful error messages", {
   # Invalid input for 'df' (list)
   expect_snapshot(
-    x = generate_xtab_latex(
+    x = generate_xtab(
       df = list("2", body(dplyr::mutate)),
       x = "education_rollup",
       y = "party_reg",
@@ -18,7 +20,7 @@ test_that("generate_xtab_latex() provides meaningful error messages", {
   )
   # Invalid input for 'caption' (numeric)
   expect_snapshot(
-    x = generate_xtab_latex(
+    x = generate_xtab(
       df = df,
       x = "education_rollup",
       y = "party_reg",
@@ -29,7 +31,7 @@ test_that("generate_xtab_latex() provides meaningful error messages", {
   )
   # Invalid input for 'caption' (correct type but wrong length)
   expect_snapshot(
-    x = generate_xtab_latex(
+    x = generate_xtab(
       df = df,
       x = "education_rollup",
       y = "party_reg",
@@ -40,7 +42,7 @@ test_that("generate_xtab_latex() provides meaningful error messages", {
   )
   # Invalid input for "x", "y", or "weight" (numeric)
   expect_snapshot(
-    x = generate_xtab_latex(
+    x = generate_xtab(
       df = df,
       x = 3,
       y = "party_reg",
@@ -51,7 +53,7 @@ test_that("generate_xtab_latex() provides meaningful error messages", {
   )
   # Invalid input for "x", "y", or "weight" (correct type but wrong length)
   expect_snapshot(
-    x = generate_xtab_latex(
+    x = generate_xtab(
       df = df,
       x = c("education_rollup", "party_reg"),
       y = "party_reg",
@@ -62,7 +64,7 @@ test_that("generate_xtab_latex() provides meaningful error messages", {
   )
   # Invalid input for "x", "y", or "weight" (correct type but wrong length)
   expect_snapshot(
-    x = generate_xtab_latex(
+    x = generate_xtab(
       df = df,
       x = "party_reg",
       y = TRUE,
@@ -73,95 +75,22 @@ test_that("generate_xtab_latex() provides meaningful error messages", {
   )
 })
 
-# Functionality -----------------------------------------------------------
-
-test_that("generate_xtab_latex() returns correct output type and class", {
-  # Correct s3 class?
-  expect_s3_class(
-    object = generate_xtab_latex(
-      df = df,
-      x = "education_rollup",
-      y = "party_reg",
-      weight = "weightvec",
-      caption = "caption"
-    ),
-    class = c("kableExtra", "knitr_kable")
-  )
-  # Correct vector size?
-  expect_vector(
-    object = generate_xtab_latex(
-      df = df,
-      x = "education_rollup",
-      y = "party_reg",
-      weight = "weightvec",
-      caption = "caption"
-    ),
-    ptype = NULL,
-    size = 1
-  )
-})
-
-
-# Test for generate_topline_latex() ---------------------------------------
-
-# Errors ------------------------------------------------------------------
-
-test_that("generate_topline_latex provides meaningful error messages", {
-  # Invalid input for 'df' (list)
+test_that("generate_xtab() errors when specifing x, y, or weight that does not exist", {
   expect_snapshot(
-    x = generate_topline_latex(
-      df = list("2", body(dplyr::mutate)),
-      x = "education_rollup",
+    x = generate_xtab(
+      df = df,
+      x = "does_not_exist",
+      y = "education_rollup",
       weight = "weightvec",
       caption = "caption"
     ),
     error = TRUE
   )
-  # Invalid input for 'caption' (numeric)
   expect_snapshot(
-    x = generate_topline_latex(
+    x = generate_xtab(
       df = df,
       x = "education_rollup",
-      weight = "weightvec",
-      caption = 3
-    ),
-    error = TRUE
-  )
-  # Invalid input for 'caption' (correct type but wrong length)
-  expect_snapshot(
-    x = generate_topline_latex(
-      df = df,
-      x = "education_rollup",
-      weight = "weightvec",
-      caption = c("caption1", "caption2")
-    ),
-    error = TRUE
-  )
-  # Invalid input for "x" or "weight" (numeric)
-  expect_snapshot(
-    x = generate_topline_latex(
-      df = df,
-      x = "party_reg",
-      weight = 3,
-      caption = "caption"
-    ),
-    error = TRUE
-  )
-  # Invalid input for "x" (correct type but wrong length)
-  expect_snapshot(
-    x = generate_topline_latex(
-      df = df,
-      x = c("education_rollup", "party_reg"),
-      weight = "weightvec",
-      caption = "caption"
-    ),
-    error = TRUE
-  )
-  # Invalid input for "x", "y", or "weight" (correct type but wrong length)
-  expect_snapshot(
-    x = generate_topline_latex(
-      df = df,
-      x = TRUE,
+      y = "does_not_exist",
       weight = "weightvec",
       caption = "caption"
     ),
@@ -171,110 +100,10 @@ test_that("generate_topline_latex provides meaningful error messages", {
 
 # Functionality -----------------------------------------------------------
 
-test_that("generate_topline_latex() returns correct output type and class", {
+test_that("generate_xtab() returns correct output type and class", {
   # Correct s3 class?
   expect_s3_class(
-    object = generate_topline_latex(
-      df = df,
-      x = "party_reg",
-      weight = "weightvec",
-      caption = "caption"
-    ),
-    class = c("kableExtra", "knitr_kable")
-  )
-  # Correct vector size?
-  expect_vector(
-    object = generate_topline_latex(
-      df = df,
-      x = "issue_focus",
-      weight = "weightvec",
-      caption = "caption"
-    ),
-    ptype = NULL,
-    size = 1
-  )
-})
-
-
-# Tests for generate_xtab_docx()  -----------------------------------------
-
-# Errors ------------------------------------------------------------------
-
-test_that("generate_xtab_docx() provides meaningful error messages", {
-  # Invalid input for 'df' (list)
-  expect_snapshot(
-    x = generate_xtab_docx(
-      df = list("2", body(dplyr::mutate)),
-      x = "education_rollup",
-      y = "party_reg",
-      weight = "weightvec",
-      caption = "caption"
-    ),
-    error = TRUE
-  )
-  # Invalid input for 'caption' (numeric)
-  expect_snapshot(
-    x = generate_xtab_docx(
-      df = df,
-      x = "education_rollup",
-      y = "party_reg",
-      weight = "weightvec",
-      caption = 3
-    ),
-    error = TRUE
-  )
-  # Invalid input for 'caption' (correct type but wrong length)
-  expect_snapshot(
-    x = generate_xtab_docx(
-      df = df,
-      x = "education_rollup",
-      y = "party_reg",
-      weight = "weightvec",
-      caption = c("caption1", "caption2")
-    ),
-    error = TRUE
-  )
-  # Invalid input for "x", "y", or "weight" (numeric)
-  expect_snapshot(
-    x = generate_xtab_docx(
-      df = df,
-      x = 3,
-      y = "party_reg",
-      weight = "weightvec",
-      caption = "caption"
-    ),
-    error = TRUE
-  )
-  # Invalid input for "x", "y", or "weight" (correct type but wrong length)
-  expect_snapshot(
-    x = generate_xtab_docx(
-      df = df,
-      x = c("education_rollup", "party_reg"),
-      y = "party_reg",
-      weight = "weightvec",
-      caption = "caption"
-    ),
-    error = TRUE
-  )
-  # Invalid input for "x", "y", or "weight" (correct type but wrong length)
-  expect_snapshot(
-    x = generate_xtab_docx(
-      df = df,
-      x = "party_reg",
-      y = TRUE,
-      weight = "weightvec",
-      caption = "caption"
-    ),
-    error = TRUE
-  )
-})
-
-# Functionality -----------------------------------------------------------
-
-test_that("generate_xtab_docx() returns correct output type and class", {
-  # Correct s3 class?
-  expect_s3_class(
-    object = generate_xtab_docx(
+    object = generate_xtab(
       df = df,
       x = "education_rollup",
       y = "party_reg",
@@ -285,7 +114,7 @@ test_that("generate_xtab_docx() returns correct output type and class", {
   )
   # Correct base type? (should be a list)
   expect_type(
-    object = generate_xtab_docx(
+    object = generate_xtab(
       df = df,
       x = "education_rollup",
       y = "issue_focus",
@@ -297,14 +126,171 @@ test_that("generate_xtab_docx() returns correct output type and class", {
 })
 
 
-# Test for generate_topline_docx() ----------------------------------------
+# Tests for generate_xtab_3way()  -----------------------------------------
 
 # Errors ------------------------------------------------------------------
 
-test_that("generate_topline_docx provides meaningful error messages", {
+test_that("generate_xtab_3way() provides meaningful error messages", {
   # Invalid input for 'df' (list)
   expect_snapshot(
-    x = generate_topline_docx(
+    x = generate_xtab_3way(
+      df = list("2", body(dplyr::mutate)),
+      x = "education_rollup",
+      y = "party_reg",
+      z = "issue_focus",
+      weight = "weightvec",
+      caption = "caption"
+    ),
+    error = TRUE
+  )
+  # Invalid input for 'caption' (numeric)
+  expect_snapshot(
+    x = generate_xtab_3way(
+      df = df,
+      x = "education_rollup",
+      y = "party_reg",
+      z = "issue_focus",
+      weight = "weightvec",
+      caption = 3
+    ),
+    error = TRUE
+  )
+  # Invalid input for 'caption' (correct type but wrong length)
+  expect_snapshot(
+    x = generate_xtab_3way(
+      df = df,
+      x = "education_rollup",
+      y = "party_reg",
+      z = "issue_focus",
+      weight = "weightvec",
+      caption = c("caption1", "caption2")
+    ),
+    error = TRUE
+  )
+  # Invalid input for "x", "y", "z", or "weight" (numeric)
+  expect_snapshot(
+    x = generate_xtab_3way(
+      df = df,
+      x = 3,
+      y = "party_reg",
+      z = "issue_focus",
+      weight = "weightvec",
+      caption = "caption"
+    ),
+    error = TRUE
+  )
+  # Invalid input for "x", "y", "z", or "weight" (correct type but wrong length)
+  expect_snapshot(
+    x = generate_xtab_3way(
+      df = df,
+      x = c("education_rollup", "party_reg"),
+      y = "party_reg",
+      z = "issue_focus",
+      weight = "weightvec",
+      caption = "caption"
+    ),
+    error = TRUE
+  )
+  # Invalid input for "x", "y", "z", or "weight" (correct length but wrong type)
+  expect_snapshot(
+    x = generate_xtab_3way(
+      df = df,
+      x = "party_reg",
+      y = TRUE,
+      z = "issue_focus",
+      weight = "weightvec",
+      caption = "caption"
+    ),
+    error = TRUE
+  )
+  # Invalid input for "x", "y", "z", or "weight" (correct length but wrong type)
+  expect_snapshot(
+    x = generate_xtab_3way(
+      df = df,
+      x = "education_rollup",
+      y = "party_reg",
+      z = complex(4),
+      weight = "weightvec",
+      caption = "caption"
+    ),
+    error = TRUE
+  )
+})
+
+test_that("generate_xtab_3way() errors when specifing x, y, z, or weight that does not exist", {
+  expect_snapshot(
+    x = generate_xtab_3way(
+      df = df,
+      x = "does_not_exist",
+      y = "education_rollup",
+      z = "issue_focus",
+      weight = "weightvec",
+      caption = "caption"
+    ),
+    error = TRUE
+  )
+  expect_snapshot(
+    x = generate_xtab_3way(
+      df = df,
+      x = "education_rollup",
+      y = "does_not_exist",
+      z = "issue_focus",
+      weight = "weightvec",
+      caption = "caption"
+    ),
+    error = TRUE
+  )
+  expect_snapshot(
+    x = generate_xtab_3way(
+      df = df,
+      x = "education_rollup",
+      y = "issue_focus",
+      z = "does_not_exist",
+      weight = "weightvec",
+      caption = "caption"
+    ),
+    error = TRUE
+  )
+})
+
+# Functionality -----------------------------------------------------------
+
+test_that("generate_xtab_3way() returns correct output type and class", {
+  # Correct s3 class?
+  expect_s3_class(
+    object = generate_xtab_3way(
+      df = df,
+      x = "education_rollup",
+      y = "party_reg",
+      z = "issue_focus",
+      weight = "weightvec",
+      caption = "caption"
+    ),
+    class = c("flextable")
+  )
+  # Correct base type? (should be a list)
+  expect_type(
+    object = generate_xtab_3way(
+      df = df,
+      x = "education_rollup",
+      y = "party_reg",
+      z = "issue_focus",
+      weight = "weightvec",
+      caption = "caption"
+    ),
+    type = "list"
+  )
+})
+
+
+# Test for generate_topline() ----------------------------------------
+
+# Errors ------------------------------------------------------------------
+
+test_that("generate_topline provides meaningful error messages", {
+  # Invalid input for 'df' (list)
+  expect_snapshot(
+    x = generate_topline(
       df = list("2", body(dplyr::mutate)),
       x = "education_rollup",
       weight = "weightvec",
@@ -314,7 +300,7 @@ test_that("generate_topline_docx provides meaningful error messages", {
   )
   # Invalid input for 'caption' (numeric)
   expect_snapshot(
-    x = generate_topline_docx(
+    x = generate_topline(
       df = df,
       x = "education_rollup",
       weight = "weightvec",
@@ -324,7 +310,7 @@ test_that("generate_topline_docx provides meaningful error messages", {
   )
   # Invalid input for 'caption' (correct type but wrong length)
   expect_snapshot(
-    x = generate_topline_docx(
+    x = generate_topline(
       df = df,
       x = "education_rollup",
       weight = "weightvec",
@@ -334,7 +320,7 @@ test_that("generate_topline_docx provides meaningful error messages", {
   )
   # Invalid input for "x" or "weight" (numeric)
   expect_snapshot(
-    x = generate_topline_docx(
+    x = generate_topline(
       df = df,
       x = "party_reg",
       weight = 3,
@@ -344,7 +330,7 @@ test_that("generate_topline_docx provides meaningful error messages", {
   )
   # Invalid input for "x" (correct type but wrong length)
   expect_snapshot(
-    x = generate_topline_docx(
+    x = generate_topline(
       df = df,
       x = c("education_rollup", "party_reg"),
       weight = "weightvec",
@@ -354,7 +340,7 @@ test_that("generate_topline_docx provides meaningful error messages", {
   )
   # Invalid input for "x", "y", or "weight" (correct type but wrong length)
   expect_snapshot(
-    x = generate_topline_docx(
+    x = generate_topline(
       df = df,
       x = TRUE,
       weight = "weightvec",
@@ -366,10 +352,10 @@ test_that("generate_topline_docx provides meaningful error messages", {
 
 # Functionality -----------------------------------------------------------
 
-test_that("generate_topline_docx() returns correct output type and class", {
+test_that("generate_topline() returns correct output type and class", {
   # Correct s3 class?
   expect_s3_class(
-    object = generate_topline_docx(
+    object = generate_topline(
       df = df,
       x = "party_reg",
       weight = "weightvec",
@@ -379,7 +365,7 @@ test_that("generate_topline_docx() returns correct output type and class", {
   )
   # Correct base type? (should be a list)
   expect_type(
-    object = generate_topline_docx(
+    object = generate_topline(
       df = df,
       x = "issue_focus",
       weight = "weightvec",
