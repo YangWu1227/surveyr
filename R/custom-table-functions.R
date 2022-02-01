@@ -70,10 +70,11 @@ moe_crosstab_internal <- function(df, x, y, weight) {
     summarize(
       observations = sumcpp({{ weight }}),
       Percent = observations / first(total),
-      N = as.character(round(first(total), digits = 0)),
+      N = first(total),
       unweighted_n = first(unweighted_n)
     ) %>%
     ungroup() %>%
+    mutate(N = as.character(round(Percent * N, digits = 0))) %>%
     mutate(MOE = as.character(round(moedeff_calc(pct = Percent, deff = deff, n = unweighted_n, zscore = 1.96), digits = 1))) %>%
     mutate(
       Percent = as.character(round(Percent * 100, digits = 1))
@@ -115,10 +116,11 @@ moe_crosstab_3way_internal <- function(df, x, y, z, weight) {
     summarize(
       observations = sum({{ weight }}),
       Percent = observations / first(total),
-      N = as.character(round(first(total), digits = 0)),
+      N = first(total),
       unweighted_n = first(unweighted_n)
     ) %>%
     ungroup() %>%
+    mutate(N = as.character(round(Percent * N, digits = 0))) %>%
     mutate(MOE = as.character(round(moedeff_calc(pct = Percent, deff = deff, n = unweighted_n, zscore = 1.96), digits = 1))) %>%
     mutate(Percent = as.character(round(Percent * 100, digits = 1))) %>%
     select(-c("observations", "unweighted_n")) %>%
@@ -127,3 +129,5 @@ moe_crosstab_3way_internal <- function(df, x, y, z, weight) {
   class(xtab_3way) <- c("data.table", "data.frame")
   xtab_3way
 }
+
+
