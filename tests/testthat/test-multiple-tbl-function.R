@@ -1,35 +1,35 @@
 # Test data ---------------------------------------------------------------
 
-df <- readr::read_csv(test_path("testdata.csv"), show_col_types = FALSE)
+df <- readr::read_rds(test_path("testdata_pace.rds"))
 
 list_xtab <- tibble::tribble(
   ~x, ~y, ~caption,
-  "education_rollup", "party_reg", "caption1",
-  "education_rollup", "issue_focus", "caption2",
-  "issue_focus", "party_reg", "caption3"
+  "activism", "age_range", "caption1",
+  "activism", "income", "caption2",
+  "income", "age_range", "caption3"
 )
 
 list_xtab_3way <- list_xtab_3way_args(
   df = df,
-  control_var = c("education_rollup", "party_reg", "issue_focus"),
+  control_var = c("activism", "income", "age_range"),
   dependent_vars = list(
-    c("issue_focus", "party_reg"),
-    c("issue_focus", "education_rollup"),
-    c("party_reg", "education_rollup")
+    c("income", "age_range"),
+    c("age_range", "activism"),
+    c("activism", "income")
   ),
   independent_vars = list(
-    c("party_reg", "issue_focus"),
-    c("education_rollup", "issue_focus"),
-    c("education_rollup", "party_reg")
+    c("age_range", "income"),
+    c("activism", "age_range"),
+    c("income", "activism")
   )
 ) |>
   flatten_args()
 
 list_topline <- tibble::tribble(
   ~x, ~caption,
-  "education_rollup", "caption1",
-  "party_reg", "caption2",
-  "issue_focus", "caption3"
+  "activism", "caption1",
+  "income", "caption2",
+  "age_range", "caption3"
 )
 
 # Errors ------------------------------------------------------------------

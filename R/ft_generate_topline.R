@@ -1,12 +1,7 @@
 # Word --------------------------------------------------------------------
 
 ft_generate_topline <- function(df, x, weight, caption) {
-
-  # Convert string to symbols
-  x <- ensym(x)
-  weight <- ensym(weight)
-
-  topline <- topline_internal(df = df, variable = {{ x }}, weight = {{ weight }})[
+  topline <- topline_internal(df = df, variable = x, weight = weight)[
     Response == "No", Response := "11"
   ][
     Response == "Total", Response := "12"
@@ -46,4 +41,3 @@ ft_generate_topline <- function(df, x, weight, caption) {
   # Return formatted table
   topline_formatted
 }
-

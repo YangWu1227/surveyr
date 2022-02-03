@@ -13,7 +13,7 @@ generate_xtab_3way(df, x, y, z, weight, caption)
 
 \item{y}{A single string of the dependent variable.}
 
-\item{z}{A single string of the second control variable.}
+\item{z}{A single string of the control variable.}
 
 \item{weight}{A single string of the weighting variable.}
 

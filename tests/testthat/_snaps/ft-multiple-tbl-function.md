@@ -110,7 +110,7 @@
     Code
       ft_generate_tbls(l = topline_args, df = df, weight = "weightvec", type = "incorrect")
     Error <simpleError>
-      The argument 'type' must either be 'crosstab', 'crosstab_3way', 'topline'
+      The argument 'type' must either be 'crosstab_2way', 'crosstab_3way', 'topline'
 
 ---
 
@@ -124,7 +124,7 @@
     Code
       ft_generate_tbls(l = xtab_3way_args, df = df, weight = "weightvec", type = "crosstab_3wayy")
     Error <simpleError>
-      The argument 'type' must either be 'crosstab', 'crosstab_3way', 'topline'
+      The argument 'type' must either be 'crosstab_2way', 'crosstab_3way', 'topline'
 
 # Mismatched 'type' argument and 'l' list argument
 

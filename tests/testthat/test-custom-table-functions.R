@@ -8,8 +8,8 @@ df <- readr::read_csv(test_path("testdata.csv"), show_col_types = FALSE)
 
 test_that("Custom topline function returns correct s3 class (data.table) and output", {
   # Test examples
-  topline_1 <- citizenr:::topline_internal(df, issue_focus, weightvec)
-  topline_2 <- citizenr:::topline_internal(df, education_rollup, weightvec)
+  topline_1 <- citizenr:::topline_internal(df, "issue_focus", "weightvec")
+  topline_2 <- citizenr:::topline_internal(df, "education_rollup", "weightvec")
   # Correct base type
   expect_type(
     object = topline_1,
@@ -32,12 +32,12 @@ test_that("Custom topline function returns correct s3 class (data.table) and out
   )
   # Snapshots of output
   expect_snapshot_output(
-    x = citizenr:::topline_internal(df, issue_focus, weightvec),
+    x = citizenr:::topline_internal(df, "issue_focus", "weightvec"),
     cran = FALSE,
     variant = "custom_topline_output"
   )
   expect_snapshot_output(
-    x = citizenr:::topline_internal(df, education_rollup, weightvec),
+    x = citizenr:::topline_internal(df, "education_rollup", "weightvec"),
     cran = FALSE,
     variant = "custom_topline_output"
   )
@@ -47,8 +47,8 @@ test_that("Custom topline function returns correct s3 class (data.table) and out
 
 test_that("Custom crosstab function returns correct s3 class (data.table) and output", {
   # Test examples
-  xtab_1 <- citizenr:::moe_crosstab_internal(df, issue_focus, education_rollup, weightvec)
-  xtab_2 <- citizenr:::moe_crosstab_internal(df, party_reg, education_rollup, weightvec)
+  xtab_1 <- citizenr:::moe_crosstab_internal(df, "issue_focus", "education_rollup", "weightvec")
+  xtab_2 <- citizenr:::moe_crosstab_internal(df, "party_reg", "education_rollup", "weightvec")
   # Correct base type
   expect_type(
     object = xtab_1,
@@ -71,12 +71,12 @@ test_that("Custom crosstab function returns correct s3 class (data.table) and ou
   )
   # Snapshots of output
   expect_snapshot_output(
-    x = citizenr:::moe_crosstab_internal(df, issue_focus, education_rollup, weightvec),
+    x = citizenr:::moe_crosstab_internal(df, "issue_focus", "education_rollup", "weightvec"),
     cran = FALSE,
     variant = "custom_xtab_output"
   )
   expect_snapshot_output(
-    x = citizenr:::moe_crosstab_internal(df, party_reg, education_rollup, weightvec),
+    x = citizenr:::moe_crosstab_internal(df, "party_reg", "education_rollup", "weightvec"),
     cran = FALSE,
     variant = "custom_xtab_output"
   )
@@ -86,8 +86,8 @@ test_that("Custom crosstab function returns correct s3 class (data.table) and ou
 
 test_that("Custom three-way crosstab function returns correct s3 class (data.table) and output", {
   # Test examples
-  xtab_3way_1 <- citizenr:::moe_crosstab_3way_internal(df, issue_focus, education_rollup, party_reg, weightvec)
-  xtab_3way_2 <- citizenr:::moe_crosstab_3way_internal(df, party_reg, education_rollup, issue_focus, weightvec)
+  xtab_3way_1 <- citizenr:::moe_crosstab_3way_internal(df, "issue_focus", "education_rollup", "party_reg", "weightvec")
+  xtab_3way_2 <- citizenr:::moe_crosstab_3way_internal(df, "party_reg", "education_rollup", "issue_focus", "weightvec")
   # Correct base type
   expect_type(
     object = xtab_3way_1,
@@ -110,12 +110,12 @@ test_that("Custom three-way crosstab function returns correct s3 class (data.tab
   )
   # Snapshots of output
   expect_snapshot_output(
-    x = citizenr:::moe_crosstab_3way_internal(df, issue_focus, education_rollup, party_reg, weightvec),
+    x = citizenr:::moe_crosstab_3way_internal(df, "issue_focus", "education_rollup", "party_reg", "weightvec"),
     cran = FALSE,
     variant = "custom_xtab_output"
   )
   expect_snapshot_output(
-    x = citizenr:::moe_crosstab_3way_internal(df, party_reg, education_rollup, issue_focus, weightvec),
+    x = citizenr:::moe_crosstab_3way_internal(df, "party_reg", "education_rollup", "issue_focus", "weightvec"),
     cran = FALSE,
     variant = "custom_xtab_output"
   )

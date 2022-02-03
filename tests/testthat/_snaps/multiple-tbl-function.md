@@ -109,7 +109,7 @@
     Code
       generate_tbls(l = list_topline, df = df, weight = "weightvec", type = "incorrect")
     Error <simpleError>
-      The argument 'type' must either be 'crosstab', 'crosstab_3way', 'topline'
+      The argument 'type' must either be 'crosstab_2way', 'crosstab_3way', 'topline'
 
 ---
 
@@ -123,7 +123,7 @@
     Code
       generate_tbls(l = list_xtab_3way, df = df, weight = "weightvec", type = "crosstab_3wayy")
     Error <simpleError>
-      The argument 'type' must either be 'crosstab', 'crosstab_3way', 'topline'
+      The argument 'type' must either be 'crosstab_2way', 'crosstab_3way', 'topline'
 
 # Mismatched 'type' argument and 'l' list argument
 

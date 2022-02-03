@@ -1,40 +1,31 @@
 # Custom topline ----------------------------------------------------------
 
-#' @importFrom dplyr summarize
-#' @importFrom dplyr group_by
-#' @importFrom dplyr ungroup
-#' @importFrom dplyr first
-#' @importFrom dplyr add_row
-#' @importFrom dplyr filter
 #' @importFrom labelled to_factor
 #' @importFrom forcats fct_explicit_na
 topline_internal <- function(df, variable, weight) {
-  topline <- df %>%
-    # Convert to ordered factors
-    mutate(
-      {{ variable }} := to_factor({{ variable }}, sort_levels = "values"),
-      {{ variable }} := fct_explicit_na({{ variable }})
-    ) %>%
-    # Calculate denominator
-    mutate(valid.total = sumcpp(({{ weight }})[{{ variable }} != "(Missing)"])) %>%
-    # Calculate proportions
-    group_by({{ variable }}) %>%
-    # Use first() to get the first value since 'valid.total' is a column (vector) where all values are the same
-    summarize(
-      Percent = round((sumcpp({{ weight }}) / first(valid.total) * 100), digits = 1),
-      n = round(sumcpp({{ weight }}), digits = 0)
-    ) %>%
-    ungroup() %>%
-    select(Response = {{ variable }}, Frequency = n, Percent) %>%
-    filter(Response != "(Missing)")
+  df <- as.data.table(df)
+  topline <- df[, eval(variable) := {
+    var <- to_factor(get(variable), sort_levels = "values")
+    var <- fct_explicit_na(var)
+    .(var)
+  }][, valid_total := {
+    sumcpp(get(weight)[get(variable) != "(Missing)"])
+  }][, .(
+    Percent = round((sumcpp(get(weight)) / first(valid_total) * 100), digits = 1),
+    Frequency = round(sumcpp(get(weight)), digits = 0)
+  ),
+  keyby = .(get(variable))
+  ][get != "(Missing)"]
 
-  # Column sums
-  freq_sum <- sum(topline[["Frequency"]])
-  per_sum <- sum(topline[["Percent"]])
+  setnames(topline, c("get", "Frequency", "Percent"), c("Response", "Frequency", "Percent"))
+  setcolorder(topline, c("Response", "Frequency", "Percent"))
 
-  topline <- add_row(topline, Response = "Total", Frequency = freq_sum, Percent = per_sum)
+  topline <- rbindlist(list(topline, data.table(
+    Response = "Total",
+    Frequency = sum(topline$Frequency),
+    Percent = sum(topline$Percent)
+  )))[, Response := as.character(Response)]
 
-  class(topline) <- c("data.table", "data.frame")
   topline
 }
 
@@ -42,92 +33,81 @@ topline_internal <- function(df, variable, weight) {
 
 #' @importFrom pollster deff_calc
 #' @importFrom pollster moedeff_calc
-#' @importFrom dplyr pull
-#' @importFrom dplyr relocate
 moe_crosstab_internal <- function(df, x, y, weight) {
+  df <- as.data.table(df)
+  deff <- deff_calc(df[, get(weight)])
 
-  # Calculate the design effect
-  deff <- df %>%
-    pull({{ weight }}) %>%
-    deff_calc()
+  xtab <- df[!is.na(get(x)) & !is.na(get(y))][, c(x, y) := .(
+    to_factor(get(x)),
+    to_factor(get(y))
+  )][, c("total", "unweighted_n") := .(
+    sum(get(weight)),
+    length(get(weight))
+  ), by = eval(x)][, .(
+    observations = sumcpp(get(weight)),
+    N = first(total),
+    unweighted_n = first(unweighted_n)
+  ),
+  keyby = .(get(x), get(y))
+  ][, Percent := observations / N][, `:=`(MOE = as.character(round(
+    moedeff_calc(pct = Percent, deff = ..deff, n = unweighted_n, zscore = 1.96),
+    digits = 1
+  )))][, `:=`(Percent = as.character(round(Percent * 100, digits = 1)))][, .(get, get.1, Percent, MOE)]
 
-  # Build the table, either row percents or cell percents
-  xtab <- df %>%
-    filter(
-      !is.na({{ x }}),
-      !is.na({{ y }})
-    ) %>%
-    mutate(
-      {{ x }} := to_factor({{ x }}),
-      {{ y }} := to_factor({{ y }})
-    ) %>%
-    group_by({{ x }}) %>%
-    mutate(
-      total = sumcpp({{ weight }}),
-      unweighted_n = length({{ weight }})
-    ) %>%
-    group_by({{ x }}, {{ y }}) %>%
-    summarize(
-      observations = sumcpp({{ weight }}),
-      Percent = observations / first(total),
-      N = first(total),
-      unweighted_n = first(unweighted_n)
-    ) %>%
-    ungroup() %>%
-    mutate(N = as.character(round(Percent * N, digits = 0))) %>%
-    mutate(MOE = as.character(round(moedeff_calc(pct = Percent, deff = deff, n = unweighted_n, zscore = 1.96), digits = 1))) %>%
-    mutate(
-      Percent = as.character(round(Percent * 100, digits = 1))
-    ) %>%
-    select(-c("observations", "unweighted_n")) %>%
-    relocate(N, .after = MOE)
+  lookup_tbl <- df[, eval(y) := {
+    var <- to_factor(get(y), sort_levels = "values")
+    var <- forcats::fct_explicit_na(var)
+    .(var)
+  }][, `:=`(valid_total = sum(get(weight)[get(y) != "(Missing)"]))][, .(Percent = round((sum(get(weight)) / first(valid_total) * 100), digits = 1)),
+    keyby = .(get(y))
+  ][eval(y) != "(Missing)"]
+  lookup <- lookup_tbl$Percent
+  names(lookup) <- lookup_tbl$get
 
-  class(xtab) <- c("data.table", "data.frame")
+  xtab[, `Survey Total Percent` := as.character(lookup[get.1])]
+
+  setattr(xtab, "names", c(x, y, "Percent", "MOE", "Survey Total Percent"))
+
   xtab
 }
 
 # Custom three-way crosstab -----------------------------------------------
 
 moe_crosstab_3way_internal <- function(df, x, y, z, weight) {
+  df <- as.data.table(df)
+  deff <- deff_calc(df[, get(weight)])
 
-  # Calculate the design effect
-  deff <- df %>%
-    pull({{ weight }}) %>%
-    deff_calc()
+  xtab_3way <- df[!is.na(get(x)) & !is.na(get(y)) & !is.na(get(z))][, c(x, y, z) := .(
+    to_factor(get(x)),
+    to_factor(get(y)),
+    to_factor(get(z))
+  )][, c("total", "unweighted_n") := .(
+    sum(get(weight)),
+    length(get(weight))
+  ), by = .(get(z), get(x))][, .(
+    observations = sumcpp(get(weight)),
+    N = first(total),
+    unweighted_n = first(unweighted_n)
+  ),
+  keyby = .(get(z), get(x), get(y))
+  ][, Percent := observations / N][, `:=`(MOE = as.character(round(
+    moedeff_calc(pct = Percent, deff = ..deff, n = unweighted_n, zscore = 1.96),
+    digits = 1
+  )))][, `:=`(Percent = as.character(round(Percent * 100, digits = 1)))][, .(get, get.1, get.2, Percent, MOE)]
 
-  # Build the table, either row percents or cell percents
-  xtab_3way <- df %>%
-    filter(
-      !is.na({{ x }}),
-      !is.na({{ y }}),
-      !is.na({{ z }})
-    ) %>%
-    mutate(
-      {{ x }} := to_factor({{ x }}),
-      {{ y }} := to_factor({{ y }}),
-      {{ z }} := to_factor({{ z }})
-    ) %>%
-    group_by({{ z }}, {{ x }}) %>%
-    mutate(
-      total = sum({{ weight }}),
-      unweighted_n = length({{ weight }})
-    ) %>%
-    group_by({{ z }}, {{ x }}, {{ y }}) %>%
-    summarize(
-      observations = sum({{ weight }}),
-      Percent = observations / first(total),
-      N = first(total),
-      unweighted_n = first(unweighted_n)
-    ) %>%
-    ungroup() %>%
-    mutate(N = as.character(round(Percent * N, digits = 0))) %>%
-    mutate(MOE = as.character(round(moedeff_calc(pct = Percent, deff = deff, n = unweighted_n, zscore = 1.96), digits = 1))) %>%
-    mutate(Percent = as.character(round(Percent * 100, digits = 1))) %>%
-    select(-c("observations", "unweighted_n")) %>%
-    relocate(N, .after = MOE)
+  lookup_tbl <- df[, eval(y) := {
+    var <- to_factor(get(y), sort_levels = "values")
+    var <- fct_explicit_na(var)
+    .(var)
+  }][, `:=`(valid_total = sum(get(weight)[get(y) != "(Missing)"]))][, .(Percent = round((sum(get(weight)) / first(valid_total) * 100), digits = 1)),
+    keyby = .(get(y))
+  ][eval(y) != "(Missing)"]
+  lookup <- lookup_tbl$Percent
+  names(lookup) <- lookup_tbl$get
 
-  class(xtab_3way) <- c("data.table", "data.frame")
+  xtab_3way[, `Survey Total Percent` := lookup[get.2]]
+
+  setattr(xtab_3way, "names", c(z, x, y, "Percent", "MOE", "Survey Total Percent"))
+
   xtab_3way
 }
-
-

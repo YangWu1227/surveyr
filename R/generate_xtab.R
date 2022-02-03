@@ -62,13 +62,9 @@ generate_xtab <- function(df, x, y, weight, caption) {
   # Keep only alphabets and numbers in column names
   x_name <- str_to_title(str_replace_all(x, "[^[:alnum:]]", " "))
   y_name <- str_to_title(str_replace_all(y, "[^[:alnum:]]", " "))
-  # Convert string to symbols
-  x <- ensym(x)
-  y <- ensym(y)
-  weight <- ensym(weight)
 
-  xtab <- moe_crosstab_internal(df = df, x = {{ x }}, y = {{ y }}, weight = {{ weight }}) %>%
-    setattr("names", c(x_name, y_name, "Percent", "MOE", "N"))
+  xtab <- moe_crosstab_internal(df = df, x = x, y = y, weight = weight) %>%
+    setattr("names", c(x_name, y_name, "Percent", "MOE", "Survey Total Percent"))
 
   roll_x <- names(xtab)[[1]]
   # First column of the crosstab
@@ -95,7 +91,7 @@ generate_xtab <- function(df, x, y, weight, caption) {
   xtab_formatted <- xtab %>%
     flextable() %>%
     set_caption(caption = caption) %>%
-    colformat_char(j = 3, suffix = " %") %>%
+    colformat_char(j = c(3, 5), suffix = " %") %>%
     align(align = "center", part = "header") %>%
     align(i = NULL, j = 3:5, align = "center", part = "body") %>%
     bold(bold = TRUE, part = "header") %>%
@@ -128,7 +124,7 @@ generate_xtab <- function(df, x, y, weight, caption) {
 #' @param df A data frame or tibble.
 #' @param x A single string of the independent variable.
 #' @param y A single string of the dependent variable.
-#' @param z A single string of the second control variable.
+#' @param z A single string of the control variable.
 #' @param weight A single string of the weighting variable.
 #' @param caption A length one character vector used as the caption for the crosstab.
 #'
@@ -161,16 +157,11 @@ generate_xtab_3way <- function(df, x, y, z, weight, caption) {
   x_name <- str_to_title(str_replace_all(x, "[^[:alnum:]]", " "))
   y_name <- str_to_title(str_replace_all(y, "[^[:alnum:]]", " "))
   z_name <- str_to_title(str_replace_all(z, "[^[:alnum:]]", " "))
-  # Convert string to symbols
-  x <- ensym(x)
-  y <- ensym(y)
-  z <- ensym(z)
-  weight <- ensym(weight)
 
   xtab_3way <- moe_crosstab_3way_internal(df = df, x = {{ x }}, y = {{ y }}, z = {{ z }}, weight = {{ weight }}) %>%
-    setattr("names", c(z_name, x_name, y_name, "Percent", "MOE", "N"))
+    setattr("names", c(z_name, x_name, y_name, "Percent", "MOE", "Survey Total Percent"))
 
-  roll_vars <- names(xtab_3way)[1:2]
+  roll_var <- names(xtab_3way)[[1]]
   # First column of the crosstab
   first_column <- as.character(xtab_3way[[1]])
   # Obtain a character vector of unique categories (factor levels)
@@ -204,8 +195,7 @@ generate_xtab_3way <- function(df, x, y, z, weight, caption) {
     color(color = "white", part = "header") %>%
     bg(i = NULL, j = NULL, bg = "#32BDB9", part = "header") %>%
     bg(i = stripe_index_container, j = NULL, bg = "#e5e5e5", part = "body") %>%
-    merge_v(j = roll_vars[[1]], target = 1, part = "body") %>%
-    merge_v(j = roll_vars[[2]], target = 2, part = "body") %>%
+    merge_v(j = roll_var, part = "body") %>%
     vline_left(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
     vline_right(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
     hline_top(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%

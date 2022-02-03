@@ -34,11 +34,7 @@ generate_topline <- function(df, x, weight, caption) {
     stop("The arguments 'x' and 'weight' must be character vectors of length one", call. = FALSE)
   }
 
-  # Convert string to symbols
-  x <- ensym(x)
-  weight <- ensym(weight)
-
-  topline <- topline_internal(df = df, variable = {{ x }}, weight = {{ weight }})
+  topline <- topline_internal(df = df, variable = x, weight = weight)
 
   # Row indices to apply zebra-stripe
   even <- seq.int(length.out = vec_size(topline)) %% 2 == 0

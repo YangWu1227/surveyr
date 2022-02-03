@@ -126,7 +126,7 @@ generate_tbls <- function(l, df, weight, type = "topline") {
         weight = {{ weight }}
       )
     },
-    stop("The argument 'type' must either be 'crosstab', 'crosstab_3way', 'topline'", call. = FALSE)
+    stop("The argument 'type' must either be 'crosstab_2way', 'crosstab_3way', 'topline'", call. = FALSE)
   )
 
   list_of_tables

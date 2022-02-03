@@ -1,15 +1,13 @@
+# Two-way -----------------------------------------------------------------
+
 ft_generate_xtab <- function(df, x, y, weight, caption) {
 
   # Keep only alphabets and numbers in column names
   x_name <- str_to_title(str_replace_all(x, "[^[:alnum:]]", " "))
   y_name <- str_to_title(str_replace_all(y, "[^[:alnum:]]", " "))
-  # Convert string to symbols
-  x <- ensym(x)
-  y <- ensym(y)
-  weight <- ensym(weight)
 
-  xtab <- moe_crosstab_internal(df = df, x = {{ x }}, y = {{ y }}, weight = {{ weight }})
-  setattr(xtab, "names", c(x_name, y_name, "Percent", "MOE", "N"))[
+  xtab <- moe_crosstab_internal(df = df, x = x, y = y, weight = weight)
+  setattr(xtab, "names", c(x_name, y_name, "Percent", "MOE", "Survey Total Percent"))[
     get(x_name) == "No", eval(x_name) := "11"
   ][
     , eval(x_name) := as.integer(as.character(get(x_name)))
@@ -71,14 +69,9 @@ ft_generate_xtab_3way <- function(df, x, y, z, weight, caption) {
   x_name <- str_to_title(str_replace_all(x, "[^[:alnum:]]", " "))
   y_name <- str_to_title(str_replace_all(y, "[^[:alnum:]]", " "))
   z_name <- str_to_title(str_replace_all(z, "[^[:alnum:]]", " "))
-  # Convert string to symbols
-  x <- ensym(x)
-  y <- ensym(y)
-  z <- ensym(z)
-  weight <- ensym(weight)
 
   xtab_3way <- moe_crosstab_3way_internal(df = df, x = {{ x }}, y = {{ y }}, z = {{ z }}, weight = {{ weight }})
-  setattr(xtab_3way, "names", c(z_name, x_name, y_name, "Percent", "MOE", "N"))[
+  setattr(xtab_3way, "names", c(z_name, x_name, y_name, "Percent", "MOE", "Survey Total Percent"))[
     get(z_name) == "No", eval(z_name) := "11"
   ][
     , eval(z_name) := as.integer(as.character(get(z_name)))
@@ -88,7 +81,7 @@ ft_generate_xtab_3way <- function(df, x, y, z, weight, caption) {
     get(z_name) == "11", eval(z_name) := "No"
   ]
 
-  roll_vars <- names(xtab_3way)[1:2]
+  roll_var <- names(xtab_3way)[[1]]
   # First column of the crosstab
   first_column <- as.character(xtab_3way[[1]])
   # Obtain a character vector of unique categories (factor levels)
@@ -122,8 +115,7 @@ ft_generate_xtab_3way <- function(df, x, y, z, weight, caption) {
     color(color = "white", part = "header") %>%
     bg(i = NULL, j = NULL, bg = "#32BDB9", part = "header") %>%
     bg(i = stripe_index_container, j = NULL, bg = "#e5e5e5", part = "body") %>%
-    merge_v(j = roll_vars[[1]], target = 1, part = "body") %>%
-    merge_v(j = roll_vars[[2]], target = 2, part = "body") %>%
+    merge_v(j = roll_var, part = "body") %>%
     vline_left(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
     vline_right(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
     hline_top(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%

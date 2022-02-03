@@ -105,8 +105,8 @@ test_that("generate_xtab() returns correct output type and class", {
   expect_s3_class(
     object = generate_xtab(
       df = df,
-      x = "education_rollup",
-      y = "party_reg",
+      x = "party_reg",
+      y = "education_rollup",
       weight = "weightvec",
       caption = "caption"
     ),
@@ -261,8 +261,8 @@ test_that("generate_xtab_3way() returns correct output type and class", {
     object = generate_xtab_3way(
       df = df,
       x = "education_rollup",
-      y = "party_reg",
-      z = "issue_focus",
+      y = "issue_focus",
+      z = "party_reg",
       weight = "weightvec",
       caption = "caption"
     ),
@@ -273,8 +273,8 @@ test_that("generate_xtab_3way() returns correct output type and class", {
     object = generate_xtab_3way(
       df = df,
       x = "education_rollup",
-      y = "party_reg",
-      z = "issue_focus",
+      y = "issue_focus",
+      z = "party_reg",
       weight = "weightvec",
       caption = "caption"
     ),
