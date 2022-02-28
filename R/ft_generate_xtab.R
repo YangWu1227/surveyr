@@ -50,7 +50,7 @@ ft_generate_xtab <- function(df, x, y, weight, caption) {
     color(color = "white", part = "header") %>%
     bg(i = NULL, j = NULL, bg = "#32BDB9", part = "header") %>%
     bg(i = stripe_index_container, j = NULL, bg = "#e5e5e5", part = "body") %>%
-    merge_v(target = roll_x, part = "body") %>%
+    merge_v(j = roll_x, target = roll_x, part = "body") %>%
     vline_left(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
     vline_right(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
     hline_top(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
@@ -115,7 +115,7 @@ ft_generate_xtab_3way <- function(df, x, y, z, weight, caption) {
     color(color = "white", part = "header") %>%
     bg(i = NULL, j = NULL, bg = "#32BDB9", part = "header") %>%
     bg(i = stripe_index_container, j = NULL, bg = "#e5e5e5", part = "body") %>%
-    merge_v(j = roll_var, part = "body") %>%
+    merge_v(j = roll_var, target = roll_var, part = "body") %>%
     vline_left(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
     vline_right(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
     hline_top(border = fp_border(color = "black", style = "solid", width = 1), part = "all") %>%
