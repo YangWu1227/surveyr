@@ -22,6 +22,7 @@
 #'
 #' @seealso [apply_topline_multiselect()] for vectorized topline generation for multiple selection questions.
 #'
+#' @importFrom stats na.omit
 #' @export
 #'
 #' @examples
