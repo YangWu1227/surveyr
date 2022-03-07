@@ -154,8 +154,8 @@ list_xtab_args <- function(df, var_of_interest, dependent_vars = NULL, rm = NULL
 #'
 #' @examples
 #' \donttest{
-#' # Create var_of_interest vector
-#' control_var <- c("col1", "col3", "col20", "col23", "col32")
+#' # Create control_var vector
+#' control_var <- c("col1", "col3", "col20", "col23")
 #'
 #' # List of independent variable vectors
 #' independent_vars <- list(
