@@ -16,7 +16,7 @@
 #' @seealso [col_nms_rm_spl_char()] for removing special characters from columns names.
 #'
 #' @importFrom magrittr %>%
-#' @importFrom dplyr everything
+#' @importFrom dplyr everything across
 #'
 #' @export
 #'
