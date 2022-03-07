@@ -4,7 +4,8 @@
 \alias{MyRedshift}
 \title{A class for interacting with Redshift}
 \description{
-This class can be used to interact with a Redshift database, including reading tables and query results into R.
+This class can be used to interact with a Redshift database. Currently, only read operations--- such as
+reading tables and query results from Redshift into R--- are supported.
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -26,6 +27,8 @@ This class can be used to interact with a Redshift database, including reading t
 \itemize{
 \item \href{#method-new}{\code{MyRedshift$new()}}
 \item \href{#method-read_tbl}{\code{MyRedshift$read_tbl()}}
+\item \href{#method-read_sql}{\code{MyRedshift$read_sql()}}
+\item \href{#method-finalizer}{\code{MyRedshift$finalizer()}}
 \item \href{#method-clone}{\code{MyRedshift$clone()}}
 }
 }
@@ -62,13 +65,15 @@ A new \code{MyRedshift} object.
 \if{latex}{\out{\hypertarget{method-read_tbl}{}}}
 \subsection{Method \code{read_tbl()}}{
 A method for reading a table into a DataFrame. Warning: Reading large tables
-all at once may lead to memory issues. If the argument \code{n} is omitted, entire table will be returned.
-A value of \code{Inf} for the \code{n} argument is supported and also returns the full result. If more rows than
-available are fetched (by passing a value for \code{n} that is too large), the result is returned in full without warning.
-If zero rows are requested, the columns of the data frame are still fully typed. Fetching fewer rows
-than available is permitted, no warning is issued.
+all at once may lead to memory issues. If the argument \code{nrow} is omitted, the
+entire table will be fetched. A value of \code{Inf} for the \code{nrow} argument is
+supported and also returns the full result. If more rows than available are
+fetched (by passing a value for \code{nrow} that is too large), the result is
+returned in full without warning. If zero rows are requested, the columns of
+the data frame are still fully typed. Fetching fewer rows than available is
+permitted, no warning is issued.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MyRedshift$read_tbl(table_name, nrow = -1)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{MyRedshift$read_tbl(table_name, nrow = -1L)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -83,6 +88,44 @@ than available is permitted, no warning is issued.
 \subsection{Returns}{
 A DataFrame representing a table in the database.
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-read_sql"></a>}}
+\if{latex}{\out{\hypertarget{method-read_sql}{}}}
+\subsection{Method \code{read_sql()}}{
+A method for reading query results into a DataFrame. Warning: Large results may lead
+to memory issues. If the argument \code{nrow} is omitted, the rows will be returned. A value
+of \code{Inf} for the \code{nrow} argument is supported and also returns the full result. If more
+rows than available are fetched (by passing a value for \code{nrow} that is too large), the
+result is returned in full without warning. If zero rows are requested, the columns of
+the data frame are still fully typed. Fetching fewer rows than available is permitted,
+no warning is issued.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{MyRedshift$read_sql(sql, nrow = -1L)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{sql}}{A character string containing SQL.}
+
+\item{\code{nrow}}{Number of rows to be fetched.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A DataFrame representing query results.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-finalizer"></a>}}
+\if{latex}{\out{\hypertarget{method-finalizer}{}}}
+\subsection{Method \code{finalizer()}}{
+Resource cleanup.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{MyRedshift$finalizer()}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
