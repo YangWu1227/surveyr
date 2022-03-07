@@ -22,7 +22,7 @@
 #' list_df <- split_df(df, patterns, "weight_var")
 #'
 #' # Apply topline generation to each element of 'list_df'
-#' captions <- c("caption_1", "caption_2", ...)
+#' captions <- list(c("caption_parent", "caption_child"), "caption_2", ...)
 #' parents <- c(TRUE, FALSE, ...)
 #' results <- apply_topline_multiselect(list_df, "weight_var", captions, parents)
 #'
