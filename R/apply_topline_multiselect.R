@@ -62,6 +62,7 @@ apply_topline_multiselect <- function(list_df, weight, caption, parent) {
 
 #' Generate a list of captions for multiple selection toplines
 #'
+#' @description
 #' This function is a helper for generating a list of captions given a `patterns` vector and
 #' a `parent` vector. The outout of this function can then be passed to `apply_topline_multiselect()`.
 #'

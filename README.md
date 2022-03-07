@@ -5,8 +5,6 @@
 
 <!-- badges: start -->
 
-[![CRAN
-status](https://www.r-pkg.org/badges/version/citizenr)](https://CRAN.R-project.org/package=citizenr)
 [![codecov](https://codecov.io/gh/YangWu1227/citizenr/branch/main/graph/badge.svg?token=KS3DTV6WDT)](https://codecov.io/gh/YangWu1227/citizenr)
 [![Lifecycle:
 stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
