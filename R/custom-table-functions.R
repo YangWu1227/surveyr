@@ -3,6 +3,10 @@
 #' @importFrom labelled to_factor
 #' @importFrom forcats fct_explicit_na
 topline_internal <- function(df, variable, weight) {
+
+  # To prevent R CMD check notes
+  `.` <- valid_total <- Response <- NULL
+
   df <- as.data.table(df)
   topline <- df[, eval(variable) := {
     var <- to_factor(get(variable), sort_levels = "values")
@@ -34,6 +38,10 @@ topline_internal <- function(df, variable, weight) {
 #' @importFrom pollster deff_calc
 #' @importFrom pollster moedeff_calc
 moe_crosstab_internal <- function(df, x, y, weight) {
+
+  # To prevent R CMD check notes
+  `.` <- valid_total <- total <- unweighted_n <- Percent <- N <- `..deff` <- `get.1` <- MOE <- `Survey Total Percent` <- observations <- NULL
+
   df <- as.data.table(df)
   deff <- deff_calc(df[, get(weight)])
 
@@ -74,6 +82,10 @@ moe_crosstab_internal <- function(df, x, y, weight) {
 # Custom three-way crosstab -----------------------------------------------
 
 moe_crosstab_3way_internal <- function(df, x, y, z, weight) {
+
+  # To prevent R CMD check notes
+  `.` <- valid_total <- total <- unweighted_n <- Percent <- N <- `..deff` <- `get.1` <- `get.2` <- MOE <- `Survey Total Percent` <- observations <- NULL
+
   df <- as.data.table(df)
   deff <- deff_calc(df[, get(weight)])
 

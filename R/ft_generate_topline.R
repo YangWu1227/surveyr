@@ -1,6 +1,10 @@
 # Word --------------------------------------------------------------------
 
 ft_generate_topline <- function(df, x, weight, caption) {
+
+  # To prevent R CMD check notes
+  Response <- NULL
+
   topline <- topline_internal(df = df, variable = x, weight = weight)[
     Response == "No", Response := "11"
   ][
