@@ -25,7 +25,7 @@ of list objects. One can think of each element in \code{result} as the output of
 }
 \description{
 This function is the second part of the \strong{split-apply-combine} workflow in handling multiple selection questions
-in the survey. It takes the result of \code{split_df()},
+in the survey. It takes the result of \code{split_df()}. The \code{caption} argument can also be generated with the helper function.
 }
 \examples{
 \donttest{
