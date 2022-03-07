@@ -2,7 +2,7 @@
 #'
 #' @description
 #' This function is the second part of the \strong{split-apply-combine} workflow in handling multiple selection questions
-#' in the survey. It takes the result of `split_df()`,
+#' in the survey. It takes the result of `split_df()`. The `caption` argument can also be generated with the helper function.
 #'
 #' @param list_df A list of data frame objects.
 #' @param weight A single string of the weighting variable.
@@ -31,7 +31,7 @@
 #' list_df <- split_df(df, patterns, "weight_var")
 #'
 #' # Apply topline generation to each element of 'list_df'
-#' captions <- c("caption_1", "caption_2", ...)
+#' captions <- list(c("caption_parent", "caption_child"), "caption_2", ...)
 #' parents <- c(TRUE, FALSE, ...)
 #' results <- apply_topline_multiselect(list_df, "weight_var", captions, parents)
 #' }
