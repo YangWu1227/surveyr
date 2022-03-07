@@ -126,3 +126,88 @@ test_that("Does apply_topline_multiselect() return correct output type and class
     exact = TRUE
   )
 })
+
+# Tests for caption generation function -----------------------------------
+
+# Errors ------------------------------------------------------------------
+
+test_that("Test that topline_caption_multiselect() return helpful errors", {
+  # Invalid input for patterns (numeric)
+  expect_snapshot(
+    x = topline_caption_multiselect(
+      patterns = c(1, 2, 3, 4),
+      parent = parents
+    ),
+    error = TRUE
+  )
+  # Invalid input for parent (character)
+  expect_snapshot(
+    x = topline_caption_multiselect(
+      patterns = patterns,
+      parent = c("TRUE", "FALSE", "TRUE", "TRUE")
+    ),
+    error = TRUE
+  )
+  # Invalid lenghs
+  expect_snapshot(
+    x = topline_caption_multiselect(
+      patterns = patterns,
+      parent = c(parents, TRUE)
+    ),
+    error = TRUE
+  )
+})
+
+# Functionality -----------------------------------------------------------
+
+test_that("Test that topline_caption_multiselect() return correct output", {
+  # Test data (all have parents)
+  captions_parents <- topline_caption_multiselect(
+    patterns = patterns[c(2, 4)],
+    parent = parents[c(2, 4)]
+  )
+  # Test data (Some terms have parents)
+  captions <- topline_caption_multiselect(
+    patterns = patterns,
+    parent = parents
+  )
+  # Test data (No parents)
+  captions_no_parents <- topline_caption_multiselect(
+    patterns = patterns[c(1, 3)],
+    parent = parents[c(1, 3)]
+  )
+
+  # Expect list objects
+  expect_vector(
+    object = captions_parents,
+    ptype = list(),
+    size = 2
+  )
+  expect_vector(
+    object = captions,
+    ptype = list(),
+    size = 4
+  )
+  expect_vector(
+    object = captions_no_parents,
+    ptype = list(),
+    size = 2
+  )
+
+  # Snapshots
+  expect_snapshot_output(
+    x = captions_parents,
+    cran = FALSE,
+    variant = "captions_output_parents"
+  )
+  expect_snapshot_output(
+    x = captions,
+    cran = FALSE,
+    variant = "captions_output_mixed"
+  )
+  expect_snapshot_output(
+    x = captions_no_parents,
+    cran = FALSE,
+    variant = "captions_output_no_parents"
+  )
+})

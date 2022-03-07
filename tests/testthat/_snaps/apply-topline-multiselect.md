@@ -30,3 +30,25 @@
     Error <simpleError>
       The arguments 'weight', 'caption', and 'parent' must be a character, a list, and a logical vector, respectively
 
+# Test that topline_caption_multiselect() return helpful errors
+
+    Code
+      topline_caption_multiselect(patterns = c(1, 2, 3, 4), parent = parents)
+    Error <simpleError>
+      The arguments 'patterns' and 'parent' must be a character vector and a logical vector, respectively
+
+---
+
+    Code
+      topline_caption_multiselect(patterns = patterns, parent = c("TRUE", "FALSE",
+        "TRUE", "TRUE"))
+    Error <simpleError>
+      The arguments 'patterns' and 'parent' must be a character vector and a logical vector, respectively
+
+---
+
+    Code
+      topline_caption_multiselect(patterns = patterns, parent = c(parents, TRUE))
+    Error <simpleError>
+      The arguments 'patterns' and 'parent' must have equal lengths
+

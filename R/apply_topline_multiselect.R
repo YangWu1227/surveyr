@@ -59,3 +59,71 @@ apply_topline_multiselect <- function(list_df, weight, caption, parent) {
   list_multiselect
 }
 
+
+#' Generate a list of captions for multiple selection toplines
+#'
+#' This function is a helper for generating a list of captions given a `patterns` vector and
+#' a `parent` vector. The outout of this function can then be passed to `apply_topline_multiselect()`.
+#'
+#' @param patterns A character vector of "prefixes" for selecting columns in `df`.
+#' @param parent A logical vector of booleans indicating whether `df` has a parent response column.
+#'
+#' @return A list of character vectors that can be passed to `apply_topline_multiselect()` as its `caption` argument.
+#'
+#' @export
+#'
+#' @examples
+#' \donttest{
+#' # Vector of patterns and parent
+#' patterns <- c("prefix_1", "predix_2", ...)
+#' parents <- c(TRUE, FALSE, ...)
+#'
+#' # Captions list
+#' captions <- topline_caption_multiselect(patterns, parents)
+#' }
+topline_caption_multiselect <- function(patterns, parent) {
+  if (!is.character(patterns) | !is.logical(parent)) {
+    stop("The arguments 'patterns' and 'parent' must be a character vector and a logical vector, respectively", call. = FALSE)
+  }
+  if (length(patterns) != length(parent)) {
+    stop("The arguments 'patterns' and 'parent' must have equal lengths", call. = FALSE)
+  }
+
+  # All terms have parents
+  if (all(parent)) {
+    captions <- lapply(
+      X = patterns,
+      FUN = function(x) {
+        term <- str_to_title(str_replace_all(x, "[^[:alnum:]]", " "))
+        c(paste0("Perception of ", term), paste0("Assocation with ", term))
+      }
+    )
+    # Some terms have parents
+  } else if (any(parent)) {
+    captions <- pmap(
+      .l = list(term = patterns, bool = parent),
+      .f = function(term, bool) {
+        # If true
+        if (bool) {
+          term <- str_to_title(str_replace_all(term, "[^[:alnum:]]", " "))
+          caption <- c(paste0("Perception of ", term), paste0("Assocation with ", term))
+        } else {
+          caption <- str_to_title(str_replace_all(term, "[^[:alnum:]]", " "))
+        }
+
+        caption
+      }
+    )
+    # All terms do not have parents
+  } else if (all(!parent)) {
+    captions <- lapply(
+      X = patterns,
+      FUN = function(x) {
+        caption <- str_to_title(str_replace_all(x, "[^[:alnum:]]", " "))
+      }
+    )
+  }
+
+  # Return
+  captions
+}
