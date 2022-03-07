@@ -21,6 +21,7 @@ Imports:
     data.table (>= 1.14.2),
     dplyr (>= 1.0.7),
     flextable (>= 0.6.10),
+    forcats (>= 0.5.1),
     glue,
     knitr (>= 1.36.0),
     labelled,
