@@ -31,5 +31,7 @@ with_mock_db(
       cran = FALSE,
       variant = "myredshift_query_output"
     )
+
+    rm(db)
   })
 )
