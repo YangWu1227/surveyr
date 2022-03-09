@@ -1,5 +1,3 @@
-# Word --------------------------------------------------------------------
-
 ft_generate_topline <- function(df, x, weight, caption) {
 
   # To prevent R CMD check notes
