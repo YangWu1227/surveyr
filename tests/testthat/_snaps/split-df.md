@@ -24,5 +24,5 @@
     Code
       split_df(df, patterns, "does_not_exist")
     Error <simpleError>
-      The argument 'weight' must exit in 'df'
+      The argument 'weight' must exist in 'df'
 

@@ -36,7 +36,7 @@ split_df <- function(df, patterns, weight) {
     )
   }
   if (!weight %in% names(df)) {
-    stop("The argument 'weight' must exit in 'df'", call. = FALSE)
+    stop("The argument 'weight' must exist in 'df'", call. = FALSE)
   }
 
   # Coerce to data.table
