@@ -51,7 +51,7 @@
       generate_xtab(df = df, x = "does_not_exist", y = "education_rollup", weight = "weightvec",
         caption = "caption")
     Error <simpleError>
-      Object 'does_not_exist' not found amongst [education_rollup, party_reg, issue_focus, weightvec]
+      Object 'does_not_exist' not found amongst education_rollup, party_reg, issue_focus, weightvec
 
 ---
 
@@ -59,7 +59,7 @@
       generate_xtab(df = df, x = "education_rollup", y = "does_not_exist", weight = "weightvec",
         caption = "caption")
     Error <simpleError>
-      Object 'does_not_exist' not found amongst [education_rollup, party_reg, issue_focus, weightvec]
+      Object 'does_not_exist' not found amongst education_rollup, party_reg, issue_focus, weightvec
 
 # generate_xtab_3way() provides meaningful error messages
 
@@ -123,7 +123,7 @@
       generate_xtab_3way(df = df, x = "does_not_exist", y = "education_rollup", z = "issue_focus",
         weight = "weightvec", caption = "caption")
     Error <simpleError>
-      Object 'does_not_exist' not found amongst [education_rollup, party_reg, issue_focus, weightvec]
+      Object 'does_not_exist' not found amongst education_rollup, party_reg, issue_focus, weightvec
 
 ---
 
@@ -131,7 +131,7 @@
       generate_xtab_3way(df = df, x = "education_rollup", y = "does_not_exist", z = "issue_focus",
         weight = "weightvec", caption = "caption")
     Error <simpleError>
-      Object 'does_not_exist' not found amongst [education_rollup, party_reg, issue_focus, weightvec]
+      Object 'does_not_exist' not found amongst education_rollup, party_reg, issue_focus, weightvec
 
 ---
 
@@ -139,7 +139,7 @@
       generate_xtab_3way(df = df, x = "education_rollup", y = "issue_focus", z = "does_not_exist",
         weight = "weightvec", caption = "caption")
     Error <simpleError>
-      Object 'does_not_exist' not found amongst [education_rollup, party_reg, issue_focus, weightvec]
+      Object 'does_not_exist' not found amongst education_rollup, party_reg, issue_focus, weightvec
 
 # generate_topline provides meaningful error messages
 
