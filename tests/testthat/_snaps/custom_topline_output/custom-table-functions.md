@@ -1,6 +1,7 @@
 # Custom topline function returns correct s3 class (data.table) and output
 
                                Response Frequency Percent
+                                 <char>     <num>   <num>
      1:                           Crime        48    47.7
      2:               Education/Schools        17    16.6
      3:                      Healthcare         1     1.4
@@ -15,6 +16,7 @@
 ---
 
                 Response Frequency Percent
+                  <char>     <num>   <num>
     1:         Bachelors        34    33.8
     2:          Graduate        18    18.1
     3: Less than college        47    47.6
