@@ -2,6 +2,7 @@
 
 #' @importFrom labelled to_factor
 #' @importFrom forcats fct_explicit_na
+#' @importFrom dplyr first
 topline_internal <- function(df, variable, weight) {
 
   # To prevent R CMD check notes
