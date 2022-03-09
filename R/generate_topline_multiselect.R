@@ -37,6 +37,10 @@
 #'   )
 #' }
 generate_topline_multiselect <- function(df, weight, caption, parent = FALSE) {
+  if (!is.data.frame(df)) {
+    stop("The argument 'df' must be an object of class or subclass of data frame", call. = FALSE)
+  }
+
   class(df) <- c("data.table", "data.frame")
 
   if (parent) {
