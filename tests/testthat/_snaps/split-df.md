@@ -1,4 +1,4 @@
-# split_df() returns meaningful wrong type error messages
+# split_df() returns meaningful error messages
 
     Code
       split_df(list(c("Wrong_input")), patterns, "weightvec")

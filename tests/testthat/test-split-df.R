@@ -5,7 +5,7 @@ patterns <- c("no_vote", "civic_engagement", "media", "activism")
 
 # Errors ------------------------------------------------------------------
 
-test_that("split_df() returns meaningful wrong type error messages", {
+test_that("split_df() returns meaningful error messages", {
   # Invalid input for 'df' (wrong type)
   expect_snapshot(
     x = split_df(
