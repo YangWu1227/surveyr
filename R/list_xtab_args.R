@@ -125,7 +125,7 @@ list_xtab_args <- function(df, var_of_interest, dependent_vars = NULL, rm = NULL
 #'
 #'
 #' @param df A data frame or tibble.
-#' @param control A character vector of control variables.
+#' @param control_var A character vector of control variables.
 #' @param independent_vars A list of character vectors, each of which contains independent variables.
 #' @param dependent_vars A list of character vectors, each of which contains dependent variables.
 #'

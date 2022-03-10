@@ -9,11 +9,11 @@ list_xtab_3way_args(df, control_var, independent_vars, dependent_vars)
 \arguments{
 \item{df}{A data frame or tibble.}
 
+\item{control_var}{A character vector of control variables.}
+
 \item{independent_vars}{A list of character vectors, each of which contains independent variables.}
 
 \item{dependent_vars}{A list of character vectors, each of which contains dependent variables.}
-
-\item{control}{A character vector of control variables.}
 }
 \value{
 A list containing two elements--- \code{result} and \code{error}, which are lists in and of themselves.
