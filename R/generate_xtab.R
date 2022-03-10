@@ -158,7 +158,7 @@ generate_xtab_3way <- function(df, x, y, z, weight, caption) {
   y_name <- str_to_title(str_replace_all(y, "[^[:alnum:]]", " "))
   z_name <- str_to_title(str_replace_all(z, "[^[:alnum:]]", " "))
 
-  xtab_3way <- moe_crosstab_3way_internal(df = df, x = {{ x }}, y = {{ y }}, z = {{ z }}, weight = {{ weight }}) %>%
+  xtab_3way <- moe_crosstab_3way_internal(df = df, x = x, y = y, z = z, weight = weight) %>%
     setattr("names", c(z_name, x_name, y_name, "Percent", "MOE", "Survey Total Percent"))
 
   roll_var <- names(xtab_3way)[[1]]
