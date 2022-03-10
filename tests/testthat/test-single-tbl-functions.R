@@ -96,6 +96,16 @@ test_that("generate_xtab() errors when specifing x, y, or weight that does not e
     ),
     error = TRUE
   )
+  expect_snapshot(
+    x = generate_xtab(
+      df = df,
+      x = "education_rollup",
+      y = "issue_focus",
+      weight = "does_not_exist",
+      caption = "caption"
+    ),
+    error = TRUE
+  )
 })
 
 # Functionality -----------------------------------------------------------
@@ -251,6 +261,17 @@ test_that("generate_xtab_3way() errors when specifing x, y, z, or weight that do
     ),
     error = TRUE
   )
+  expect_snapshot(
+    x = generate_xtab_3way(
+      df = df,
+      x = "education_rollup",
+      y = "issue_focus",
+      z = "party_reg",
+      weight = "does_not_exist",
+      caption = "caption"
+    ),
+    error = TRUE
+  )
 })
 
 # Functionality -----------------------------------------------------------
@@ -344,6 +365,27 @@ test_that("generate_topline provides meaningful error messages", {
       df = df,
       x = TRUE,
       weight = "weightvec",
+      caption = "caption"
+    ),
+    error = TRUE
+  )
+})
+
+test_that("generate_topline() errors when specifing variable or weight that does not exist", {
+  expect_snapshot(
+    x = generate_topline(
+      df = df,
+      x = "does_not_exist",
+      weight = "weightvec",
+      caption = "caption"
+    ),
+    error = TRUE
+  )
+  expect_snapshot(
+    x = generate_topline(
+      df = df,
+      x = "party_reg",
+      weight = "does_not_exist",
       caption = "caption"
     ),
     error = TRUE

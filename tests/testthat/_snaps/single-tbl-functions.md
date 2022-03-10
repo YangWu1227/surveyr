@@ -51,7 +51,7 @@
       generate_xtab(df = df, x = "does_not_exist", y = "education_rollup", weight = "weightvec",
         caption = "caption")
     Error <simpleError>
-      Object 'does_not_exist' not found amongst education_rollup, party_reg, issue_focus, weightvec
+      The arguments x, y, weight must be found amongst names(df)
 
 ---
 
@@ -59,7 +59,15 @@
       generate_xtab(df = df, x = "education_rollup", y = "does_not_exist", weight = "weightvec",
         caption = "caption")
     Error <simpleError>
-      Object 'does_not_exist' not found amongst education_rollup, party_reg, issue_focus, weightvec
+      The arguments x, y, weight must be found amongst names(df)
+
+---
+
+    Code
+      generate_xtab(df = df, x = "education_rollup", y = "issue_focus", weight = "does_not_exist",
+        caption = "caption")
+    Error <simpleError>
+      The arguments x, y, weight must be found amongst names(df)
 
 # generate_xtab_3way() provides meaningful error messages
 
@@ -123,7 +131,7 @@
       generate_xtab_3way(df = df, x = "does_not_exist", y = "education_rollup", z = "issue_focus",
         weight = "weightvec", caption = "caption")
     Error <simpleError>
-      Object 'does_not_exist' not found amongst education_rollup, party_reg, issue_focus, weightvec
+      The arguments x, y, z, weight must be found amongst names(df)
 
 ---
 
@@ -131,7 +139,7 @@
       generate_xtab_3way(df = df, x = "education_rollup", y = "does_not_exist", z = "issue_focus",
         weight = "weightvec", caption = "caption")
     Error <simpleError>
-      Object 'does_not_exist' not found amongst education_rollup, party_reg, issue_focus, weightvec
+      The arguments x, y, z, weight must be found amongst names(df)
 
 ---
 
@@ -139,7 +147,15 @@
       generate_xtab_3way(df = df, x = "education_rollup", y = "issue_focus", z = "does_not_exist",
         weight = "weightvec", caption = "caption")
     Error <simpleError>
-      Object 'does_not_exist' not found amongst education_rollup, party_reg, issue_focus, weightvec
+      The arguments x, y, z, weight must be found amongst names(df)
+
+---
+
+    Code
+      generate_xtab_3way(df = df, x = "education_rollup", y = "issue_focus", z = "party_reg",
+        weight = "does_not_exist", caption = "caption")
+    Error <simpleError>
+      The arguments x, y, z, weight must be found amongst names(df)
 
 # generate_topline provides meaningful error messages
 
@@ -186,4 +202,18 @@
       generate_topline(df = df, x = TRUE, weight = "weightvec", caption = "caption")
     Error <simpleError>
       The arguments 'x' and 'weight' must be character vectors of length one
+
+# generate_topline() errors when specifing variable or weight that does not exist
+
+    Code
+      generate_topline(df = df, x = "does_not_exist", weight = "weightvec", caption = "caption")
+    Error <simpleError>
+      The arguments variable and weight must be found amongst names(df)
+
+---
+
+    Code
+      generate_topline(df = df, x = "party_reg", weight = "does_not_exist", caption = "caption")
+    Error <simpleError>
+      The arguments variable and weight must be found amongst names(df)
 
