@@ -16,7 +16,7 @@ A list of character vectors that can be passed to \code{apply_topline_multiselec
 }
 \description{
 This function is a helper for generating a list of captions given a \code{patterns} vector and
-a \code{parent} vector. The outout of this function can then be passed to \code{apply_topline_multiselect()}.
+a \code{parent} vector. The output of this function can then be passed to \code{apply_topline_multiselect()}.
 }
 \examples{
 \donttest{
