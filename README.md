@@ -20,5 +20,5 @@ You can install the development version of citizenr as follows:
 
 ``` r
 install.packages("devtools")
-devtools::install_github("YangWu1227/citizenr)
+devtools::install_github("YangWu1227/citizenr")
 ```
