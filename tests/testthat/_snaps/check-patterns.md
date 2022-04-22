@@ -2,13 +2,15 @@
 
     Code
       check_patterns(c(3, 4), patterns)
-    Error <Rcpp::not_compatible>
-      Expecting a string vector: [type=double; required=STRSXP].
+    Condition
+      Error in `check_patterns()`:
+      ! Expecting a string vector: [type=double; required=STRSXP].
 
 ---
 
     Code
       check_patterns(patterns)
-    Error <simpleError>
-      argument "patterns" is missing, with no default
+    Condition
+      Error in `check_patterns()`:
+      ! argument "patterns" is missing, with no default
 
