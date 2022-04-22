@@ -36,11 +36,12 @@ FrameCleaner <- R6Class("FrameCleaner",
         stop("The field 'df' must be an object that inherits from data.frame", call. = FALSE)
       }
 
-      # Store prototype as an field
+      # Store prototype as an field before coercing to data.table
       self$ptype <- vec_ptype(df)
 
-      # Coerce input to data.table by reference
-      setDT(df)
+      if (!is.data.table(df)) {
+        df <- as.data.table(df)
+      }
 
       # Fields
       self$df <- df
@@ -65,13 +66,19 @@ FrameCleaner <- R6Class("FrameCleaner",
 
     #' @description
     #' A method for restoring the original class attribute of the input data frame.
-    #' Note that a copy is returned. The original input `df` is modified in-place
-    #' and should remain a `data.table`.
+    #' Note that a copy is returned if the original input `df` is not a `data.table`.
+    #' If the original input `df` is a `data.table`, then this method should be a
+    #' no-op.
+    #'
     #'
     #'
     #' @return An object that inherits from `data.frame`.
     restore = function() {
-      vec_restore(x = df, to = self$ptype)
+      if (is.data.table(self$ptype)) {
+        self$df
+      } else {
+        vec_restore(x = df, to = self$ptype)
+      }
     }
   )
 )
