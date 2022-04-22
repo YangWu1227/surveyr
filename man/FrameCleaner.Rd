@@ -70,8 +70,9 @@ The function modifies the \code{df} field in-place.
 \if{latex}{\out{\hypertarget{method-restore}{}}}
 \subsection{Method \code{restore()}}{
 A method for restoring the original class attribute of the input data frame.
-Note that a copy is returned. The original input \code{df} is modified in-place
-and should remain a \code{data.table}.
+Note that a copy is returned if the original input \code{df} is not a \code{data.table}.
+If the original input \code{df} is a \code{data.table}, then this method should be a
+no-op.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FrameCleaner$restore()}\if{html}{\out{</div>}}
 }
