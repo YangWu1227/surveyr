@@ -44,6 +44,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// trimcpp
+Vector<STRSXP> trimcpp(const Vector<STRSXP>& s);
+RcppExport SEXP _citizenr_trimcpp(SEXP sSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Vector<STRSXP>& >::type s(sSEXP);
+    rcpp_result_gen = Rcpp::wrap(trimcpp(s));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 RcppExport SEXP run_testthat_tests(SEXP);
 
@@ -51,6 +62,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_citizenr_check_patterns", (DL_FUNC) &_citizenr_check_patterns, 2},
     {"_citizenr_print_tbls", (DL_FUNC) &_citizenr_print_tbls, 1},
     {"_citizenr_sumcpp", (DL_FUNC) &_citizenr_sumcpp, 1},
+    {"_citizenr_trimcpp", (DL_FUNC) &_citizenr_trimcpp, 1},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},
     {NULL, NULL, 0}
 };

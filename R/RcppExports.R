@@ -83,3 +83,25 @@ sumcpp <- function(x) {
     .Call(`_citizenr_sumcpp`, x)
 }
 
+#' Remove leading and trailing spaces of strings in a vector (C++)
+#'
+#' @description
+#' This function removes all leading or trailing white space, including
+#' space (' '), form feed (`\f`), line feed (`\n`), carriage return (`\r'`,
+#' horizontal tab (`\t`), and vertical tab (`\v`), from a character vector.
+#'
+#' @param s A character vector.
+#'
+#' @return A character vector.
+#'
+#' @export
+#'
+#' @examples
+#' \donttest{
+#' x <- c(" leading", "trailing ", " both ")
+#' trimcpp(x)
+#' }
+trimcpp <- function(s) {
+    .Call(`_citizenr_trimcpp`, s)
+}
+
