@@ -1,3 +1,7 @@
+# citizenr 1.9.3
+
+* Add `FrameCleaner` class that contains cleaning routines for data frame.
+
 # citizenr 1.8.3
 
 * Re-implement table functions to avoid lazy evaluation. The preferred approach is switch to data.table's built-in `substitute2()` function, which will be released in version 1.14.3. 
