@@ -12,6 +12,9 @@
 #'
 #' @export
 MyRedshift <- R6Class("MyRedshift",
+  portable = FALSE,
+  class = FALSE,
+  cloneable = FALSE,
   public = list(
     #' @field host Database host address.
     host = NULL,

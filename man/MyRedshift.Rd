@@ -29,7 +29,6 @@ reading tables and query results from Redshift into R--- are supported.
 \item \href{#method-read_tbl}{\code{MyRedshift$read_tbl()}}
 \item \href{#method-read_sql}{\code{MyRedshift$read_sql()}}
 \item \href{#method-finalizer}{\code{MyRedshift$finalizer()}}
-\item \href{#method-clone}{\code{MyRedshift$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
@@ -126,22 +125,5 @@ Resource cleanup.
 \if{html}{\out{<div class="r">}}\preformatted{MyRedshift$finalizer()}\if{html}{\out{</div>}}
 }
 
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MyRedshift$clone(deep = FALSE)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
 }
 }
