@@ -13,7 +13,7 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 
 // check_patterns
 std::vector<bool> check_patterns(std::vector<std::string> mainstrs, std::vector<std::string> patterns);
-RcppExport SEXP _citizenr_check_patterns(SEXP mainstrsSEXP, SEXP patternsSEXP) {
+RcppExport SEXP _surveyr_check_patterns(SEXP mainstrsSEXP, SEXP patternsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -25,7 +25,7 @@ END_RCPP
 }
 // print_tbls
 void print_tbls(List l);
-RcppExport SEXP _citizenr_print_tbls(SEXP lSEXP) {
+RcppExport SEXP _surveyr_print_tbls(SEXP lSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< List >::type l(lSEXP);
@@ -35,7 +35,7 @@ END_RCPP
 }
 // sumcpp
 double sumcpp(arma::vec& x);
-RcppExport SEXP _citizenr_sumcpp(SEXP xSEXP) {
+RcppExport SEXP _surveyr_sumcpp(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -46,7 +46,7 @@ END_RCPP
 }
 // trimcpp
 Vector<STRSXP> trimcpp(const Vector<STRSXP>& s);
-RcppExport SEXP _citizenr_trimcpp(SEXP sSEXP) {
+RcppExport SEXP _surveyr_trimcpp(SEXP sSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -59,15 +59,15 @@ END_RCPP
 RcppExport SEXP run_testthat_tests(SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_citizenr_check_patterns", (DL_FUNC) &_citizenr_check_patterns, 2},
-    {"_citizenr_print_tbls", (DL_FUNC) &_citizenr_print_tbls, 1},
-    {"_citizenr_sumcpp", (DL_FUNC) &_citizenr_sumcpp, 1},
-    {"_citizenr_trimcpp", (DL_FUNC) &_citizenr_trimcpp, 1},
+    {"_surveyr_check_patterns", (DL_FUNC) &_surveyr_check_patterns, 2},
+    {"_surveyr_print_tbls", (DL_FUNC) &_surveyr_print_tbls, 1},
+    {"_surveyr_sumcpp", (DL_FUNC) &_surveyr_sumcpp, 1},
+    {"_surveyr_trimcpp", (DL_FUNC) &_surveyr_trimcpp, 1},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_citizenr(DllInfo *dll) {
+RcppExport void R_init_surveyr(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }

@@ -1,6 +1,6 @@
 # Test data ---------------------------------------------------------------
 
-df <- readr::read_rds(test_path("testdata_pace.rds"))
+df <- readr::read_rds(test_path("testdata.rds"))
 
 list_xtab <- tibble::tribble(
   ~x, ~y, ~caption,

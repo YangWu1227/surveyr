@@ -1,19 +1,17 @@
-Package: citizenr
-Title: An R Toolkit for Citizen
+Package: surveyr
+Title: An R Toolkit for Survey
 Version: 1.9.3
 Authors@R: 
-    c(person(given = "Yang", 
+    person(given = "Yang", 
              family = "Wu",
              email = "yangwu2020@gmail.com", 
              role = c("aut", "cre"),
-             comment = c(ORCID = "0000-0001-9847-0112")),
-      person(given = "Citizen, Inc.", 
-             role = c("cph")))
+             comment = c(ORCID = "0000-0001-9847-0112"))
 Description: A toolkit of functions aimed at making data cleaning and table formatting 
     easier and faster using more concise code.
 License: file LICENSE
-URL: https://github.com/YangWu1227/citizenr
-BugReports: https://github.com/YangWu1227/citizenr/issues
+URL: https://github.com/YangWu1227/surveyr
+BugReports: https://github.com/YangWu1227/surveyr/issues
 Depends: 
     R (>= 3.3.0)
 Imports: 

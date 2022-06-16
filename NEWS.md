@@ -1,8 +1,8 @@
-# citizenr 1.9.3
+# surveyr 1.9.3
 
 * Add `FrameCleaner` class that contains cleaning routines for data frame.
 
-# citizenr 1.8.3
+# surveyr 1.8.3
 
 * Re-implement table functions to avoid lazy evaluation. The preferred approach is switch to data.table's built-in `substitute2()` function, which will be released in version 1.14.3. 
 
@@ -16,4 +16,4 @@
 
 # citizen 0.0.0.9000
 
-* Create an R package for internal use by data team members. Many tasks and processes should be quicker and easier with the help of `citizenr`. 
+* Create an R package for internal use by data team members. Many tasks and processes should be quicker and easier with the help of `surveyr`. 

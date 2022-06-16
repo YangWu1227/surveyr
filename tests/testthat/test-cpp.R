@@ -1,1 +1,1 @@
-run_cpp_tests("citizenr")
+run_cpp_tests("surveyr")

@@ -31,7 +31,7 @@
 #' patterns[!valid_index]
 #' }
 check_patterns <- function(mainstrs, patterns) {
-    .Call(`_citizenr_check_patterns`, mainstrs, patterns)
+    .Call(`_surveyr_check_patterns`, mainstrs, patterns)
 }
 
 #' Print tables iteratively
@@ -57,7 +57,7 @@ check_patterns <- function(mainstrs, patterns) {
 #' print_tbls(list_xtabs)
 #' }
 print_tbls <- function(l) {
-    invisible(.Call(`_citizenr_print_tbls`, l))
+    invisible(.Call(`_surveyr_print_tbls`, l))
 }
 
 #' Sum of Vector Elements (C++)
@@ -80,7 +80,7 @@ print_tbls <- function(l) {
 #' sumcpp(x)
 #' }
 sumcpp <- function(x) {
-    .Call(`_citizenr_sumcpp`, x)
+    .Call(`_surveyr_sumcpp`, x)
 }
 
 #' Remove leading and trailing spaces of strings in a vector (C++)
@@ -102,6 +102,6 @@ sumcpp <- function(x) {
 #' trimcpp(x)
 #' }
 trimcpp <- function(s) {
-    .Call(`_citizenr_trimcpp`, s)
+    .Call(`_surveyr_trimcpp`, s)
 }
 

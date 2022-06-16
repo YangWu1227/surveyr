@@ -1,4 +1,4 @@
 library(testthat)
-library(citizenr)
+library(surveyr)
 
-test_check("citizenr")
+test_check("surveyr")
